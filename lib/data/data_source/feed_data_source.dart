@@ -1,7 +1,7 @@
-import 'package:bean_tripper/domain/entity/Feed.dart';
+import 'package:bean_tripper/data/dto/feed_dto.dart';
 
 abstract interface class FeedDataSource {
-  Future<List<Feed>?> fetchFeedsList();
+  Future<List<FeedDto>?> fetchFeedsList();
 
-  Future<Feed?> fetchFeedItem(int id);
+  Future<FeedDto?> fetchFeedItem(int id);
 }

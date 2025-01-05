@@ -1,18 +1,20 @@
-import 'package:bean_tripper/domain/entity/feed.dart';
-import 'package:bean_tripper/domain/repository/feed_repository.dart';
+import 'package:bean_tripper/data/data_source/feed_data_source.dart';
+import 'package:bean_tripper/data/dto/feed_dto.dart';
+import 'package:flutter/services.dart';
 
-class FeedRepositoryImpl implements FeedRepository {
+class FeedDataSourceImpl implements FeedDataSource {
+  final AssetBundle _assetBundle;
+  FeedDataSourceImpl(this._assetBundle);
+
   @override
-  Future<Feed?> fetchFeedItem(int id) {
+  Future<FeedDto?> fetchFeedItem(int id) {
     // TODO: implement fetchFeedItem
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Feed>?> fetchFeedsList() {
+  Future<List<FeedDto>?> fetchFeedsList() {
     // TODO: implement fetchFeedsList
     throw UnimplementedError();
   }
-
-
 }

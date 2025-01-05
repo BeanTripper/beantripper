@@ -13,7 +13,7 @@ class CafeDto {
     required this.tel,
   });
 
-  CafeDto.fromjson(Map<String, dynamic> json)
+  CafeDto.fromJson(Map<String, dynamic> json)
       : this(
           id: json['id'] ?? '',
           name: json['name'] ?? '',
