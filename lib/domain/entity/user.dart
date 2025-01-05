@@ -1,8 +1,8 @@
-class User {
-  String id;
+class AppUser {
+  int id;
   String name;
 
-  User({
+  AppUser({
     required this.id,
     required this.name,
   });
