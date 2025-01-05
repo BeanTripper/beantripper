@@ -1,5 +1,5 @@
 class Cafe {
-  int id;
+  String id;
   String name;
   String address;
   String? operatingTime;

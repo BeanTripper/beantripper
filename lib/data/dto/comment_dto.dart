@@ -1,13 +1,13 @@
-import 'package:bean_tripper/domain/entity/user.dart';
-
 class CommentDto {
-  int id;
+  String id;
   String comment;
-  User writer;
+  String writerId;
+  String writerName;
 
   CommentDto({
     required this.id,
     required this.comment,
-    required this.writer,
+    required this.writerId,
+    required this.writerName,
   });
 }

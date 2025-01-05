@@ -1,5 +1,5 @@
 class UserDto {
-  int id;
+  String id;
   String name;
 
   UserDto({

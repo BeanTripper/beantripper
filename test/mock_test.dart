@@ -21,7 +21,7 @@ void main() {
       // 가짜데이터 주입
       when(() => mockAssetBundle.loadString(any())).thenAnswer((_) async => """
   [{
-      "id": 123,
+      "id": "123",
       "name": "가게 이름",
       "address": "카페 주소 동동동",
       "operatingTime": "아침저녁",

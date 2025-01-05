@@ -1,16 +1,17 @@
-import 'package:bean_tripper/domain/entity/cafe.dart';
-import 'package:bean_tripper/domain/entity/user.dart';
-
 class FeedDto {
-  int id;
+  String id;
   String content;
-  Cafe cafe;
-  User writer;
+  String cafeId;
+  String cafeName;
+  String writerId;
+  String writerName;
 
   FeedDto({
     required this.id,
     required this.content,
-    required this.cafe,
-    required this.writer,
+    required this.cafeId,
+    required this.cafeName,
+    required this.writerId,
+    required this.writerName,
   });
 }
