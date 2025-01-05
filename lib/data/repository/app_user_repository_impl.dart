@@ -17,7 +17,8 @@ class AppUserRepositoryImpl implements AppUserRepository {
 
   @override
   Future<void> saveUser(AppUser user) async {
-    await _firestore.collection('users').doc('${user.id}').set(user.toJson());
+    //TODO toJson
+    // await _firestore.collection('users').doc('${user.id}').set(user.toJson());
   }
 
   @override
