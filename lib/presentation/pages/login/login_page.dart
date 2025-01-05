@@ -29,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: CustomColors.brown,
                     ),
                   ),
+                  const SizedBox(height: 20),
                   Image.asset(
                     "assets/images/login_logo.png",
                     width: 210,
@@ -36,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
+            //TODO Consumer Widget 감싸기
             Column(
               children: [
                 Spacer(),
@@ -53,10 +55,12 @@ class _LoginPageState extends State<LoginPage> {
                   backgroundColor: Colors.white,
                   textColor: CustomColors.black,
                   iconPath: "assets/images/google_icon.png",
-                  onPressed: () async {},
+                  onPressed: () async {
+                    // TODO signInWithGoogle();
+                  },
                   iconSize: 20,
                 ),
-                const SizedBox(height: 20)
+                const SizedBox(height: 20),
               ],
             )
           ],

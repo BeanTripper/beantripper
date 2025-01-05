@@ -20,7 +20,10 @@ class CustomSocialButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          textStyle: const TextStyle(fontSize: 18),
+          textStyle: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
           backgroundColor: backgroundColor,
           foregroundColor: textColor,
           minimumSize: const Size(double.infinity, 50),

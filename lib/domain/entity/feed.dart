@@ -1,3 +1,5 @@
+import 'package:bean_tripper/domain/entity/cafe.dart';
+
 class Feed {
   int id;
   String content;
