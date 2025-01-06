@@ -1,4 +1,5 @@
 import 'package:bean_tripper/firebase_options.dart';
+import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
 import 'package:bean_tripper/presentation/pages/login/login_page.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/feed_write_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,6 +11,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
+    name: 'bean_tripper',
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
@@ -26,8 +28,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Pretendard',
         brightness: Brightness.dark,
       ),
-      home: FeedWritePage(), // login_page작업용
-      // home: HomePage(),
+      home: HomePage(),
     );
   }
 }

@@ -17,5 +17,4 @@ class FeedRepositoryImpl implements FeedRepository {
     // TODO: implement fetchFeedsList
     throw UnimplementedError();
   }
-
 }
