@@ -67,11 +67,21 @@ class LoginPage extends StatelessWidget {
                     color: CustomColors.lightGrey,
                     thickness: 1,
                   ),
-                  const SizedBox(height: 20),
-                  Text(
-                    '둘러보기',
-                  ),
-                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () => print('둘러보기'),
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Center(
+                            child: Text('둘러보기'),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               );
             })
