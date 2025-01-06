@@ -5,5 +5,5 @@ abstract interface class AppUserRepository {
 
   Future<void> saveUser(AppUser user) async {}
 
-  Future<void> updateUSer(AppUser user) async {}
+  Future<void> updateUser(AppUser user) async {}
 }
