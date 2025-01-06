@@ -1,5 +1,5 @@
 class AppUser {
-  int id;
+  String id;
   String name;
 
   AppUser({
