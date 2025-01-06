@@ -13,6 +13,9 @@ class HomeBottomNavigationBar extends StatelessWidget {
         return BottomNavigationBar(
           currentIndex: state,
           onTap: viewModel.onIndexChanged,
+          // backgroundColor: Colors.white,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.grey,
           iconSize: 28,
           selectedLabelStyle: TextStyle(
             fontSize: 12,
@@ -29,14 +32,14 @@ class HomeBottomNavigationBar extends StatelessWidget {
               tooltip: "홈",
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.chat_bubble_2),
-              activeIcon: Icon(CupertinoIcons.chat_bubble_2_fill),
+              icon: Icon(CupertinoIcons.pencil_circle),
+              activeIcon: Icon(CupertinoIcons.pencil_circle_fill),
               label: "작성",
               tooltip: "작성",
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.chat_bubble_2),
-              activeIcon: Icon(CupertinoIcons.chat_bubble_2_fill),
+              icon: Icon(CupertinoIcons.map),
+              activeIcon: Icon(CupertinoIcons.map_fill),
               label: "지도",
               tooltip: "지도",
             ),
