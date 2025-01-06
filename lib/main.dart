@@ -1,6 +1,6 @@
 import 'package:bean_tripper/firebase_options.dart';
 import 'package:bean_tripper/presentation/pages/home/home_page.dart';
-import 'package:bean_tripper/presentation/pages/login/login_page.dart';
+import 'package:bean_tripper/presentation/pages/map/map_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Pretendard',
         brightness: Brightness.dark,
       ),
-      // home: LoginPage(), // login_page작업용
       home: HomePage(),
     );
   }
