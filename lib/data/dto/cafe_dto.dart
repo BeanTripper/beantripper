@@ -1,24 +1,26 @@
 class CafeDto {
   String id;
-  String name;
-  String address;
-  String? operatingTime;
-  String? tel;
+  double lat;
+  double lng;
 
   CafeDto({
     required this.id,
-    required this.name,
-    required this.address,
-    required this.operatingTime,
-    required this.tel,
+    required this.lat,
+    required this.lng,
   });
 
   CafeDto.fromJson(Map<String, dynamic> json)
       : this(
           id: json['id'] ?? '',
-          name: json['name'] ?? '',
-          address: json['address'] ?? '',
-          operatingTime: json['operatingTime'],
-          tel: json['tel'],
+          lat: json['lat'] ?? 0.0,
+          lng: json['lng'] ?? 0.0,
         );
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'lat': lat,
+      'lng': lng,
+    };
+  }
 }

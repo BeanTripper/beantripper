@@ -1,15 +1,16 @@
-import 'package:bean_tripper/presentation/pages/cafe_detail/widgets/cafe_feed_collection.dart';
-import 'package:bean_tripper/presentation/pages/cafe_detail/widgets/cafe_info.dart';
+import 'package:bean_tripper/constant/theme.dart';
+import 'package:bean_tripper/core/widgets/feed_content.dart';
+import 'package:bean_tripper/core/widgets/feed_info.dart';
 import 'package:flutter/material.dart';
 
-class CafeDetailPage extends StatefulWidget {
-  const CafeDetailPage({super.key});
+class FeedDetailPage extends StatefulWidget {
+  const FeedDetailPage({super.key});
 
   @override
-  State<CafeDetailPage> createState() => _CafeDetailPageState();
+  State<FeedDetailPage> createState() => _FeedDetailPageState();
 }
 
-class _CafeDetailPageState extends State<CafeDetailPage> {
+class _FeedDetailPageState extends State<FeedDetailPage> {
   final ScrollController _scrollController = ScrollController();
   List<int> items = List.generate(20, (index) => index);
   bool _isLoading = false;
@@ -58,7 +59,7 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
             children: [
               GestureDetector(
                 onTap: () {
-                  print('좋아요');
+                  print('좋아요 버튼 터치됨');
                 },
                 child: Icon(
                   Icons.favorite_border,
@@ -70,19 +71,18 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
           )
         ],
       ),
-      body: ListView(
+      body: ListView.builder(
         controller: _scrollController,
-        children: [
-          SizedBox(height: 20),
-          CafeInfo(),
-          SizedBox(height: 20),
-          CafeFeedCollection(items: items),
-          if (_isLoading)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(child: CircularProgressIndicator()),
-            ),
-        ],
+        itemCount: 70,
+        itemBuilder: (BuildContext context, int index) {
+          return Column(
+            children: [
+              FeedInfo(),
+              SizedBox(height: 12),
+              FeedContent(),
+            ],
+          );
+        },
       ),
     );
   }
