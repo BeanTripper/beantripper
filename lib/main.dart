@@ -2,12 +2,6 @@ import 'package:bean_tripper/firebase_options.dart';
 import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_page.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/feed_write_page.dart';
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
-import 'package:bean_tripper/presentation/pages/home/home_page.dart';
-import 'package:bean_tripper/presentation/pages/login/login_page.dart';
-import 'package:bean_tripper/presentation/pages/map/map_page.dart';
-import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_page.dart';
-import 'package:bean_tripper/presentation/pages/feed_write/feed_write_page.dart';
-import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
 import 'package:bean_tripper/presentation/pages/login/login_page.dart';
 import 'package:bean_tripper/presentation/pages/map/map_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -37,11 +31,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        fontFamily: 'Pretendard',
-        brightness: Brightness.dark,
-      ),
-      home: HomePage(),
-    );
+        routes: {
+          '/feeds_page': (context) => FeedsPage(),
+          '/feeds_write_page': (context) => FeedWritePage(),
+          '/map_page': (context) => MapPage(),
+          '/cafe_detail_page': (context) => CafeDetailPage(),
+          '/login_page': (context) => LoginPage(),
+        },
+        // feeds_page로 가고 싶을때 pushNamed 사용예시:
+        // ontap:(){Navigator.pushNamed(context, '/feeds_page')}
+        theme: ThemeData(
+          fontFamily: 'Pretendard',
+          brightness: Brightness.dark,
+        ),
+        home: LoginPage()
+        // home: HomePage(),
+        );
   }
 }
