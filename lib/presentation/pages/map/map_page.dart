@@ -51,7 +51,7 @@ class MapPage extends ConsumerWidget {
         // );
         // controller.addOverlay(marker1);
 
-        cafes?.map((e) {
+        cafes?.forEach((e) {
           final marker = NMarker(id: e.id, position: NLatLng(e.lat, e.lng));
           marker.setOnTapListener((overlay) {
             print("마커 터치 ${e.id}");
