@@ -20,7 +20,7 @@ class CafeDataSourceImpl implements CafeDataSource {
 
     return CafeDetailDto.fromJson({
       'id': doc.id,
-      ...doc.data()!,
+      ...?doc.data(),
     });
   }
 

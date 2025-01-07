@@ -1,12 +1,23 @@
 import 'package:bean_tripper/domain/entity/cafe.dart';
+import 'package:bean_tripper/domain/entity/cafe_detail.dart';
 import 'package:bean_tripper/presentation/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MapViewModel extends Notifier<List<Cafe>> {
+class MapState {
+  List<Cafe> cafeList;
+  CafeDetail? selectedCafe;
+
+  MapState({
+    required this.cafeList,
+    required this.selectedCafe,
+  });
+}
+
+class MapViewModel extends Notifier<MapState> {
   @override
-  List<Cafe> build() {
+  MapState build() {
     fetchCafes();
-    return [];
+    return MapState(cafeList: [], selectedCafe: null);
   }
 
   Future<void> fetchCafes() async {
@@ -16,9 +27,15 @@ class MapViewModel extends Notifier<List<Cafe>> {
           "CAFE== id: ${element.id}, lat: ${element.lat}, lng: ${element.lng}");
     });
     print(cafes?.length);
-    state = cafes ?? [];
+    state = MapState(cafeList: cafes ?? [], selectedCafe: state.selectedCafe);
+  }
+
+  Future<void> fetchCafeItem(String id) async {
+    final cafe = await ref.read(fetchCafeItemUsecaseProvider).excute(id);
+    print("SELECTEDCAFE== ${cafe?.id}, ${cafe?.name}");
+    state = MapState(cafeList: state.cafeList, selectedCafe: cafe);
   }
 }
 
 final mapViewModel =
-    NotifierProvider<MapViewModel, List<Cafe>>(() => MapViewModel());
+    NotifierProvider<MapViewModel, MapState>(() => MapViewModel());

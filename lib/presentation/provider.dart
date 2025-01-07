@@ -5,6 +5,7 @@ import 'package:bean_tripper/data/repository/app_user_repository_impl.dart';
 import 'package:bean_tripper/data/repository/cafe_repository_impl.dart';
 import 'package:bean_tripper/domain/repository/app_user_repository.dart';
 import 'package:bean_tripper/domain/repository/cafe_repository.dart';
+import 'package:bean_tripper/domain/usecase/fetch_cafe_item_usecase.dart';
 import 'package:bean_tripper/domain/usecase/fetch_cafes_list_usecase.dart';
 import 'package:bean_tripper/domain/usecase/fetch_user_usecase.dart';
 import 'package:bean_tripper/domain/usecase/save_user_usecase.dart';
@@ -29,7 +30,6 @@ final updateUserUseCaseProvider = Provider<UpdateUserUseCase>((ref) {
   return UpdateUserUseCase(ref.read(_appUserRepository));
 });
 
-
 // 카페
 final _cafeDataSource = Provider<CafeDataSource>((ref) {
   return CafeDataSourceImpl();
@@ -41,4 +41,8 @@ final _cafeRepository = Provider<CafeRepository>((ref) {
 final fetchCafesListUsecaseProvider = Provider((ref) {
   final cafeRefo = ref.read(_cafeRepository);
   return FetchCafesListUsecase(cafeRefo);
+});
+final fetchCafeItemUsecaseProvider = Provider((ref) {
+  final cafeRefo = ref.read(_cafeRepository);
+  return FetchCafeItemUsecase(cafeRefo);
 });
