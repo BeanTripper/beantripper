@@ -15,12 +15,13 @@ class LoginPageViewModel extends Notifier<LoginState> {
     return LoginState(appUser: null);
   }
 
+  ///Google
   Future<void> signInWithGoogle() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn();
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       //google 로그인
-
+      print('2');
       if (googleUser != null) {
         final GoogleSignInAuthentication googleAuth =
             await googleUser.authentication;
@@ -35,21 +36,31 @@ class LoginPageViewModel extends Notifier<LoginState> {
         // Firebase에 로그인(앱에 로그인하는 것과는 별개임)
         // 새 사용자라면 Firebase Authentication에서 사용자 생성
         final user = userCredential.user;
-        // TODO 뷰모델 완성
         if (user != null) {
-          final fetchUser = await fetchUserUseCaseProvider;
-          if (fetchUser != null) {
-            // TODO state=LoginState(appUser: fetchUser);
+          final fetchUserUseCase = ref.read(fetchUserUseCaseProvider);
+          final fetchedUser = await fetchUserUseCase.fetchUser(user.uid);
+          //TODO 매개변수 user.uid가 맞는지?
+          if (fetchedUser != null) {
+            state = LoginState(appUser: fetchedUser);
+          } else {
+            state = LoginState(
+              appUser: AppUser(
+                id: user.uid,
+                name: user.displayName ?? "",
+                profile: user.photoURL ?? "",
+              ),
+            );
           }
         }
       }
     } catch (e) {
+      state = LoginState(appUser: null);
       print(e);
     }
   }
-
-  final loginPageViewModelProvider =
-      NotifierProvider<LoginPageViewModel, LoginState>(() {
-    return LoginPageViewModel();
-  });
 }
+
+final loginPageViewModelProvider =
+    NotifierProvider<LoginPageViewModel, LoginState>(() {
+  return LoginPageViewModel();
+});
