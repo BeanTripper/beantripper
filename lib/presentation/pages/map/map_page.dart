@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bean_tripper/constant/theme.dart';
+import 'package:bean_tripper/presentation/pages/map/map_view_model.dart';
+import 'package:bean_tripper/presentation/pages/map/widgets/map_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
