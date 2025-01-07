@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class CaffeDetailPage extends StatelessWidget {
+class CafeDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('CaffeDetailPage'),
+        child: Text('CafeDetailPage'),
       ),
     );
   }
