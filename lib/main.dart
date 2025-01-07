@@ -1,4 +1,5 @@
 import 'package:bean_tripper/firebase_options.dart';
+import 'package:bean_tripper/presentation/pages/caffe_detail/caffe_detail_page.dart';
 import 'package:bean_tripper/presentation/pages/home/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

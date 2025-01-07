@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bean_tripper/theme.dart';
+import 'package:bean_tripper/constant/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 
