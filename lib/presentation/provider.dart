@@ -4,6 +4,7 @@ import 'package:bean_tripper/domain/repository/app_user_repository.dart';
 import 'package:bean_tripper/domain/usecase/fetch_user_usecase.dart';
 import 'package:bean_tripper/domain/usecase/save_user_usecase.dart';
 import 'package:bean_tripper/domain/usecase/update_user_usecase.dart';
+import 'package:bean_tripper/presentation/pages/feed_write/feed_wirte_viewmodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,4 +23,8 @@ final saveUserUseCaseProvider = Provider<SaveUserUseCase>((ref) {
 
 final updateUserUseCaseProvider = Provider<UpdateUserUseCase>((ref) {
   return UpdateUserUseCase(ref.read(_appUserRepository));
+});
+
+final feedWriteViewModelProvider = ChangeNotifierProvider((ref) {
+  return FeedWriteViewModel();
 });

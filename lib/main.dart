@@ -43,13 +43,11 @@ class MyApp extends StatelessWidget {
       // ontap:(){Navigator.pushNamed(context, '/feeds_page')}
       theme: ThemeData(
         fontFamily: 'Pretendard',
-        brightness: Brightness.dark,
+        brightness: Brightness.dark,  
       ),
-<<<<<<<<< Temporary merge branch 1
-      home: FeedsPage(), // login_page작업용
-=========
+
       home: FeedWritePage(), // login_page작업용
->>>>>>>>> Temporary merge branch 2
+
       // home: HomePage(),
     );
   }
