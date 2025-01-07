@@ -1,15 +1,11 @@
 class Cafe {
   String id;
-  String name;
-  String address;
-  String? operatingTime;
-  String? tel;
+  double lat;
+  double lng;
 
   Cafe({
     required this.id,
-    required this.name,
-    required this.address,
-    required this.operatingTime,
-    required this.tel,
+    required this.lat,
+    required this.lng,
   });
 }
