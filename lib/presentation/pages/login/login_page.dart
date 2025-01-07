@@ -1,6 +1,6 @@
 import 'package:bean_tripper/presentation/pages/login/login_page_view_model.dart';
 import 'package:bean_tripper/presentation/pages/login/widget/custom_social_button.dart';
-import 'package:bean_tripper/theme.dart';
+import 'package:bean_tripper/constant/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,7 +64,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Divider(
-                    color: CustomColors.lightGrey,
+                    color: CustomColors.lightGray,
                     thickness: 1,
                   ),
                   GestureDetector(
