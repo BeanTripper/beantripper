@@ -44,10 +44,11 @@ class MyApp extends StatelessWidget {
       // ontap:(){Navigator.pushNamed(context, '/feeds_page')}
       theme: ThemeData(
         fontFamily: 'Pretendard',
-        brightness: Brightness.dark,
+        brightness: Brightness.dark,  
       ),
-      // home: HomePage(),
+
       home: CafeDetailPage(),
+
     );
   }
 }

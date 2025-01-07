@@ -10,6 +10,7 @@ import 'package:bean_tripper/domain/usecase/fetch_cafes_list_usecase.dart';
 import 'package:bean_tripper/domain/usecase/fetch_user_usecase.dart';
 import 'package:bean_tripper/domain/usecase/save_user_usecase.dart';
 import 'package:bean_tripper/domain/usecase/update_user_usecase.dart';
+import 'package:bean_tripper/presentation/pages/feed_write/feed_wirte_viewmodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,6 +31,11 @@ final updateUserUseCaseProvider = Provider<UpdateUserUseCase>((ref) {
   return UpdateUserUseCase(ref.read(_appUserRepository));
 });
 
+
+final feedWriteViewModelProvider = ChangeNotifierProvider((ref) {
+  return FeedWriteViewModel();
+  });
+
 // 카페
 final _cafeDataSource = Provider<CafeDataSource>((ref) {
   return CafeDataSourceImpl();
@@ -45,4 +51,5 @@ final fetchCafesListUsecaseProvider = Provider((ref) {
 final fetchCafeItemUsecaseProvider = Provider((ref) {
   final cafeRefo = ref.read(_cafeRepository);
   return FetchCafeItemUsecase(cafeRefo);
+
 });

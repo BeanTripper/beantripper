@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bean_tripper/presentation/pages/feed_write/feed_wirte_viewmodel.dart';
+import 'package:bean_tripper/presentation/provider.dart';
 
-class FeedWritePage extends StatelessWidget {
+class FeedWritePage extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModel = ref.watch(feedWriteViewModelProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('작성하기'),
@@ -15,7 +20,6 @@ class FeedWritePage extends StatelessWidget {
       ),
       body: GestureDetector(
         onTap: () {
-          // 배경 터치 시 키보드 숨기기
           FocusScope.of(context).unfocus();
         },
         child: SingleChildScrollView(
@@ -24,88 +28,67 @@ class FeedWritePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 이미지 선택 섹션
                 const SizedBox(height: 20),
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.camera_alt),
-                    onPressed: () {
-                      // 이미지 추가 기능
-                    },
-                  ),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        await viewModel.pickImages();
+                      },
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(Icons.camera_alt),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Wrap(
+                        spacing: 8,
+                        children: viewModel.selectedImages
+                            .map((file) => Image.file(
+                                  file,
+                                  width: 60,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 20),
-                // 카페 입력 섹션
                 const Text(
                   '카페',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
                 const SizedBox(height: 10),
-                Container(
-                  height: 46,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey),
+                TextField(
+                  decoration: const InputDecoration(
+                    hintText: '카페 이름을 입력해주세요',
+                    border: OutlineInputBorder(),
                   ),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: TextField(
-                          decoration: const InputDecoration(
-                            hintText: '카페 이름을 입력해주세요',
-                            hintStyle: TextStyle(fontSize: 16),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.search),
-                        onPressed: () {
-                          // 검색 아이콘 동작
-                        },
-                      ),
-                    ],
-                  ),
+                  onChanged: viewModel.setCafeName,
                 ),
                 const SizedBox(height: 20),
-                // 게시글 입력 섹션
                 const Text(
                   '게시글',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
                 const SizedBox(height: 12),
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey),
+                TextField(
+                  maxLines: 5,
+                  decoration: const InputDecoration(
+                    hintText: '게시글을 작성해주세요',
+                    border: OutlineInputBorder(),
                   ),
-                  child: TextField(
-                    maxLines: null,
-                    expands: true,
-                    decoration: const InputDecoration(
-                      hintText: '게시글을 작성해주세요',
-                      hintStyle: TextStyle(fontSize: 16),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(12),
-                    ),
-                  ),
+                  onChanged: viewModel.setPostContent,
                 ),
                 const SizedBox(height: 20),
-                // 태그 버튼 섹션
                 const Text(
                   '태그',
                   style: TextStyle(fontSize: 20, color: Colors.white),
@@ -115,21 +98,42 @@ class FeedWritePage extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    StatefulTagButton(label: '커피맛집'),
-                    StatefulTagButton(label: '모던한'),
-                    StatefulTagButton(label: '디자인이 예쁜'),
-                    StatefulTagButton(label: '따뜻한'),
-                    StatefulTagButton(label: '깔끔한'),
-                    StatefulTagButton(label: '다시 방문하고 싶은'),
+                    for (var tag in ['커피맛집', '모던한', '디자인이 예쁜', '따뜻한', '깔끔한', '다시 방문하고 싶은'])
+                      GestureDetector(
+                        onTap: () {
+                          viewModel.toggleTagSelection(tag);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: viewModel.categories.contains(tag) ? const Color(0xFFA47764) : Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            tag,
+                            style: TextStyle(
+                              color: viewModel.categories.contains(tag) ? Colors.white : Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
                 const SizedBox(height: 20),
-                // 작성 완료 버튼
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // 작성 완료 버튼 기능
+                    onPressed: () async {
+                      try {
+                        await viewModel.uploadDataToFirebase();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('업로드 성공!')),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('업로드 실패: $e')),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFA47764),
@@ -143,43 +147,6 @@ class FeedWritePage extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class StatefulTagButton extends StatefulWidget {
-  final String label;
-
-  const StatefulTagButton({Key? key, required this.label}) : super(key: key);
-
-  @override
-  _StatefulTagButtonState createState() => _StatefulTagButtonState();
-}
-
-class _StatefulTagButtonState extends State<StatefulTagButton> {
-  bool isSelected = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          isSelected = !isSelected;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFA47764) : Colors.white,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          widget.label,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black,
           ),
         ),
       ),
