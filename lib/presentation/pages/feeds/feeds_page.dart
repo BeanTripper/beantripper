@@ -48,20 +48,13 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
           IconButton(
             icon: Icon(Icons.map),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MapPage()), // 맵 페이지로 이동
-              );
+              Navigator.pushNamed(context, '/map_page');
             },
           ),
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProfilePage()), // 프로필 페이지로 이동
-              );
+              Navigator.pushNamed(context, '/profile_page');
             },
           ),
         ],
@@ -118,11 +111,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => FeedWritePage()), // WritePage로 이동
-          );
+          Navigator.pushNamed(context, '/feeds_write_page');
         },
         child: Icon(Icons.edit), // 연필 모양 아이콘
         shape: RoundedRectangleBorder(
