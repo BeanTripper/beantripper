@@ -1,9 +1,9 @@
 import 'package:bean_tripper/domain/entity/app_user.dart';
 
 abstract interface class AppUserRepository {
-  Future<AppUser?> fetchUser(String uid) async {}
+  Future<AppUser?> fetchUser(String id);
 
-  Future<void> saveUser(AppUser user) async {}
+  Future<void> saveUser(AppUser user);
 
-  Future<void> updateUSer(AppUser user) async {}
+  Future<void> updateUser(AppUser user);
 }

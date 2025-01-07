@@ -1,5 +1,4 @@
 import 'package:bean_tripper/domain/entity/app_user.dart';
-import 'package:bean_tripper/domain/repository/app_user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -42,7 +41,7 @@ class LoginPageViewModel extends Notifier<LoginState> {
     }
   }
 
-  final userViewModelProvider =
+  final loginPageViewModelProvider =
       NotifierProvider<LoginPageViewModel, LoginState>(() {
     return LoginPageViewModel();
   });

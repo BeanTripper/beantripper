@@ -1,11 +1,11 @@
 import 'package:bean_tripper/domain/entity/app_user.dart';
 import 'package:bean_tripper/domain/repository/app_user_repository.dart';
 
-class FetchUserUseCase {
-  FetchUserUseCase(this._appUserRepository);
+class SaveUserUseCase {
+  SaveUserUseCase(this._appUserRepository);
   final AppUserRepository _appUserRepository;
 
-  Future<AppUser?> fetchUser(String id) async {
-    return await _appUserRepository.fetchUser(id);
+  Future<void> saveUser(AppUser user) async {
+    return await _appUserRepository.saveUser(user);
   }
 }
