@@ -2,15 +2,13 @@ import 'dart:async';
 
 import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/domain/entity/cafe.dart';
+import 'package:bean_tripper/domain/entity/cafe_detail.dart';
 import 'package:bean_tripper/presentation/pages/map/map_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MapPage extends ConsumerWidget {
-  // NaverMapController 객체의 비동기 작업 완료를 나타내는 Completer
-  // final Completer<NaverMapController> mapControllerCompleter = Completer();
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(mapViewModel);
@@ -22,14 +20,14 @@ class MapPage extends ConsumerWidget {
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          naverMap(vm),
-          bottomSheetContainer(),
+          naverMap(vm, context),
+          // bottomSheetContainer(),
         ],
       ),
     );
   }
 
-  NaverMap naverMap(List<Cafe>? cafes) {
+  NaverMap naverMap(List<Cafe>? cafes, BuildContext context) {
     return NaverMap(
       options: const NaverMapViewOptions(
         initialCameraPosition: NCameraPosition(
@@ -40,21 +38,27 @@ class MapPage extends ConsumerWidget {
         consumeSymbolTapEvents: true,
       ),
       onMapReady: (controller) {
-        // Completer에 지도 컨트롤러 완료 신호 전송
-        // mapControllerCompleter.complete(controller);
-
-        // final marker1 = NMarker(id: '1', position: NLatLng(35.2347, 126.9816));
-        // marker1.setOnTapListener(
-        //   (overlay) {
-        //     print('마커 터치');
-        //   },
-        // );
-        // controller.addOverlay(marker1);
-
         cafes?.forEach((e) {
           final marker = NMarker(id: e.id, position: NLatLng(e.lat, e.lng));
           marker.setOnTapListener((overlay) {
             print("마커 터치 ${e.id}");
+
+            final item = CafeDetail(
+              id: 'id',
+              name: 'name',
+              address: 'address',
+              lat: 0,
+              lng: 0,
+              operatingTime: 'operatingTime',
+              tel: 'tel',
+            );
+
+            showModalBottomSheet(
+              backgroundColor: Color.fromRGBO(0, 0, 0, 0),
+              barrierColor: Color.fromRGBO(0, 0, 0, 0),
+              context: context,
+              builder: (context) => bottomSheetContainer(item, context),
+            );
           });
           controller.addOverlay(marker);
         });
@@ -62,7 +66,7 @@ class MapPage extends ConsumerWidget {
     );
   }
 
-  Widget bottomSheetContainer() {
+  Widget bottomSheetContainer(CafeDetail cafe, BuildContext context) {
     return Wrap(
       children: [
         Container(
@@ -77,7 +81,7 @@ class MapPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '카페 이름',
+                cafe.name,
                 style: TextStyle(
                   fontSize: 20,
                   color: CustomColors.brown,
@@ -90,20 +94,22 @@ class MapPage extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '영업시간: 8:00 ~ 22:00',
+                        cafe.operatingTime ?? '',
                         style: TextStyle(color: CustomColors.brown),
                       ),
-                      Text('02-1234-5678'),
+                      Text(cafe.tel ?? ''),
                     ],
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/cafe_detail_page');
+                    },
                     child: Text('상세보기'),
                   ),
                 ],
               ),
               Text(
-                'tjdnfxmrquftl tjchrn qksvhehd 11-2',
+                cafe.address,
                 style: TextStyle(color: CustomColors.brown),
                 overflow: TextOverflow.visible,
               ),
