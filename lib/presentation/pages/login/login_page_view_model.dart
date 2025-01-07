@@ -1,4 +1,5 @@
 import 'package:bean_tripper/domain/entity/app_user.dart';
+import 'package:bean_tripper/presentation/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -35,6 +36,12 @@ class LoginPageViewModel extends Notifier<LoginState> {
         // 새 사용자라면 Firebase Authentication에서 사용자 생성
         final user = userCredential.user;
         // TODO 뷰모델 완성
+        if (user != null) {
+          final fetchUser = await fetchUserUseCaseProvider;
+          if (fetchUser != null) {
+            // TODO state=LoginState(appUser: fetchUser);
+          }
+        }
       }
     } catch (e) {
       print(e);
