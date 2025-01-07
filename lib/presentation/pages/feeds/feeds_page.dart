@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page_viewmodel.dart';
 import 'package:bean_tripper/domain/entity/feed.dart';
 import 'package:bean_tripper/presentation/pages/feeds/comment_dialog.dart';
+import 'package:bean_tripper/presentation/pages/feed_write/feed_write_page.dart';
+import 'package:bean_tripper/presentation/pages/map/map_page.dart';
 
 class FeedsPage extends ConsumerStatefulWidget {
   @override
@@ -40,9 +42,18 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
       appBar: AppBar(
         title: Image.asset(
           'assets/images/login_logo.png',
-          height: 40,
+          height: 35,
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.map),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MapPage()), // 맵 페이지로 이동
+              );
+            },
+          ),
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () {
@@ -66,7 +77,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
               style: TextStyle(
                 color: Color(0xFFA47764), // 글씨 색상 설정
                 fontSize: Theme.of(context).textTheme.headlineLarge!.fontSize! *
-                    0.5, // 글씨 크기 절반으로 설정
+                    0.6, // 글씨 크기 절반으로 설정
               ),
             ),
           ),
@@ -74,7 +85,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
             height: 120, // 가로 스크롤 이미지를 위한 높이 설정
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: 3, // 예시 이미지 수 설정
+              itemCount: 5, // 예시 이미지 수 설정
               separatorBuilder: (context, index) =>
                   SizedBox(width: 8), // 이미지들 사이 간격 설정
               itemBuilder: (context, index) {
@@ -104,6 +115,20 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => FeedWritePage()), // WritePage로 이동
+          );
+        },
+        child: Icon(Icons.edit), // 연필 모양 아이콘
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0)), // 네모 모양
+        ),
+        backgroundColor: Color(0xFFA47764), // 버튼 색상 설정
       ),
     );
   }
