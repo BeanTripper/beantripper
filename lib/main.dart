@@ -28,7 +28,11 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Pretendard',
         brightness: Brightness.dark,
       ),
-      home: LoginPage(), // login_page작업용
+<<<<<<<<< Temporary merge branch 1
+      home: FeedsPage(), // login_page작업용
+=========
+      home: FeedWritePage(), // login_page작업용
+>>>>>>>>> Temporary merge branch 2
       // home: HomePage(),
     );
   }
