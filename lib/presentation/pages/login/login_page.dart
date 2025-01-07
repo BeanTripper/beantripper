@@ -59,7 +59,9 @@ class LoginPage extends StatelessWidget {
                     textColor: CustomColors.black,
                     iconPath: "assets/images/google_icon.png",
                     onPressed: () async {
-                      userViewModel.signInWithGoogle();
+                      await userViewModel.signInWithGoogle();
+                      await userViewModel.submitUserToFirestore();
+                      Navigator.pushNamed(context, '/feeds_page');
                     },
                     iconSize: 20,
                   ),
