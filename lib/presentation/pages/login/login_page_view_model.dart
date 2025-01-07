@@ -18,7 +18,9 @@ class LoginPageViewModel extends Notifier<LoginState> {
   ///Google
   Future<void> signInWithGoogle() async {
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email'],
+      );
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       //google 로그인
       print('2');
