@@ -46,6 +46,7 @@ dependencies:
   firebase_storage: ^12.3.7
   provider: ^6.1.2
   expandable_text: ^2.3.0
+  http: ^1.2.2
 
 
 dev_dependencies:
