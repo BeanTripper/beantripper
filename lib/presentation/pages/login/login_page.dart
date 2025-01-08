@@ -35,8 +35,9 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             Consumer(builder: (context, ref, child) {
-              // final userState=ref.watch( loginPageViewModel );
-              // final userViewModel=ref.read(loginPageViewModel.notifier
+              final userState = ref.watch(loginPageViewModelProvider);
+              final userViewModel =
+                  ref.read(loginPageViewModelProvider.notifier);
               // )
 //TODO 뷰모델 갖고오기.
 
@@ -58,7 +59,9 @@ class LoginPage extends StatelessWidget {
                     textColor: CustomColors.black,
                     iconPath: "assets/images/google_icon.png",
                     onPressed: () async {
-                      // TODO signInWithGoogle();
+                      await userViewModel.signInWithGoogle();
+                      await userViewModel.submitUserToFirestore();
+                      Navigator.pushNamed(context, '/feeds_page');
                     },
                     iconSize: 20,
                   ),
