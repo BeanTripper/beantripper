@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bean_tripper/domain/entity/feed.dart';
+import 'package:bean_tripper/data/repository/comment_repository.dart';
 
 void showCommentDialog(BuildContext context, Feed post) {
   final TextEditingController _commentController = TextEditingController();
+  final CommentRepository _commentRepository =
+      CommentRepository(); // Repository 인스턴스 생성
+
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
@@ -21,12 +24,9 @@ void showCommentDialog(BuildContext context, Feed post) {
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () async {
-                // Firebase에 댓글 저장
-                await FirebaseFirestore.instance.collection('comments').add({
-                  'postId': post.id,
-                  'comment': _commentController.text,
-                  'timestamp': FieldValue.serverTimestamp(),
-                });
+                // Repository를 사용하여 Firebase에 댓글 저장
+                await _commentRepository.addComment(
+                    post.id, _commentController.text);
                 Navigator.pop(context); // 댓글 입력 후 창 닫기
               },
               child: Text('댓글 등록'),
