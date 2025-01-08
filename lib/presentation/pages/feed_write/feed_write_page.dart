@@ -98,21 +98,33 @@ class FeedWritePage extends ConsumerWidget {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    for (var tag in ['커피맛집', '모던한', '디자인이 예쁜', '따뜻한', '깔끔한', '다시 방문하고 싶은'])
+                    for (var tag in [
+                      '커피맛집',
+                      '모던한',
+                      '디자인이 예쁜',
+                      '따뜻한',
+                      '깔끔한',
+                      '다시 방문하고 싶은'
+                    ])
                       GestureDetector(
                         onTap: () {
                           viewModel.toggleTagSelection(tag);
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
-                            color: viewModel.categories.contains(tag) ? const Color(0xFFA47764) : Colors.white,
+                            color: viewModel.categories.contains(tag)
+                                ? const Color(0xFFA47764)
+                                : Colors.white,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
                             tag,
                             style: TextStyle(
-                              color: viewModel.categories.contains(tag) ? Colors.white : Colors.black,
+                              color: viewModel.categories.contains(tag)
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
                         ),
