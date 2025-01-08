@@ -1,6 +1,7 @@
 import 'package:bean_tripper/presentation/pages/login/login_page_view_model.dart';
 import 'package:bean_tripper/presentation/pages/login/widget/custom_social_button.dart';
 import 'package:bean_tripper/constant/theme.dart';
+import 'package:bean_tripper/presentation/pages/login/widget/looking_around_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,69 +30,54 @@ class LoginPage extends StatelessWidget {
                   const SizedBox(height: 20),
                   Image.asset(
                     "assets/images/login_logo.png",
-                    width: 210,
+                    width: 233,
                   ),
                 ],
               ),
             ),
-            Consumer(builder: (context, ref, child) {
-              final userState = ref.watch(loginPageViewModelProvider);
-              final userViewModel =
-                  ref.read(loginPageViewModelProvider.notifier);
-              // )
-//TODO 뷰모델 갖고오기.
-
-              return Column(
-                children: [
-                  Spacer(),
-                  CustomSocialButton(
-                    text: "카카오로 시작하기",
-                    backgroundColor: const Color(0xFFFAE100),
-                    textColor: CustomColors.black,
-                    iconPath: "assets/images/kakao_icon.png",
-                    onPressed: () async {
-                      await userViewModel.signInWithKakao();
-                      await userViewModel.submitUserToFirestore();
-                      // Navigator.pushNamed(context, '/feeds_page');
-                    },
-                    iconSize: 20,
-                  ),
-                  const SizedBox(height: 20),
-                  CustomSocialButton(
-                    text: "구글로 시작하기",
-                    backgroundColor: Colors.white,
-                    textColor: CustomColors.black,
-                    iconPath: "assets/images/google_icon.png",
-                    onPressed: () async {
-                      await userViewModel.signInWithGoogle();
-                      await userViewModel.submitUserToFirestore();
-                      // Navigator.pushNamed(context, '/feeds_page');
-                    },
-                    iconSize: 20,
-                  ),
-                  const SizedBox(height: 20),
-                  Divider(
-                    color: CustomColors.lightGray,
-                    thickness: 1,
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, '/feeds_page'),
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 20),
-                          Center(
-                            child: Text('둘러보기'),
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-                      ),
+            Consumer(
+              builder: (context, ref, child) {
+                final userState = ref.watch(loginPageViewModelProvider);
+                final userViewModel =
+                    ref.read(loginPageViewModelProvider.notifier);
+                return Column(
+                  children: [
+                    const Spacer(),
+                    CustomSocialButton(
+                      text: "카카오로 시작하기",
+                      backgroundColor: const Color(0xFFFAE100),
+                      textColor: CustomColors.black,
+                      iconPath: "assets/images/kakao_icon.png",
+                      onPressed: () async {
+                        await userViewModel.signInWithKakao();
+                        await userViewModel.submitUserToFirestore();
+                        // Navigator.pushNamed(context, '/feeds_page');
+                      },
+                      iconSize: 20,
                     ),
-                  )
-                ],
-              );
-            })
+                    const SizedBox(height: 20),
+                    CustomSocialButton(
+                      text: "구글로 시작하기",
+                      backgroundColor: Colors.white,
+                      textColor: CustomColors.black,
+                      iconPath: "assets/images/google_icon.png",
+                      onPressed: () async {
+                        await userViewModel.signInWithGoogle();
+                        await userViewModel.submitUserToFirestore();
+                        // Navigator.pushNamed(context, '/feeds_page');
+                      },
+                      iconSize: 20,
+                    ),
+                    const SizedBox(height: 20),
+                    Divider(
+                      color: CustomColors.lightGray,
+                      thickness: 1,
+                    ),
+                    const LookingAroundButton(),
+                  ],
+                );
+              },
+            ),
           ],
         ),
       ),
