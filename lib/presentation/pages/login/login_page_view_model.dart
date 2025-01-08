@@ -67,18 +67,54 @@ class LoginPageViewModel extends Notifier<LoginState> {
 
   ///kakao 로그인
   Future<void> signInWithKakao() async {
-    final isInstalled = await isKakaoTalkInstalled();
-    final OAuthToken oAuthToken = isInstalled
-        ? await UserApi.instance.loginWithKakaoTalk()
-        : await UserApi.instance.loginWithKakaoAccount();
+    try {
+      // await UserApi.instance.logout(); 카카오 로그아웃기능
+      final isInstalled = await isKakaoTalkInstalled();
+      final OAuthToken oAuthToken = isInstalled
+          ? await UserApi.instance.loginWithKakaoTalk()
+          : await UserApi.instance.loginWithKakaoAccount();
 
-    final OAuthProvider oAuthProvider = OAuthProvider('oidc.kakao');
-    final OAuthCredential oAuthCred = oAuthProvider.credential(
-      accessToken: oAuthToken.accessToken,
-      idToken: oAuthToken.idToken,
-    );
-    final UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(oAuthCred);
+      final OAuthProvider oAuthProvider = OAuthProvider('oidc.kakao');
+      final OAuthCredential oAuthCred = oAuthProvider.credential(
+        accessToken: oAuthToken.accessToken,
+        idToken: oAuthToken.idToken,
+      );
+      print(1);
+      // 구글에서 받은 accessToken과 idToken을 firebase가 이해할수 있는 걸로 변환
+      // .credential이라는 메서드는 kakao_flutter_sdk_user 패키지의 것
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(oAuthCred);
+      print(2);
+
+      // Firebase에 로그인(앱에 로그인하는 것과는 별개임)
+      // 새 사용자라면 Firebase Authentication에서 사용자 생성
+      final user = userCredential.user;
+      if (user != null) {
+        final fetchUserUseCase = ref.read(fetchUserUseCaseProvider);
+        print(3);
+        final fetchedUser = await fetchUserUseCase.fetchUser(user.uid);
+        print(4);
+
+        if (fetchedUser != null) {
+          state = LoginState(appUser: fetchedUser);
+          print(5);
+        } else {
+          //user 가 firestore에 없으면 firestore에 등록. registerPage
+          //updateUserToFirestore
+          //submitUserToFirestore
+          state = LoginState(
+            appUser: AppUser(
+              id: user.uid,
+              name: user.displayName ?? "",
+              profile: user.photoURL ?? "",
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      state = LoginState(appUser: null);
+      print(e);
+    }
   }
 
   Future<void> submitUserToFirestore() async {
