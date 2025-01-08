@@ -31,24 +31,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/feeds_page': (context) => FeedsPage(),
-        '/feeds_write_page': (context) => FeedWritePage(),
-        '/map_page': (context) => MapPage(),
-        '/cafe_detail_page': (context) => CafeDetailPage(),
-        '/login_page': (context) => LoginPage(),
-        '/profile_page': (context) => ProfilePage(),
-      },
-      // feeds_page로 가고 싶을때 pushNamed 사용예시:
-      // ontap:(){Navigator.pushNamed(context, '/feeds_page')}
-      theme: ThemeData(
-        fontFamily: 'Pretendard',
-        brightness: Brightness.dark,  
-      ),
-
-      home: CafeDetailPage(),
-
-    );
+        routes: {
+          '/feeds_page': (context) => FeedsPage(),
+          '/feeds_write_page': (context) => FeedWritePage(),
+          '/map_page': (context) => MapPage(),
+          '/cafe_detail_page': (context) => CafeDetailPage(),
+          '/login_page': (context) => LoginPage(),
+        },
+        // feeds_page로 가고 싶을때 pushNamed 사용예시:
+        // ontap:(){Navigator.pushNamed(context, '/feeds_page')}
+        theme: ThemeData(
+          fontFamily: 'Pretendard',
+          brightness: Brightness.dark,
+        ),
+        home: LoginPage()
+        // home: HomePage(),
+        );
   }
 }

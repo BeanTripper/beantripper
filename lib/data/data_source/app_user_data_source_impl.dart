@@ -8,7 +8,7 @@ class AppUserDataSourceImpl implements AppUserDataSource {
 
   @override
   Future<UserDto?> fetchUser(String id) async {
-    final doc = await _firestore.collection('users').doc(id).get();
+    final doc = await _firestore.collection('user').doc(id).get();
     if (doc.exists) {
       final data = doc.data() as Map<String, dynamic>;
       final newMap = {
@@ -25,13 +25,15 @@ class AppUserDataSourceImpl implements AppUserDataSource {
     final map = user.toJson();
     map.remove('id');
     //문서 id가 user id가 되기때문에,
-    await _firestore.collection('users').doc(user.id).set(map);
+    await _firestore.collection('user').doc(user.id).set(map);
+
+    /// user로 데이터 바꿔서 에러 뜸
   }
 
   @override
   Future<void> updateUser(UserDto user) async {
     final map = user.toJson();
     map.remove('id');
-    await _firestore.collection('users').doc(user.id).set(map);
+    await _firestore.collection('user').doc(user.id).set(map);
   }
 }
