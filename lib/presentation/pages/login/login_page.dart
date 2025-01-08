@@ -71,7 +71,7 @@ class LoginPage extends StatelessWidget {
                     thickness: 1,
                   ),
                   GestureDetector(
-                    onTap: () => print('둘러보기'),
+                    onTap: () => Navigator.pushNamed(context, '/feeds_page'),
                     child: Container(
                       color: Colors.transparent,
                       child: Column(
