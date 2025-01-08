@@ -3,6 +3,7 @@ import 'package:bean_tripper/presentation/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 class LoginState {
   final AppUser? appUser;
@@ -19,7 +20,7 @@ class LoginPageViewModel extends Notifier<LoginState> {
   Future<void> signInWithGoogle() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn();
-      // await googleSignIn.signOut(); //로그아웃 기능
+      await googleSignIn.signOut(); //로그아웃 기능
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       //google 로그인
       if (googleUser != null) {
@@ -45,7 +46,7 @@ class LoginPageViewModel extends Notifier<LoginState> {
           if (fetchedUser != null) {
             state = LoginState(appUser: fetchedUser);
           } else {
-            //user 가 firestore에 없으면 firestore에 등록. registerpage
+            //user 가 firestore에 없으면 firestore에 등록. registerPage
             //updateUserToFirestore
             //submitUserToFirestore
             state = LoginState(
@@ -64,12 +65,30 @@ class LoginPageViewModel extends Notifier<LoginState> {
     }
   }
 
+  ///kakao 로그인
+  Future<void> signInWithKakao() async {
+    final isInstalled = await isKakaoTalkInstalled();
+    final OAuthToken oAuthToken = isInstalled
+        ? await UserApi.instance.loginWithKakaoTalk()
+        : await UserApi.instance.loginWithKakaoAccount();
+
+    final OAuthProvider oAuthProvider = OAuthProvider('oidc.kakao');
+    final OAuthCredential oAuthCred = oAuthProvider.credential(
+      accessToken: oAuthToken.accessToken,
+      idToken: oAuthToken.idToken,
+    );
+    final UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(oAuthCred);
+  }
+
   Future<void> submitUserToFirestore() async {
     final user = state.appUser;
     if (user != null) {
       try {
         final updateUserUseCase = ref.read(updateUserUseCaseProvider);
         final updateUser = await updateUserUseCase.updateUser(user);
+
+        /// TODO UPDATE -> SAVE로 변경.
       } catch (e) {
         print(e);
       }

@@ -49,7 +49,11 @@ class LoginPage extends StatelessWidget {
                     backgroundColor: const Color(0xFFFAE100),
                     textColor: CustomColors.black,
                     iconPath: "assets/images/kakao_icon.png",
-                    onPressed: () async {},
+                    onPressed: () async {
+                      await userViewModel.signInWithKakao();
+                      await userViewModel.submitUserToFirestore();
+                      // Navigator.pushNamed(context, '/feeds_page');
+                    },
                     iconSize: 20,
                   ),
                   const SizedBox(height: 20),
@@ -61,7 +65,7 @@ class LoginPage extends StatelessWidget {
                     onPressed: () async {
                       await userViewModel.signInWithGoogle();
                       await userViewModel.submitUserToFirestore();
-                      Navigator.pushNamed(context, '/feeds_page');
+                      // Navigator.pushNamed(context, '/feeds_page');
                     },
                     iconSize: 20,
                   ),
