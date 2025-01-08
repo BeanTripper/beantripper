@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
           '/map_page': (context) => MapPage(),
           '/cafe_detail_page': (context) => CafeDetailPage(),
           '/login_page': (context) => LoginPage(),
+          '/profile_page': (context) => ProfilePage(),
         },
         // feeds_page로 가고 싶을때 pushNamed 사용예시:
         // ontap:(){Navigator.pushNamed(context, '/feeds_page')}
