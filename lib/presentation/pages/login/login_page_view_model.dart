@@ -19,7 +19,7 @@ class LoginPageViewModel extends Notifier<LoginState> {
   Future<void> signInWithGoogle() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn();
-      // await googleSignIn.signOut(); //로그아웃 기능
+      await googleSignIn.signOut(); //로그아웃 기능
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       //google 로그인
       if (googleUser != null) {

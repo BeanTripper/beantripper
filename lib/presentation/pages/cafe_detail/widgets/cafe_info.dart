@@ -18,7 +18,10 @@ class CafeInfo extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('충북 청주시 흥덕구 가경동'),
+                Text(
+                  '충북 청주시 흥덕구 가경동',
+                  style: TextStyle(fontSize: 16),
+                ),
                 Row(
                   children: [
                     Text(
