@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Pretendard',
           brightness: Brightness.dark,
         ),
-        home: LoginPage()
+        home: MapPage()
         // home: HomePage(),
         );
   }

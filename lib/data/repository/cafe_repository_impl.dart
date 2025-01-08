@@ -31,8 +31,8 @@ class CafeRepositoryImpl implements CafeRepository {
   }
 
   @override
-  Future<List<Cafe>?> fetchCafesList() async {
-    final result = await _cafeDataSource.fetchCafesList();
+  Future<List<Cafe>?> fetchCafesList(double lat, double lng) async {
+    final result = await _cafeDataSource.fetchCafesList(lat, lng);
     return result
         ?.map(
           (e) => Cafe(

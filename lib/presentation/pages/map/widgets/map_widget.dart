@@ -1,5 +1,4 @@
 import 'package:bean_tripper/domain/entity/cafe.dart';
-import 'package:bean_tripper/domain/entity/cafe_detail.dart';
 import 'package:bean_tripper/presentation/pages/map/map_view_model.dart';
 import 'package:bean_tripper/presentation/pages/map/widgets/cafe_info_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -8,19 +7,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MapWidget extends ConsumerWidget {
   const MapWidget({
-    super.key,
     required this.cafes,
+    required this.latLng,
   });
 
   final List<Cafe>? cafes;
+  final NLatLng latLng;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vm = ref.watch(mapViewModel);
+    final state = ref.watch(mapViewModel);
     return NaverMap(
-      options: const NaverMapViewOptions(
+      options: NaverMapViewOptions(
         initialCameraPosition: NCameraPosition(
-          target: NLatLng(35.2347, 126.9816),
+          target: latLng,
           zoom: 13.5,
         ),
         locationButtonEnable: true,

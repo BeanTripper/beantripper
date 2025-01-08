@@ -1,7 +1,9 @@
+import 'package:bean_tripper/core/geolocator_helper.dart';
 import 'package:bean_tripper/domain/entity/cafe.dart';
 import 'package:bean_tripper/domain/entity/cafe_detail.dart';
 import 'package:bean_tripper/presentation/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MapState {
   List<Cafe> cafeList;
@@ -16,12 +18,13 @@ class MapState {
 class MapViewModel extends Notifier<MapState> {
   @override
   MapState build() {
-    fetchCafes();
+    // fetchCafes();
     return MapState(cafeList: [], selectedCafe: null);
   }
 
-  Future<void> fetchCafes() async {
-    final cafes = await ref.read(fetchCafesListUsecaseProvider).excute();
+  Future<void> fetchCafes(double lat, double lng) async {
+    final cafes =
+        await ref.read(fetchCafesListUsecaseProvider).excute(lat, lng);
     cafes?.forEach((element) {
       print(
           "CAFE== id: ${element.id}, lat: ${element.lat}, lng: ${element.lng}");

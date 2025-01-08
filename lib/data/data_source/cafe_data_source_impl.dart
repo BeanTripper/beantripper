@@ -25,14 +25,19 @@ class CafeDataSourceImpl implements CafeDataSource {
   }
 
   @override
-  Future<List<CafeDto>?> fetchCafesList() async {
+  Future<List<CafeDto>?> fetchCafesList(double lat, double lng) async {
     // final jsonString = await _assetBundle.loadString('assets/cafes.json');
     // return List.from(jsonDecode(jsonString))
     //     .map((e) => CafeDto.fromJson(e))
     //     .toList();
 
     final firestore = FirebaseFirestore.instance;
-    final collectionRef = firestore.collection('cafe');
+    final collectionRef = firestore
+        .collection('cafe')
+        .where('lat', isLessThan: lat + 0.05)
+        .where('lat', isGreaterThan: lat - 0.05)
+        .where('lng', isLessThan: lng + 0.05)
+        .where('lng', isGreaterThan: lng - 0.05);
     final result = await collectionRef.get();
     final docs = result.docs;
 

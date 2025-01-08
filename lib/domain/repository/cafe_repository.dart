@@ -2,7 +2,7 @@ import 'package:bean_tripper/domain/entity/cafe.dart';
 import 'package:bean_tripper/domain/entity/cafe_detail.dart';
 
 abstract interface class CafeRepository {
-  Future<List<Cafe>?> fetchCafesList();
+  Future<List<Cafe>?> fetchCafesList(double lat, double lng);
 
   Future<CafeDetail?> fetchCafeItem(String id);
 
