@@ -15,7 +15,8 @@ class MapWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    NaverMapController? mapController;
+    final vm = ref.read(mapViewModel.notifier);
+    final state = ref.watch(mapViewModel);
 
     return NaverMap(
       options: NaverMapViewOptions(
@@ -27,21 +28,21 @@ class MapWidget extends ConsumerWidget {
         consumeSymbolTapEvents: true,
       ),
       onMapReady: (controller) async {
-        mapController = controller;
-        if (mapController != null) {
-          await fetchCafeMarkers(ref, context, mapController!, latLng);
+        state.mapController = controller;
+        if (state.mapController != null) {
+          await fetchCafeMarkers(ref, context, state.mapController!, latLng);
         }
       },
       onCameraIdle: () async {
         print("onCameraIdle called");
-        if (mapController != null) {
-          final cameraPosition = mapController!.nowCameraPosition.target;
-          print("Camera idle at: $cameraPosition");
-          try {
+        if (state.mapController != null) {
+          final cameraPosition = state.mapController!.nowCameraPosition.target;
+          if (state.currentLatLng?.latitude != cameraPosition.latitude &&
+              state.currentLatLng?.longitude != cameraPosition.longitude) {
             await fetchCafeMarkers(
-                ref, context, mapController!, cameraPosition);
-          } catch (e) {
-            print("Error fetching cafe markers: $e");
+                ref, context, state.mapController!, cameraPosition);
+            vm.setCurrentLatLng(
+                NLatLng(cameraPosition.latitude, cameraPosition.longitude));
           }
         } else {
           print("controller is null");
@@ -61,7 +62,7 @@ class MapWidget extends ConsumerWidget {
 
     final state = ref.watch(mapViewModel);
 
-    if (state.cafeList.isEmpty) {
+    if (state.cafeList.isNotEmpty) {
       print("지워용~~");
       mapController.clearOverlays();
     }
