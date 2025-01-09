@@ -1,6 +1,8 @@
+import 'package:bean_tripper/presentation/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bean_tripper/domain/entity/cafe_detail.dart';
-import 'package:bean_tripper/domain/repository/cafe_repository.dart';
+import 'package:bean_tripper/domain/usecase/fetch_cafe_item_usecase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CafeDetailState {
   final bool isLoading;
@@ -27,15 +29,31 @@ class CafeDetailState {
 }
 
 class CafeDetailViewModel extends StateNotifier<CafeDetailState> {
-  final CafeRepository _cafeRepository;
+  final FetchCafeItemUsecase _fetchCafeItemUsecase;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  CafeDetailViewModel(this._cafeRepository) : super(CafeDetailState());
+  CafeDetailViewModel(this._fetchCafeItemUsecase) : super(CafeDetailState()) {
+    _initFirstCafe();
+  }
+
+  Future<void> _initFirstCafe() async {
+    try {
+      final snapshot = await _firestore.collection('cafe').limit(1).get();
+      if (snapshot.docs.isNotEmpty) {
+        final firstCafeId = snapshot.docs[0].id;
+        await fetchCafeDetail(firstCafeId);
+      } else {}
+    } catch (e) {
+      state = state.copyWith(
+        error: '카페 정보를 불러오는데 실패했습니다.',
+      );
+    }
+  }
 
   Future<void> fetchCafeDetail(String cafeId) async {
     try {
       state = state.copyWith(isLoading: true, error: null);
-
-      final cafeDetail = await _cafeRepository.fetchCafeItem(cafeId);
+      final cafeDetail = await _fetchCafeItemUsecase.excute(cafeId);
 
       if (cafeDetail != null) {
         state = state.copyWith(
@@ -62,8 +80,8 @@ class CafeDetailViewModel extends StateNotifier<CafeDetailState> {
 }
 
 final cafeDetailViewModelProvider =
-    StateNotifierProvider.family<CafeDetailViewModel, CafeDetailState, String>(
-  (ref, cafeId) => CafeDetailViewModel(
-    ref.watch(_cafeRepository),
-  )..fetchCafeDetail(cafeId),
+    StateNotifierProvider<CafeDetailViewModel, CafeDetailState>(
+  (ref) => CafeDetailViewModel(
+    ref.watch(fetchCafeItemUsecaseProvider),
+  ),
 );

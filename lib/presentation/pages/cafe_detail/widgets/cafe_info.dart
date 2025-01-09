@@ -1,13 +1,16 @@
 import 'package:bean_tripper/constant/theme.dart';
+import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CafeInfo extends StatelessWidget {
-  const CafeInfo({
-    super.key,
-  });
+class CafeInfo extends ConsumerWidget {
+  const CafeInfo({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(cafeDetailViewModelProvider);
+    final cafeDetail = state.cafeDetail;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -19,14 +22,14 @@ class CafeInfo extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '충북 청주시 흥덕구 가경동',
+                  cafeDetail?.address ?? '주소 정보 없음',
                   style: TextStyle(fontSize: 16),
                 ),
                 Row(
                   children: [
                     Icon(Icons.local_phone),
                     SizedBox(width: 6),
-                    Text('043-123-1234'),
+                    Text(cafeDetail?.tel ?? '전화번호 정보 없음'),
                   ],
                 )
               ],
