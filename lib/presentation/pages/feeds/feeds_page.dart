@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:bean_tripper/domain/entity/feed.dart';
 import 'package:bean_tripper/presentation/pages/feeds/comment_dialog.dart';
-import 'package:bean_tripper/presentation/pages/feed_write/feed_write_page.dart';
-import 'package:bean_tripper/presentation/pages/map/map_page.dart';
+import 'package:bean_tripper/presentation/pages/profile/profile_page.dart';
+import 'package:bean_tripper/presentation/pages/feeds/cafe_of_the_day.dart';
 import 'package:bean_tripper/core/widgets/feed_content.dart';
 import 'package:bean_tripper/core/widgets/feed_info.dart';
-import 'package:bean_tripper/presentation/pages/profile/profile_page.dart'; // 프로필 페이지 import 추가
+import 'package:bean_tripper/constant/theme.dart';
+import 'package:bean_tripper/presentation/pages/feeds/feeds_page_viewmodel.dart';
 
 class FeedsPage extends ConsumerStatefulWidget {
   @override
@@ -33,12 +32,13 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
   void _scrollListener() {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      // 추가 피드 데이터 로드 로직
+      ref.read(feedProvider.notifier).fetchMoreFeeds(); // 추가 피드 데이터 로드
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final feedState = ref.watch(feedProvider);
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
@@ -49,18 +49,16 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
           IconButton(
             icon: Icon(Icons.map),
             onPressed: () {
-              // 여기서 map_page로 이동합니다.
-              Navigator.pushNamed(context, '/map_page');
+              Navigator.pushNamed(context, '/map_page'); // 여기서 map_page로 이동
             },
           ),
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () {
-              // 여기서 프로필 페이지로 이동합니다.
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ProfilePage()), // 예시로 userId 설정
+                    builder: (context) => ProfilePage()), // 여기서 프로필 페이지로 이동
               );
             },
           ),
@@ -76,68 +74,48 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
               '오늘의 카페',
               style: TextStyle(
                 color: Color(0xFFA47764), // 글씨 색상 설정
-                fontSize:
-                    Theme.of(context).textTheme.headlineLarge!.fontSize! * 0.6,
+                fontSize: Theme.of(context).textTheme.headlineLarge!.fontSize! *
+                    0.6, // 글씨 크기 절반으로 설정
               ),
             ),
           ),
-          Container(
-            height: 120, // 가로 스크롤 이미지를 위한 높이 설정
-            child: StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection('cafes').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                var documents = snapshot.data!.docs;
-                return ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: documents.length,
-                  separatorBuilder: (context, index) =>
-                      SizedBox(width: 8), // 이미지들 사이 간격 설정
-                  itemBuilder: (context, index) {
-                    var data = documents[index].data() as Map<String, dynamic>;
-                    return Container(
-                      width: 100,
-                      color: Colors.transparent,
-                      child: Image.network(data['imageUrl'], fit: BoxFit.cover),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
+          CafeOfTheDay(), // "오늘의 카페" 부분
           Expanded(
-            child: StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection('feeds').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                var posts = snapshot.data!.docs
-                    .map((doc) => Feed.fromFirestore(doc))
-                    .toList();
+            child: feedState.when(
+              data: (feeds) {
+                print("피드 데이터 불러오기 성공: ${feeds.length}개"); // 데이터 로드 성공 여부 확인
+                feeds.forEach((feed) {
+                  print(
+                      "카페 이름: ${feed.cafeName}, 작성자: ${feed.writerName}"); // 각 피드 데이터 확인
+                });
                 return ListView.builder(
                   controller: _scrollController,
-                  itemCount: posts.length, // 게시물 수 설정
+                  itemCount: feeds.length,
                   itemBuilder: (context, index) {
-                    final post = posts[index]; // 각 게시물 가져오기
+                    final feed = feeds[index];
                     return Column(
                       children: [
-                        FeedInfo(),
-                        FeedContent(),
+                        FeedInfo(feed: feed), // FeedInfo 위젯 사용
+                        FeedContent(feed: feed), // FeedContent 위젯 사용
                         GestureDetector(
                           onTap: () {
-                            showCommentDialog(context, post); // 댓글 창 표시
+                            showCommentDialog(context, feed); // 댓글 창 표시
                           },
                           child: Icon(Icons.chat_bubble_outline, size: 30),
                         ),
+                        Text(feed.cafeName), // 테스트를 위해 카페 이름을 추가
                       ],
                     );
                   },
                 );
+              },
+              loading: () {
+                print("데이터 로딩 중...");
+                return Center(child: CircularProgressIndicator());
+              },
+              error: (e, stackTrace) {
+                print("데이터 불러오기 오류: $e");
+                return Center(child: Text('Error: $e'));
               },
             ),
           ),

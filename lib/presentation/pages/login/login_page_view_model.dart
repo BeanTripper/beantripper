@@ -1,4 +1,3 @@
-
 import 'package:bean_tripper/domain/entity/app_user.dart';
 import 'package:bean_tripper/presentation/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,7 +42,6 @@ class LoginPageViewModel extends Notifier<LoginState> {
         if (user != null) {
           final fetchUserUseCase = ref.read(fetchUserUseCaseProvider);
           final fetchedUser = await fetchUserUseCase.fetchUser(user.uid);
-          //TODO 매개변수 user.uid가 맞는지?
           if (fetchedUser != null) {
             state = LoginState(appUser: fetchedUser);
           } else {
