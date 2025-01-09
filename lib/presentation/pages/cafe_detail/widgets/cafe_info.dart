@@ -34,15 +34,30 @@ class CafeInfo extends ConsumerWidget {
                 )
               ],
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: CustomColors.brown,
-              ),
-              child: Text(
-                '지도',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  '/map_page',
+                  arguments: {
+                    'cafeMarker': {
+                      'id': cafeDetail?.id,
+                      'lat': cafeDetail?.lat,
+                      'lng': cafeDetail?.lng,
+                    },
+                  },
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: CustomColors.brown,
+                ),
+                child: Text(
+                  '지도',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
               ),
             ),
           ],

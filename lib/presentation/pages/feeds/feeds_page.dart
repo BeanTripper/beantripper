@@ -41,6 +41,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Image.asset(
           'assets/images/login_logo.png',
           height: 35,
