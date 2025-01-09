@@ -35,16 +35,7 @@ class CafeInfoBottomSheet extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        cafe?.operatingTime ?? '',
-                        style: TextStyle(color: CustomColors.brown),
-                      ),
-                      Text(cafe?.tel ?? ''),
-                    ],
-                  ),
+                  Text(cafe?.tel ?? ''),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/cafe_detail_page');

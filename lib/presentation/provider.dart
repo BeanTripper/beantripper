@@ -31,25 +31,26 @@ final updateUserUseCaseProvider = Provider<UpdateUserUseCase>((ref) {
   return UpdateUserUseCase(ref.read(_appUserRepository));
 });
 
-
 final feedWriteViewModelProvider = ChangeNotifierProvider((ref) {
   return FeedWriteViewModel();
-  });
+});
 
 // 카페
 final _cafeDataSource = Provider<CafeDataSource>((ref) {
   return CafeDataSourceImpl();
 });
+
 final _cafeRepository = Provider<CafeRepository>((ref) {
   final dataSource = ref.read(_cafeDataSource);
   return CafeRepositoryImpl(dataSource);
 });
+
 final fetchCafesListUsecaseProvider = Provider((ref) {
   final cafeRefo = ref.read(_cafeRepository);
   return FetchCafesListUsecase(cafeRefo);
 });
+
 final fetchCafeItemUsecaseProvider = Provider((ref) {
   final cafeRefo = ref.read(_cafeRepository);
   return FetchCafeItemUsecase(cafeRefo);
-
 });

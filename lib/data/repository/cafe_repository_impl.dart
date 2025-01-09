@@ -23,8 +23,8 @@ class CafeRepositoryImpl implements CafeRepository {
         address: result.address,
         lat: result.lat,
         lng: result.lng,
-        operatingTime: result.operatingTime,
         tel: result.tel,
+        feedImageUrls: '',
       );
     }
     return null;

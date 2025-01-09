@@ -25,10 +25,7 @@ class CafeFeedCollection extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             print('아이템 ${items[index]}');
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => FeedDetailPage()),
-            );
+            Navigator.pushNamed(context, '/feed_detail_page');
           },
           child: Container(
             decoration: BoxDecoration(

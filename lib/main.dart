@@ -1,3 +1,4 @@
+import 'package:bean_tripper/core/feed_detail_page.dart';
 import 'package:bean_tripper/firebase_options.dart';
 import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_page.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/feed_write_page.dart';
@@ -43,8 +44,8 @@ class MyApp extends StatelessWidget {
         '/map_page': (context) => MapPage(),
         '/cafe_detail_page': (context) => CafeDetailPage(),
         '/login_page': (context) => LoginPage(),
-        // '/profile_page' 경로에서 userId를 매개변수로 전달하도록 수정
         '/profile_page': (context) => ProfilePage(),
+        '/feed_detail_page': (context) => FeedDetailPage(),
       },
       // feeds_page로 가고 싶을때 pushNamed 사용예시:
       // ontap:(){Navigator.pushNamed(context, '/feeds_page')}
@@ -52,9 +53,8 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Pretendard',
         brightness: Brightness.dark,
       ),
-      home: SplashPage(),
-      // home: LoginPage(),
       // home: FeedsPage(),
+      home: const CafeDetailPage(),
     );
   }
 }
