@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MapWidget extends ConsumerWidget {
   const MapWidget({
+    super.key,
     required this.latLng,
   });
 
@@ -13,7 +14,7 @@ class MapWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    NaverMapController? _mapController;
+    NaverMapController? mapController;
 
     return NaverMap(
       options: NaverMapViewOptions(
@@ -24,14 +25,24 @@ class MapWidget extends ConsumerWidget {
         locationButtonEnable: true,
         consumeSymbolTapEvents: true,
       ),
-      onMapReady: (controller) {
-        _mapController = controller;
-        fetchCafeMarkers(ref, context, _mapController, latLng);
+      onMapReady: (controller) async {
+        mapController = controller;
+        if (mapController != null) {
+          await fetchCafeMarkers(ref, context, mapController!, latLng);
+        }
       },
-      onCameraIdle: () {
-        final cameraPosition = _mapController!.nowCameraPosition.target;
-        print(cameraPosition);
-        fetchCafeMarkers(ref, context, _mapController, cameraPosition);
+      onCameraIdle: () async {
+        print("onCameraIdle called");
+        if (mapController != null) {
+          final cameraPosition = mapController!.nowCameraPosition.target;
+          print("Camera idle at: $cameraPosition");
+          try {
+            await fetchCafeMarkers(
+                ref, context, mapController!, cameraPosition);
+          } catch (e) {
+            print("Error fetching cafe markers: $e");
+          }
+        }
       },
     );
   }
@@ -39,7 +50,7 @@ class MapWidget extends ConsumerWidget {
   Future<void> fetchCafeMarkers(
     WidgetRef ref,
     BuildContext context,
-    NaverMapController? _mapController,
+    NaverMapController mapController,
     NLatLng targetLatLng,
   ) async {
     final vm = ref.read(mapViewModel.notifier);
@@ -49,11 +60,11 @@ class MapWidget extends ConsumerWidget {
 
     if (state.cafeList.isEmpty) {
       print("지워용~~");
-      _mapController!.clearOverlays();
+      mapController.clearOverlays();
     }
 
+    print("삐용~~");
     for (var e in state.cafeList) {
-      print("삐용~~");
       final marker = NMarker(id: e.id, position: NLatLng(e.lat, e.lng));
       marker.setOnTapListener((overlay) async {
         print("마커 터치 ${e.id}");
@@ -68,7 +79,8 @@ class MapWidget extends ConsumerWidget {
           builder: (context) => CafeInfoBottomSheet(cafe: selectedCafe),
         );
       });
-      _mapController!.addOverlay(marker);
+      mapController.addOverlay(marker);
     }
+    print("끗~~");
   }
 }
