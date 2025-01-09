@@ -41,6 +41,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
     final feedState = ref.watch(feedProvider);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Image.asset(
           'assets/images/login_logo.png',
           height: 35,
