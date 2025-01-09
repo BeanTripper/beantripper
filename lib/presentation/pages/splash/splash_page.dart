@@ -1,23 +1,29 @@
 import 'package:bean_tripper/constant/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    //widget에서 화면을 실시 후 처음으로 하는 액션
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
+        // await FirebaseAuth.instance.signOut(); //로그아웃
         //2초 딜레이
         await Future.delayed(Duration(seconds: 2));
         //비동기 처리하고 해당 화면에 있는지 확인 후
         if (!context.mounted) {
           return;
         }
+        //firebaseauth 현재 유저 여부
         FirebaseAuth.instance.currentUser == null
             ? Navigator.pushNamed(context, '/login_page')
             : Navigator.pushNamed(context, '/feeds_page');
+
+        print(FirebaseAuth.instance.currentUser);
       },
     );
     return Scaffold(

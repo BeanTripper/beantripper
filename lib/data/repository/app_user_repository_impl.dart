@@ -37,4 +37,22 @@ class AppUserRepositoryImpl implements AppUserRepository {
       profile: user.profile,
     ));
   }
+
+  @override
+  Future<AppUser?> signInWithGoogle() async {
+    final user = await _appUserDataSource.signInWithGoogle();
+    if (user != null) {
+      return AppUser(
+        id: user.id,
+        name: user.name,
+        profile: user.profile,
+      );
+    }
+  }
+
+  @override
+  Future<AppUser?> signInWithKakao() {
+    // TODO: implement signInWithKakao
+    throw UnimplementedError();
+  }
 }

@@ -1,1 +1,38 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"beantripper-7578b","appId":"1:221334488132:android:103f8bf906bff3a152e811","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"beantripper-7578b","configurations":{"android":"1:221334488132:android:103f8bf906bff3a152e811","ios":"1:221334488132:ios:289579a2b6db8a4f52e811"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "beantripper-7578b",
+          "appId": "1:221334488132:android:103f8bf906bff3a152e811",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "beantripper-7578b",
+          "configurations": {
+            "android": "1:221334488132:android:103f8bf906bff3a152e811",
+            "ios": "1:221334488132:ios:289579a2b6db8a4f52e811"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ]
+}

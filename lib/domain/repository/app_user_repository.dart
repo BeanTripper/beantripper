@@ -6,4 +6,8 @@ abstract interface class AppUserRepository {
   Future<void> saveUser(AppUser user);
 
   Future<void> updateUser(AppUser user);
+
+  Future<AppUser?> signInWithGoogle();
+
+  Future<AppUser?> signInWithKakao();
 }
