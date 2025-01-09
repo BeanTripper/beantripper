@@ -54,8 +54,6 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
       ),
       home: SplashPage(),
-      // home: FeedsPage(),
-      // home: const CafeDetailPage(),
     );
   }
 }
