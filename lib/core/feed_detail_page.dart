@@ -1,4 +1,3 @@
-import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/core/widgets/feed_content.dart';
 import 'package:bean_tripper/core/widgets/feed_info.dart';
 import 'package:flutter/material.dart';

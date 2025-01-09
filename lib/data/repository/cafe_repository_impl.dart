@@ -39,6 +39,10 @@ class CafeRepositoryImpl implements CafeRepository {
             id: e.id,
             lat: e.lat,
             lng: e.lng,
+            address: e.address,
+            name: e.name,
+            operatingTime: e.operatingTime,
+            tel: e.tel,
           ),
         )
         .toList();
