@@ -53,8 +53,9 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Pretendard',
         brightness: Brightness.dark,
       ),
+      home: SplashPage(),
       // home: FeedsPage(),
-      home: const CafeDetailPage(),
+      // home: const CafeDetailPage(),
     );
   }
 }
