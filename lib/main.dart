@@ -4,6 +4,7 @@ import 'package:bean_tripper/presentation/pages/feed_write/feed_write_page.dart'
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
 import 'package:bean_tripper/presentation/pages/login/login_page.dart';
 import 'package:bean_tripper/presentation/pages/map/map_page.dart';
+import 'package:bean_tripper/presentation/pages/splash/splash_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Pretendard',
           brightness: Brightness.dark,
         ),
+        // home: SplashPage(),
         home: LoginPage()
         // home: HomePage(),
         );
