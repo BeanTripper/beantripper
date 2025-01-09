@@ -17,6 +17,7 @@ class FeedContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: 12),
         Container(
           width: double.infinity,
           height: MediaQuery.of(context).size.width,

@@ -80,7 +80,6 @@ class _FeedDetailPageState extends State<FeedDetailPage> {
           return Column(
             children: [
               FeedInfo(feed: widget.feed),
-              const SizedBox(height: 12),
               FeedContent(feed: widget.feed),
             ],
           );
