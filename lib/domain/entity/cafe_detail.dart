@@ -4,7 +4,6 @@ class CafeDetail {
   String address;
   double lat;
   double lng;
-  String? operatingTime;
   String? tel;
   String? feedImageUrls;
 
@@ -14,7 +13,6 @@ class CafeDetail {
     required this.address,
     required this.lat,
     required this.lng,
-    required this.operatingTime,
     required this.tel,
     required this.feedImageUrls,
   });

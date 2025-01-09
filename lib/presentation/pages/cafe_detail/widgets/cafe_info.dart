@@ -24,16 +24,6 @@ class CafeInfo extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Text(
-                      '영업중 ',
-                      style: TextStyle(color: CustomColors.blue),
-                    ),
-                    Text('· 오후 10:00에 영업 종료'),
-                  ],
-                ),
-                SizedBox(height: 15),
-                Row(
-                  children: [
                     Icon(Icons.local_phone),
                     SizedBox(width: 6),
                     Text('043-123-1234'),
