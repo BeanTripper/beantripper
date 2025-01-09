@@ -6,6 +6,7 @@ class CafeDetail {
   double lng;
   String? operatingTime;
   String? tel;
+  String? feedImageUrls;
 
   CafeDetail({
     required this.id,
@@ -15,5 +16,6 @@ class CafeDetail {
     required this.lng,
     required this.operatingTime,
     required this.tel,
+    required this.feedImageUrls,
   });
 }
