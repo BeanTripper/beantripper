@@ -7,6 +7,7 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //widget에서 화면을 실시 후 처음으로 하는 액션
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
         //2초 딜레이
@@ -15,9 +16,12 @@ class SplashPage extends StatelessWidget {
         if (!context.mounted) {
           return;
         }
+        //firebaseauth 현재 유저 여부
         FirebaseAuth.instance.currentUser == null
             ? Navigator.pushNamed(context, '/login_page')
             : Navigator.pushNamed(context, '/feeds_page');
+
+        print(FirebaseAuth.instance.currentUser);
       },
     );
     return Scaffold(

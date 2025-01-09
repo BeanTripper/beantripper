@@ -13,14 +13,10 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-          // if(user!=null)
-
-          Padding(
+      body: Padding(
         padding: EdgeInsets.all(20),
         child: Consumer(
           builder: (context, ref, child) {
-            print(FirebaseAuth.instance.currentUser);
             final userState = ref.watch(loginPageViewModelProvider);
             final userViewModel = ref.read(loginPageViewModelProvider.notifier);
             return Column(
