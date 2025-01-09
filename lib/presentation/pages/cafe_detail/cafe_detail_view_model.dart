@@ -64,10 +64,6 @@ class CafeDetailViewModel extends StateNotifier<CafeDetailState> {
 final cafeDetailViewModelProvider =
     StateNotifierProvider.family<CafeDetailViewModel, CafeDetailState, String>(
   (ref, cafeId) => CafeDetailViewModel(
-    ref.watch(cafeRepositoryProvider),
+    ref.watch(_cafeRepository),
   )..fetchCafeDetail(cafeId),
 );
-
-final cafeRepositoryProvider = Provider<CafeRepository>((ref) {
-  throw UnimplementedError();
-});
