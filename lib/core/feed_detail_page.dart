@@ -1,10 +1,13 @@
 import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/core/widgets/feed_content.dart';
 import 'package:bean_tripper/core/widgets/feed_info.dart';
+import 'package:bean_tripper/domain/entity/feed.dart';
 import 'package:flutter/material.dart';
 
 class FeedDetailPage extends StatefulWidget {
-  const FeedDetailPage({super.key});
+  final Feed feed; // Add a field for the feed object
+
+  const FeedDetailPage({super.key, required this.feed});
 
   @override
   State<FeedDetailPage> createState() => _FeedDetailPageState();
@@ -53,7 +56,7 @@ class _FeedDetailPageState extends State<FeedDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('블루보틀'),
+        title: Text(widget.feed.cafeName),
         actions: [
           Row(
             children: [
@@ -61,25 +64,25 @@ class _FeedDetailPageState extends State<FeedDetailPage> {
                 onTap: () {
                   print('좋아요 버튼 터치됨');
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.favorite_border,
                   size: 32,
                 ),
               ),
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
             ],
           )
         ],
       ),
       body: ListView.builder(
         controller: _scrollController,
-        itemCount: 70,
+        itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
           return Column(
             children: [
-              FeedInfo(),
-              SizedBox(height: 12),
-              FeedContent(),
+              FeedInfo(feed: widget.feed),
+              const SizedBox(height: 12),
+              FeedContent(feed: widget.feed),
             ],
           );
         },
