@@ -5,7 +5,7 @@ class FetchCafesListUsecase {
   final CafeRepository _cafeRepository;
   FetchCafesListUsecase(this._cafeRepository);
 
-  Future<List<CafeMarker>?> excute() async {
-    return await _cafeRepository.fetchCafesList();
+  Future<List<CafeMarker>?> excute(double lat, double lng) async {
+    return await _cafeRepository.fetchCafesList(lat, lng);
   }
 }

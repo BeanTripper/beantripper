@@ -4,4 +4,6 @@ abstract interface class AppUserDataSource {
   Future<UserDto?> fetchUser(String id);
   Future<void> saveUser(UserDto user);
   Future<void> updateUser(UserDto user);
+  Future<UserDto?> signInWithGoogle();
+  Future<UserDto?> signInWithKakao();
 }

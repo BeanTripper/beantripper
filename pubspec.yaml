@@ -48,7 +48,8 @@ dependencies:
   expandable_text: ^2.3.0
   kakao_flutter_sdk_user: ^1.9.6
   shimmer: ^3.0.0
-  http: ^1.2.2
+  geolocator: ^13.0.2
+  http:^1.2.2
 
 dev_dependencies:
   flutter_test:
