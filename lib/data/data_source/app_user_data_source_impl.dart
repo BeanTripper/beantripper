@@ -32,8 +32,15 @@ class AppUserDataSourceImpl implements AppUserDataSource {
 
   @override
   Future<void> updateUser(UserDto user) async {
-    final map = user.toJson();
-    map.remove('id');
-    await _firestore.collection('user').doc(user.id).set(map);
+    try {
+      final map = user.toJson();
+      print(map);
+      map.remove('id');
+      print(map);
+      // await _firestore.collection('user').doc(user.id).set(map);
+      await _firestore.collection('user').add(map);
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 }

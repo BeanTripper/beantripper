@@ -1442,7 +1442,7 @@ SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   BoringSSL-GRPC: ca6a8e5d04812fce8ffd6437810c2d46f925eaeb
-  cloud_firestore: 50c9e447367f07951ec36e06dffbce8e38bc2149
+  cloud_firestore: 56bca083ecf07f16188ace1d5b57123bcb1b3465
   Firebase: cf1b19f21410b029b6786a54e9764a0cacad3c99
   firebase_auth: dee97e7428ef7c304083839d4e3bc4313c03afd5
   firebase_core: 726c34112998e66d1ddaf4b1bef78ed2dd4b9804
@@ -1458,8 +1458,8 @@ SPEC CHECKSUMS:
   FirebaseSharedSwift: a4e5dfca3e210633bb3a3dfb94176c019211948b
   FirebaseStorage: 1bf8f80ac3bb02c72844b7350e95e10be7113ef0
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_naver_map: b7ccf21ee350a34381ec92d0bfdad1e8714af9bc
-  google_sign_in_ios: 0ab078e60da6dfe23cbc55c83502b52bba1aad63
+  flutter_naver_map: d31b1884517151e7b3121e3b24c18733ef4e4387
+  google_sign_in_ios: 07375bfbf2620bc93a602c0e27160d6afc6ead38
   GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   "gRPC-C++": 2fa52b3141e7789a28a737f251e0c45b4cb20a87
@@ -1471,7 +1471,7 @@ SPEC CHECKSUMS:
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   NMapsGeometry: 4e02554fa9880ef02ed96b075dc84355d6352479
   NMapsMap: 99c10429d93340780b6f88d3fc7c0a3850b43664
-  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
 
 PODFILE CHECKSUM: a57f30d18f102dd3ce366b1d62a55ecbef2158e5
