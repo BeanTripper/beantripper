@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Pretendard',
         brightness: Brightness.dark,
       ),
-      home: FeedsPage(),
+      home: MapPage(),
     );
   }
 }
