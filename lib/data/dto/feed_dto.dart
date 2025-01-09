@@ -1,4 +1,4 @@
-import 'package:bean_tripper/domain/entity/cafe.dart';
+import 'package:bean_tripper/domain/entity/cafe_marker.dart';
 
 class FeedDto {
   String id;

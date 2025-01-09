@@ -1,4 +1,5 @@
-import 'package:bean_tripper/domain/entity/cafe.dart';
+import 'package:bean_tripper/domain/entity/cafe_marker.dart';
+import 'package:bean_tripper/domain/entity/cafe_detail.dart';
 import 'package:bean_tripper/presentation/pages/map/map_view_model.dart';
 import 'package:bean_tripper/presentation/pages/map/widgets/cafe_info_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class MapWidget extends ConsumerWidget {
     required this.latLng,
   });
 
-  final List<Cafe>? cafes;
+  final List<CafeMarker>? cafes;
   final NLatLng latLng;
 
   @override

@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:bean_tripper/data/data_source/cafe_data_source.dart';
 import 'package:bean_tripper/data/dto/cafe_detail_dto.dart';
-import 'package:bean_tripper/data/dto/cafe_dto.dart';
+import 'package:bean_tripper/data/dto/cafe_marker_dto.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 
 class CafeDataSourceImpl implements CafeDataSource {
   // final AssetBundle _assetBundle;
@@ -25,7 +22,7 @@ class CafeDataSourceImpl implements CafeDataSource {
   }
 
   @override
-  Future<List<CafeDto>?> fetchCafesList(double lat, double lng) async {
+  Future<List<CafeMarkerDto>?> fetchCafesList(double lat, double lng) async {
     // final jsonString = await _assetBundle.loadString('assets/cafes.json');
     // return List.from(jsonDecode(jsonString))
     //     .map((e) => CafeDto.fromJson(e))
@@ -46,7 +43,7 @@ class CafeDataSourceImpl implements CafeDataSource {
         'id': doc.id,
         ...doc.data(),
       };
-      return CafeDto.fromJson(map);
+      return CafeMarkerDto.fromJson(map);
     }).toList();
   }
 
