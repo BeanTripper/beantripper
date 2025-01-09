@@ -25,6 +25,7 @@ class CafeRepositoryImpl implements CafeRepository {
         lng: result.lng,
         operatingTime: result.operatingTime,
         tel: result.tel,
+        feedImageUrls: '',
       );
     }
     return null;
