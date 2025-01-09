@@ -38,7 +38,7 @@ class AppUserDataSourceImpl implements AppUserDataSource {
       map.remove('id');
       print(map);
       // await _firestore.collection('user').doc(user.id).set(map);
-      await _firestore.collection('user').add(map);
+      await _firestore.collection('user').doc(user.id).set(map);
     } on Exception catch (e) {
       print(e);
     }

@@ -1,6 +1,6 @@
 import 'package:bean_tripper/data/data_source/cafe_data_source.dart';
 import 'package:bean_tripper/data/dto/cafe_detail_dto.dart';
-import 'package:bean_tripper/domain/entity/cafe.dart';
+import 'package:bean_tripper/domain/entity/cafe_marker.dart';
 import 'package:bean_tripper/domain/entity/cafe_detail.dart';
 import 'package:bean_tripper/domain/repository/cafe_repository.dart';
 
@@ -23,26 +23,22 @@ class CafeRepositoryImpl implements CafeRepository {
         address: result.address,
         lat: result.lat,
         lng: result.lng,
-        operatingTime: result.operatingTime,
         tel: result.tel,
+        feedImageUrls: '',
       );
     }
     return null;
   }
 
   @override
-  Future<List<Cafe>?> fetchCafesList() async {
+  Future<List<CafeMarker>?> fetchCafesList() async {
     final result = await _cafeDataSource.fetchCafesList();
     return result
         ?.map(
-          (e) => Cafe(
+          (e) => CafeMarker(
             id: e.id,
             lat: e.lat,
             lng: e.lng,
-            address: e.address,
-            name: e.name,
-            operatingTime: e.operatingTime,
-            tel: e.tel,
           ),
         )
         .toList();

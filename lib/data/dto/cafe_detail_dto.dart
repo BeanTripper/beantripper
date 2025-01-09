@@ -4,8 +4,8 @@ class CafeDetailDto {
   String address;
   double lat;
   double lng;
-  String? operatingTime;
   String? tel;
+  String? feedImageUrls;
 
   CafeDetailDto({
     required this.id,
@@ -13,8 +13,8 @@ class CafeDetailDto {
     required this.address,
     required this.lat,
     required this.lng,
-    required this.operatingTime,
     required this.tel,
+    required this.feedImageUrls,
   });
 
   CafeDetailDto.fromJson(Map<String, dynamic> json)
@@ -24,8 +24,8 @@ class CafeDetailDto {
           address: json['address'] ?? '',
           lat: json['lat'] ?? 0.0,
           lng: json['lng'] ?? 0.0,
-          operatingTime: json['operatingTime'],
           tel: json['tel'],
+          feedImageUrls: json['feedImageUrls'],
         );
 
   Map<String, dynamic> toJson() {
@@ -35,8 +35,8 @@ class CafeDetailDto {
       'address': address,
       'lat': lat,
       'lng': lng,
-      'operatingTime': operatingTime,
       'tel': tel,
+      'feedImageUrls': feedImageUrls,
     };
   }
 }

@@ -1,58 +1,19 @@
+import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_view_model.dart';
 import 'package:bean_tripper/presentation/pages/cafe_detail/widgets/cafe_feed_collection.dart';
 import 'package:bean_tripper/presentation/pages/cafe_detail/widgets/cafe_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CafeDetailPage extends StatefulWidget {
+class CafeDetailPage extends ConsumerWidget {
   const CafeDetailPage({super.key});
 
   @override
-  State<CafeDetailPage> createState() => _CafeDetailPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(cafeDetailViewModelProvider);
 
-class _CafeDetailPageState extends State<CafeDetailPage> {
-  final ScrollController _scrollController = ScrollController();
-  List<int> items = List.generate(20, (index) => index);
-  bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _scrollListener() async {
-    if (!mounted) return;
-
-    if (!_isLoading &&
-        _scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 100) {
-      setState(() {
-        _isLoading = true;
-      });
-
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      if (!mounted) return;
-
-      setState(() {
-        items.addAll(List.generate(10, (index) => items.length + index));
-        _isLoading = false;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('블루보틀'),
+        title: Text(state.cafeDetail?.name ?? '카페 상세'),
         actions: [
           Row(
             children: [
@@ -71,17 +32,11 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
         ],
       ),
       body: ListView(
-        controller: _scrollController,
         children: [
           SizedBox(height: 20),
           CafeInfo(),
           SizedBox(height: 20),
-          CafeFeedCollection(items: items),
-          if (_isLoading)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(child: CircularProgressIndicator()),
-            ),
+          CafeFeedCollection(items: List.generate(20, (index) => index)),
         ],
       ),
     );

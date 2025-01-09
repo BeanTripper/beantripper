@@ -1,31 +1,38 @@
-import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bean_tripper/data/data_source/cafe_data_source.dart';
 import 'package:bean_tripper/data/dto/cafe_detail_dto.dart';
-import 'package:bean_tripper/data/dto/cafe_dto.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
+import 'package:bean_tripper/data/dto/cafe_marker_dto.dart';
 
 class CafeDataSourceImpl implements CafeDataSource {
-  // final AssetBundle _assetBundle;
-  // CafeDataSourceImpl(this._assetBundle);
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Future<CafeDetailDto?> fetchCafeItem(String id) async {
-    final firestore = FirebaseFirestore.instance;
-    final collectionRef = firestore.collection('cafe');
-    final docRef = collectionRef.doc(id);
+    try {
+      final docSnapshot = await _firestore.collection('cafe').doc(id).get();
 
-    final doc = await docRef.get();
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data()!;
 
-    return CafeDetailDto.fromJson({
-      'id': doc.id,
-      ...?doc.data(),
-    });
+        return CafeDetailDto(
+          id: docSnapshot.id,
+          name: data['name'] ?? '',
+          address: data['address'] ?? '',
+          lat: (data['lat'] ?? 0.0).toDouble(),
+          lng: (data['lng'] ?? 0.0).toDouble(),
+          tel: data['tel'],
+          feedImageUrls: '',
+        );
+      }
+
+      return null;
+    } catch (e) {
+      return null;
+    }
   }
 
   @override
-  Future<List<CafeDto>?> fetchCafesList() async {
+  Future<List<CafeMarkerDto>?> fetchCafesList() async {
     // final jsonString = await _assetBundle.loadString('assets/cafes.json');
     // return List.from(jsonDecode(jsonString))
     //     .map((e) => CafeDto.fromJson(e))
@@ -41,7 +48,7 @@ class CafeDataSourceImpl implements CafeDataSource {
         'id': doc.id,
         ...doc.data(),
       };
-      return CafeDto.fromJson(map);
+      return CafeMarkerDto.fromJson(map);
     }).toList();
   }
 
