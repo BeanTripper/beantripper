@@ -4,11 +4,14 @@ import 'package:bean_tripper/presentation/pages/feed_write/feed_write_page.dart'
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
 import 'package:bean_tripper/presentation/pages/login/login_page.dart';
 import 'package:bean_tripper/presentation/pages/map/map_page.dart';
+import 'package:bean_tripper/presentation/pages/splash/splash_page.dart';
+import 'package:bean_tripper/presentation/pages/profile/profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +24,9 @@ Future<void> main() async {
     clientId: dotenv.get('NAVER_MAP_CLIENT_ID'),
     onAuthFailed: (ex) => print("********* 네이버맵 인증오류 : $ex *********"),
   );
-
+  KakaoSdk.init(
+    nativeAppKey: 'e9f3c287a2596309bf7be25870b4d726',
+  );
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -31,22 +36,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        routes: {
-          '/feeds_page': (context) => FeedsPage(),
-          '/feeds_write_page': (context) => FeedWritePage(),
-          '/map_page': (context) => MapPage(),
-          '/cafe_detail_page': (context) => CafeDetailPage(),
-          '/login_page': (context) => LoginPage(),
-          '/profile_page': (context) => ProfilePage(),
-        },
-        // feeds_page로 가고 싶을때 pushNamed 사용예시:
-        // ontap:(){Navigator.pushNamed(context, '/feeds_page')}
-        theme: ThemeData(
-          fontFamily: 'Pretendard',
-          brightness: Brightness.dark,
-        ),
-        home: MapPage()
-        // home: HomePage(),
-        );
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/feeds_page': (context) => FeedsPage(),
+        '/feeds_write_page': (context) => FeedWritePage(),
+        '/map_page': (context) => MapPage(),
+        '/cafe_detail_page': (context) => CafeDetailPage(),
+        '/login_page': (context) => LoginPage(),
+        // '/profile_page' 경로에서 userId를 매개변수로 전달하도록 수정
+        '/profile_page': (context) => ProfilePage(),
+      },
+      // feeds_page로 가고 싶을때 pushNamed 사용예시:
+      // ontap:(){Navigator.pushNamed(context, '/feeds_page')}
+      theme: ThemeData(
+        fontFamily: 'Pretendard',
+        brightness: Brightness.dark,
+      ),
+      home: FeedsPage(),
+    );
   }
 }
