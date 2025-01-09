@@ -42,7 +42,7 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<Feed>>> {
   Future<List<Feed>> _fetchFeedsFromFirebase(
       {DocumentSnapshot? startAfter}) async {
     final query = FirebaseFirestore.instance
-        .collection('feeds')
+        .collection('feed')
         .orderBy('createdAt', descending: true)
         .limit(10);
 
