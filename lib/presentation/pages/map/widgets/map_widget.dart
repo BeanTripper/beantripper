@@ -42,6 +42,8 @@ class MapWidget extends ConsumerWidget {
           } catch (e) {
             print("Error fetching cafe markers: $e");
           }
+        } else {
+          print("controller is null");
         }
       },
     );
