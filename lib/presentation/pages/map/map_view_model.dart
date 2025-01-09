@@ -1,10 +1,10 @@
-import 'package:bean_tripper/domain/entity/cafe.dart';
+import 'package:bean_tripper/domain/entity/cafe_marker.dart';
 import 'package:bean_tripper/domain/entity/cafe_detail.dart';
 import 'package:bean_tripper/presentation/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MapState {
-  List<Cafe> cafeList;
+  List<CafeMarker> cafeList;
   CafeDetail? selectedCafe;
 
   MapState({
