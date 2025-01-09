@@ -22,14 +22,14 @@ class CafeInfo extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  cafeDetail?.address ?? '주소 정보 없음',
+                  cafeDetail?.address ?? '주소 정보가 없습니다',
                   style: TextStyle(fontSize: 16),
                 ),
                 Row(
                   children: [
                     Icon(Icons.local_phone),
                     SizedBox(width: 6),
-                    Text(cafeDetail?.tel ?? '전화번호 정보 없음'),
+                    Text(cafeDetail?.tel ?? '전화번호 정보가 없습니다'),
                   ],
                 )
               ],

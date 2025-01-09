@@ -52,18 +52,25 @@ class CafeDetailViewModel extends StateNotifier<CafeDetailState> {
   Future<void> checkFavoriteStatus(String cafeName) async {
     try {
       final userId = _auth.currentUser?.uid;
-      if (userId == null) return;
+      if (userId == null) {
+        state = state.copyWith(isFavorite: false);
+        return;
+      }
 
-      final docSnapshot = await _firestore
-          .collection('users')
+      final favoritesSnapshot = await _firestore
+          .collection('user')
           .doc(userId)
           .collection('favoriteCafe')
-          .where('cafeName', isEqualTo: cafeName)
           .get();
 
-      state = state.copyWith(isFavorite: docSnapshot.docs.isNotEmpty);
+      final isFavorite = favoritesSnapshot.docs.any((doc) {
+        final data = doc.data();
+        return data['cafeName'] == cafeName;
+      });
+
+      state = state.copyWith(isFavorite: isFavorite);
     } catch (e) {
-      print('Error checking favorite status: $e');
+      state = state.copyWith(isFavorite: false);
     }
   }
 
@@ -75,19 +82,19 @@ class CafeDetailViewModel extends StateNotifier<CafeDetailState> {
       if (userId == null || cafeName == null) return;
 
       final userFavoriteRef =
-          _firestore.collection('users').doc(userId).collection('favoriteCafe');
+          _firestore.collection('user').doc(userId).collection('favoriteCafe');
 
       if (state.isFavorite) {
-        final querySnapshot =
-            await userFavoriteRef.where('cafeName', isEqualTo: cafeName).get();
+        final favoritesSnapshot = await userFavoriteRef.get();
+        final docToDelete = favoritesSnapshot.docs.firstWhere(
+          (doc) => doc.data()['cafeName'] == cafeName,
+          orElse: () => throw Exception('Document not found'),
+        );
 
-        for (var doc in querySnapshot.docs) {
-          await doc.reference.delete();
-        }
+        await userFavoriteRef.doc(docToDelete.id).delete();
       } else {
-        await userFavoriteRef.add({
+        final docRef = await userFavoriteRef.add({
           'cafeName': cafeName,
-          'timestamp': FieldValue.serverTimestamp(),
         });
       }
 
@@ -132,6 +139,8 @@ class CafeDetailViewModel extends StateNotifier<CafeDetailState> {
       final doc = snapshot.docs.first;
       final cafeId = doc.id;
       await fetchCafeDetail(cafeId);
+
+      await checkFavoriteStatus(cafeName);
     } catch (e) {
       print('Error in initWithCafeName: $e');
     }
