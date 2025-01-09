@@ -41,6 +41,7 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<Feed>>> {
 
   Future<List<Feed>> _fetchFeedsFromFirebase(
       {DocumentSnapshot? startAfter}) async {
+    List<Feed> feedList = [];
     final query = FirebaseFirestore.instance
         .collection('feed')
         .orderBy('createdAt', descending: true)
@@ -53,6 +54,9 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<Feed>>> {
     if (snapshot.docs.isNotEmpty) {
       _lastDocument = snapshot.docs.last;
     }
-    return snapshot.docs.map((doc) => Feed.fromFirestore(doc)).toList();
+    for (var d in snapshot.docs) {
+      feedList.add(Feed.fromFirestore(d));
+    }
+    return feedList;
   }
 }
