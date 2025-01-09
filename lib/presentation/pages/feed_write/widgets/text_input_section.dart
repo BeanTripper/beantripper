@@ -11,35 +11,36 @@ class TextInputSection extends StatefulWidget {
 }
 
 class _TextInputSectionState extends State<TextInputSection> {
-  List<Map<String, dynamic>> searchResults = [];
   bool isLoading = false;
 
   // 네이버 지도 API 호출
   Future<void> fetchCafes(String query) async {
-    if (query.isEmpty) return;
+    if (query.isEmpty) {
+      setState(() {
+        widget.viewModel.searchResults.clear();
+      });
+      return;
+    }
 
     setState(() {
       isLoading = true;
     });
 
     try {
-      // 네이버 지도 API 호출 (여기에 실제 API 호출 로직을 추가하세요)
-      final response = await widget.viewModel.searchCafes(query);
-
-      setState(() {
-        searchResults = response; // 검색 결과 설정
-        isLoading = false;
-      });
+      await widget.viewModel.searchCafes(query);
     } catch (e) {
+      print('카페 검색 중 오류 발생: $e');
+    } finally {
       setState(() {
         isLoading = false;
       });
-      print('카페 검색 중 오류 발생: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final searchResults = widget.viewModel.searchResults;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -75,7 +76,7 @@ class _TextInputSectionState extends State<TextInputSection> {
                 onTap: () {
                   widget.viewModel.setCafeName(cafe['name']);
                   setState(() {
-                    searchResults.clear();
+                    widget.viewModel.searchResults.clear();
                   });
                 },
               );
@@ -98,3 +99,4 @@ class _TextInputSectionState extends State<TextInputSection> {
     );
   }
 }
+

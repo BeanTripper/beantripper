@@ -6,17 +6,20 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class FeedWriteViewModel extends ChangeNotifier {
   final ImagePicker _picker = ImagePicker();
   final List<File> selectedImages = [];
   final List<String> categories = [];
+  final List<Map<String, dynamic>> searchResults = [];
   String cafeName = '';
   String content = '';
 
   // 네이버 API 키와 Secret
-  final String naverApiKey = '<NAVER_API_KEY>';
-  final String naverApiSecret = '<NAVER_API_SECRET>';
+  final String naverApiKey = dotenv.env['NAVER_API_KEY'] ?? '';
+  final String naverApiSecret = dotenv.env['NAVER_API_SECRET'] ?? '';
+
   final String baseUrl = 'https://naveropenapi.apigw.ntruss.com/map-place/v1/search';
 
   // 제외할 카페 브랜드 리스트
@@ -113,8 +116,12 @@ class FeedWriteViewModel extends ChangeNotifier {
   }
 
   // 네이버 지도 API로 카페 검색
-  Future<List<Map<String, dynamic>>> searchCafes(String query) async {
-    if (query.isEmpty) return [];
+  Future<void> searchCafes(String query) async {
+    if (query.isEmpty) {
+      searchResults.clear();
+      notifyListeners();
+      return;
+    }
 
     final url = Uri.parse('$baseUrl?query=$query&coordinate=127.1054328,37.3595963');
 
@@ -131,25 +138,29 @@ class FeedWriteViewModel extends ChangeNotifier {
         final data = json.decode(response.body);
         final places = data['places'] as List;
 
-        // 결과 필터링: 제외할 브랜드를 포함하지 않는 카페만 남김
-        final filteredPlaces = places.where((place) {
-          final name = place['name'] as String;
-          return !excludedBrands.any((brand) => name.contains(brand));
-        }).toList();
+        // 결과 필터링
+        searchResults
+          ..clear()
+          ..addAll(places.where((place) {
+            final name = place['name'] as String;
+            return !excludedBrands.any((brand) => name.contains(brand));
+          }).map((place) {
+            return {
+              'name': place['name'],
+              'address': place['road_address'] ?? place['jibun_address'],
+              'lat': place['x'],
+              'lng': place['y'],
+              'tel': place['telephone'] ?? '',
+            };
+          }));
 
-        return filteredPlaces.map((place) {
-          return {
-            'name': place['name'],
-            'address': place['road_address'] ?? place['jibun_address'],
-          };
-        }).toList();
+        notifyListeners();
       } else {
         print('네이버 지도 API 호출 실패: ${response.body}');
         throw Exception('Failed to fetch cafes');
       }
     } catch (e) {
-      print('네이버 지도 API 호출 중 오류 발생: $e');
-      rethrow;
+      print('카페 검색 중 오류 발생: $e');
     }
   }
 }
