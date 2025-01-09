@@ -1,9 +1,7 @@
-import 'package:bean_tripper/core/geolocator_helper.dart';
 import 'package:bean_tripper/domain/entity/cafe.dart';
 import 'package:bean_tripper/domain/entity/cafe_detail.dart';
 import 'package:bean_tripper/presentation/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
 
 class MapState {
   List<Cafe> cafeList;

@@ -1,8 +1,5 @@
-import 'dart:convert';
 
 import 'package:bean_tripper/domain/entity/app_user.dart';
-import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
-import 'package:bean_tripper/presentation/pages/login/login_page.dart';
 import 'package:bean_tripper/presentation/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

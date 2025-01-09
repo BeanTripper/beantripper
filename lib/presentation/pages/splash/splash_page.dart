@@ -1,11 +1,5 @@
 import 'package:bean_tripper/constant/theme.dart';
-import 'package:bean_tripper/presentation/pages/login/login_page_view_model.dart';
-import 'package:bean_tripper/presentation/pages/login/widget/custom_social_button.dart';
-import 'package:bean_tripper/presentation/pages/login/widget/looking_around_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shimmer/shimmer.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

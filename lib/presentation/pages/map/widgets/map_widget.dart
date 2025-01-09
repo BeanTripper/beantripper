@@ -17,6 +17,8 @@ class MapWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(mapViewModel);
+    NaverMapController? _mapController;
+
     return NaverMap(
       options: NaverMapViewOptions(
         initialCameraPosition: NCameraPosition(
@@ -27,7 +29,9 @@ class MapWidget extends ConsumerWidget {
         consumeSymbolTapEvents: true,
       ),
       onMapReady: (controller) {
+        _mapController = controller;
         cafes?.forEach((e) {
+          print("삐용~~");
           final marker = NMarker(id: e.id, position: NLatLng(e.lat, e.lng));
           marker.setOnTapListener((overlay) async {
             print("마커 터치 ${e.id}");
@@ -42,8 +46,14 @@ class MapWidget extends ConsumerWidget {
               builder: (context) => CafeInfoBottomSheet(cafe: selectedCafe),
             );
           });
-          controller.addOverlay(marker);
+          _mapController!.addOverlay(marker);
         });
+      },
+      onCameraIdle: () {
+        final cameraPosition = _mapController!.nowCameraPosition.target;
+        print(cameraPosition);
+        // final vm = ref.watch(mapViewModel.notifier);
+        // vm.fetchCafes(cameraPosition.latitude, cameraPosition.longitude);
       },
     );
   }
