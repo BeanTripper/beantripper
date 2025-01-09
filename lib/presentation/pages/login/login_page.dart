@@ -1,9 +1,12 @@
+import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
 import 'package:bean_tripper/presentation/pages/login/login_page_view_model.dart';
 import 'package:bean_tripper/presentation/pages/login/widget/custom_social_button.dart';
 import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/presentation/pages/login/widget/looking_around_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -11,74 +14,68 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+      body:
+          // if(user!=null)
+          // FirebaseAuth.instance.currentUser != null
+          //     ? FeedsPage()
+          //     :
+          Padding(
         padding: EdgeInsets.all(20),
-        child: Stack(
-          children: [
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    '커피를 따라 떠나는 여행자',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      color: CustomColors.brown,
-                    ),
+        child: Consumer(
+          builder: (context, ref, child) {
+            print(FirebaseAuth.instance.currentUser);
+            final userState = ref.watch(loginPageViewModelProvider);
+            final userViewModel = ref.read(loginPageViewModelProvider.notifier);
+            return Column(
+              children: [
+                SizedBox(height: 150),
+                const Text(
+                  '커피를 따라 떠나는 여행자',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: CustomColors.brown,
                   ),
-                  const SizedBox(height: 20),
-                  Image.asset(
-                    "assets/images/login_logo.png",
-                    width: 233,
-                  ),
-                ],
-              ),
-            ),
-            Consumer(
-              builder: (context, ref, child) {
-                final userState = ref.watch(loginPageViewModelProvider);
-                final userViewModel =
-                    ref.read(loginPageViewModelProvider.notifier);
-                return Column(
-                  children: [
-                    const Spacer(),
-                    CustomSocialButton(
-                      text: "카카오로 시작하기",
-                      backgroundColor: const Color(0xFFFAE100),
-                      textColor: CustomColors.black,
-                      iconPath: "assets/images/kakao_icon.png",
-                      onPressed: () async {
-                        await userViewModel.signInWithKakao();
-                        await userViewModel.submitUserToFirestore();
-                        // Navigator.pushNamed(context, '/feeds_page');
-                      },
-                      iconSize: 20,
-                    ),
-                    const SizedBox(height: 20),
-                    CustomSocialButton(
-                      text: "구글로 시작하기",
-                      backgroundColor: Colors.white,
-                      textColor: CustomColors.black,
-                      iconPath: "assets/images/google_icon.png",
-                      onPressed: () async {
-                        await userViewModel.signInWithGoogle();
-                        await userViewModel.submitUserToFirestore();
-                        // Navigator.pushNamed(context, '/feeds_page');
-                      },
-                      iconSize: 20,
-                    ),
-                    const SizedBox(height: 20),
-                    Divider(
-                      color: CustomColors.lightGray,
-                      thickness: 1,
-                    ),
-                    const LookingAroundButton(),
-                  ],
-                );
-              },
-            ),
-          ],
+                ),
+                const SizedBox(height: 20),
+                Image.asset(
+                  "assets/images/login_logo.png",
+                  width: 234,
+                ),
+                Spacer(),
+                CustomSocialButton(
+                  text: "카카오로 시작하기",
+                  backgroundColor: const Color(0xFFFAE100),
+                  textColor: CustomColors.black,
+                  iconPath: "assets/images/kakao_icon.png",
+                  onPressed: () async {
+                    await userViewModel.signInWithKakao();
+                    await userViewModel.submitUserToFirestore();
+                    // Navigator.pushNamed(context, '/feeds_page');
+                  },
+                  iconSize: 20,
+                ),
+                const SizedBox(height: 20),
+                CustomSocialButton(
+                  text: "구글로 시작하기",
+                  backgroundColor: Colors.white,
+                  textColor: CustomColors.black,
+                  iconPath: "assets/images/google_icon.png",
+                  onPressed: () async {
+                    await userViewModel.signInWithGoogle();
+                    Navigator.pushNamed(context, '/feeds_page');
+                  },
+                  iconSize: 20,
+                ),
+                const SizedBox(height: 20),
+                Divider(
+                  color: CustomColors.lightGray,
+                  thickness: 1,
+                ),
+                const LookingAroundButton(),
+              ],
+            );
+          },
         ),
       ),
     );
