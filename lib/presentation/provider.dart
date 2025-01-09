@@ -9,6 +9,7 @@ import 'package:bean_tripper/domain/usecase/fetch_cafe_item_usecase.dart';
 import 'package:bean_tripper/domain/usecase/fetch_cafes_list_usecase.dart';
 import 'package:bean_tripper/domain/usecase/fetch_user_usecase.dart';
 import 'package:bean_tripper/domain/usecase/save_user_usecase.dart';
+import 'package:bean_tripper/domain/usecase/sign_in_with_google_usecase.dart';
 import 'package:bean_tripper/domain/usecase/update_user_usecase.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/feed_wirte_viewmodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,6 +30,11 @@ final saveUserUseCaseProvider = Provider<SaveUserUseCase>((ref) {
 
 final updateUserUseCaseProvider = Provider<UpdateUserUseCase>((ref) {
   return UpdateUserUseCase(ref.read(_appUserRepository));
+});
+
+final signInWithGoogleUseCaseProvider =
+    Provider<SignInWithGoogleUseCase>((ref) {
+  return SignInWithGoogleUseCase(ref.read(_appUserRepository));
 });
 
 final feedWriteViewModelProvider = ChangeNotifierProvider((ref) {
