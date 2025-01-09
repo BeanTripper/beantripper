@@ -12,31 +12,51 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<Feed>>> {
     _fetchFeeds();
   }
 
+  DocumentSnapshot? _lastDocument;
+  bool _hasMore = true;
+
   Future<void> _fetchFeeds() async {
     try {
-      final feeds = await fetchFeedsFromFirebase(); // Firebase에서 피드 데이터를 가져옴
-      state = AsyncValue.data(feeds); // 데이터를 성공적으로 가져온 경우 상태를 업데이트
+      final feeds = await _fetchFeedsFromFirebase();
+      state = AsyncValue.data(feeds);
     } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace); // 예외 발생 시 예외 상태로 업데이트
+      state = AsyncValue.error(e, stackTrace);
     }
   }
 
   Future<void> fetchMoreFeeds() async {
+    if (!_hasMore) return;
     try {
       final moreFeeds =
-          await fetchFeedsFromFirebase(); // Firebase에서 추가 데이터 가져오기
-      state = state.whenData((feeds) => feeds + moreFeeds); // 기존 데이터에 추가 데이터 병합
+          await _fetchFeedsFromFirebase(startAfter: _lastDocument);
+      if (moreFeeds.isEmpty) {
+        _hasMore = false;
+        return;
+      }
+      state = state.whenData((feeds) => [...feeds, ...moreFeeds]);
     } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace); // 예외 발생 시 예외 상태로 업데이트
+      state = AsyncValue.error(e, stackTrace);
     }
   }
 
-  Future<List<Feed>> fetchFeedsFromFirebase() async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('feeds')
-        .get(); // Firestore에서 'feeds' 컬렉션의 데이터를 가져옴
-    return snapshot.docs
-        .map((doc) => Feed.fromFirestore(doc))
-        .toList(); // 각 문서를 Feed 객체로 변환하여 리스트로 반환
+  Future<List<Feed>> _fetchFeedsFromFirebase(
+      {DocumentSnapshot? startAfter}) async {
+    List<Feed> feedList = [];
+    final query = FirebaseFirestore.instance
+        .collection('feed')
+        .orderBy('createdAt', descending: true)
+        .limit(10);
+
+    final snapshot = startAfter != null
+        ? await query.startAfterDocument(startAfter).get()
+        : await query.get();
+
+    if (snapshot.docs.isNotEmpty) {
+      _lastDocument = snapshot.docs.last;
+    }
+    for (var d in snapshot.docs) {
+      feedList.add(Feed.fromFirestore(d));
+    }
+    return feedList;
   }
 }

@@ -1,9 +1,13 @@
 import 'package:bean_tripper/constant/theme.dart';
+import 'package:bean_tripper/domain/entity/feed.dart';
 import 'package:flutter/material.dart';
 
 class FeedInfo extends StatelessWidget {
+  final Feed feed;
+
   const FeedInfo({
     super.key,
+    required this.feed,
   });
 
   @override
@@ -27,10 +31,13 @@ class FeedInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '카페상속자',
+                feed.writerName, // 수정: writerName 사용
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text('1분전'),
+              Text(
+                '${feed.createdAt.toDate()}',
+                style: TextStyle(color: Colors.grey),
+              ),
             ],
           ),
           Spacer(),
