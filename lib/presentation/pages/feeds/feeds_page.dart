@@ -73,7 +73,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
             child: Text(
               '오늘의 카페',
               style: TextStyle(
-                color: CustomColors.darkGray, // 글씨 색상 설정
+                color: Color(0xFFA47764), // 글씨 색상 설정
                 fontSize: Theme.of(context).textTheme.headlineLarge!.fontSize! *
                     0.6, // 글씨 크기 절반으로 설정
               ),
@@ -129,7 +129,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15.0)),
         ),
-        backgroundColor: CustomColors.darkGray,
+        backgroundColor: Color(0xFFA47764),
       ),
     );
   }
