@@ -13,7 +13,6 @@ class CafeSelectionPage extends StatelessWidget {
         ),
         body: GestureDetector(
           onTap: () {
-            // 화면 클릭 시 키보드 닫기
             FocusScope.of(context).unfocus();
           },
           child: CafeSelectionBody(),
@@ -31,6 +30,7 @@ class CafeSelectionBody extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextField(
             decoration: const InputDecoration(
@@ -41,54 +41,63 @@ class CafeSelectionBody extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           const Text(
-            '⚠ 프랜차이즈 커피 매장은 검색에서 제외됩니다.',
-            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            '프랜차이즈 커피 매장은 검색에서 제외됩니다.',
+            style: TextStyle(color: Colors.red, fontSize: 12),
           ),
           const SizedBox(height: 20),
           Expanded(
             child: viewModel.isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : ListView.builder(
-                    itemCount: viewModel.searchResults.length,
-                    itemBuilder: (context, index) {
-                      final cafe = viewModel.searchResults[index];
-                      return ListTile(
-                        title: Text(cafe['name']),
-                        subtitle: Text(cafe['address'] ?? '주소 없음'),
-                        onTap: () {
-                          viewModel.setSelectedCafe(cafe);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('${cafe['name']} 선택됨')),
+                : viewModel.searchResults.isEmpty
+                    ? const Center(child: Text('검색 결과가 없습니다.'))
+                    : ListView.builder(
+                        itemCount: viewModel.searchResults.length,
+                        itemBuilder: (context, index) {
+                          final cafe = viewModel.searchResults[index];
+                          return ListTile(
+                            title: Text(cafe['name']),
+                            subtitle: Text(cafe['address'] ?? '주소 없음'),
+                            onTap: () {
+                              viewModel.setSelectedCafe(cafe);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('${cafe['name']} 선택됨')),
+                              );
+                            },
                           );
                         },
-                      );
-                    },
-                  ),
+                      ),
           ),
           const SizedBox(height: 20),
           SizedBox(
-            width: double.infinity, // 버튼 양옆으로 꽉 채움
+            width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                if (viewModel.selectedCafe != null) {
-                  Navigator.pushNamed(
-                    context,
-                    '/feedwritepage',
-                    arguments: viewModel.selectedCafe!['name'],
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('카페를 선택해주세요.')),
-                  );
-                }
-              },
+              onPressed: viewModel.selectedCafe == null
+                  ? null
+                  : () async {
+                      final selectedCafe = viewModel.selectedCafe!;
+                      try {
+                        // Firebase 업로드
+                        await viewModel.saveCafeToFirebase(selectedCafe);
+
+                        // FeedWritePage로 이동
+                        Navigator.pushNamed(
+                          context,
+                          '/feedwritepage',
+                          arguments: {'selectedCafeName': selectedCafe['name']},
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Firebase 업로드 실패: $e')),
+                        );
+                      }
+                    },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFA47764),
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
               child: const Text(
                 '카페 입력',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
           ),

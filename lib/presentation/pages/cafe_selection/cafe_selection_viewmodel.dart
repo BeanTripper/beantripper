@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CafeSelectionViewModel extends ChangeNotifier {
-  final String naverApiKey = '<NAVER_API_KEY>';
-  final String naverApiSecret = '<NAVER_API_SECRET>';
+  final String naverApiKey = dotenv.env['NAVER_API_KEY'] ?? '';
+  final String naverApiSecret = dotenv.env['NAVER_API_SECRET'] ?? '';
   final String baseUrl = "https://openapi.naver.com/v1/search/local.json";
 
   final List<Map<String, dynamic>> searchResults = [];
@@ -58,9 +59,9 @@ class CafeSelectionViewModel extends ChangeNotifier {
         }).map((item) {
           return {
             'name': _stripHtmlTags(item['title']),
-            'address': item['roadAddress'] ?? item['address'] ?? '',
-            'tel': item['telephone'] ?? '',
-            'link': item['link'] ?? '',
+            'address': item['address'] ,
+            'lat': item['mapy'], 
+            'lng': item['mapx'], 
           };
         }));
 
@@ -98,13 +99,19 @@ class CafeSelectionViewModel extends ChangeNotifier {
       await docRef.set({
         'name': cafe['name'],
         'address': cafe['address'],
-        'tel': cafe['tel'],
-        'link': cafe['link'],
+        'lat': cafe['lat'], // lat 필드 추가
+        'lng': cafe['lng'], // lng 필드 추가
       });
       print('${cafe['name']} 저장 완료!');
     } catch (e) {
       print('Firebase 저장 중 오류 발생: $e');
     }
+  }
+    String? selectedCafeName;
+
+  void setSelectedCafeName(String cafeName) {
+    selectedCafeName = cafeName;
+    notifyListeners();
   }
 }
 

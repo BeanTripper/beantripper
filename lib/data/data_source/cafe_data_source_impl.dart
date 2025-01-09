@@ -1,109 +1,68 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bean_tripper/data/data_source/cafe_data_source.dart';
+import 'package:bean_tripper/data/dto/cafe_detail_dto.dart';
+import 'package:bean_tripper/data/dto/cafe_marker_dto.dart';
 
-class CafeSelectionViewModel extends ChangeNotifier {
-  final String naverApiKey = '<NAVER_API_KEY>';
-  final String naverApiSecret = '<NAVER_API_SECRET>';
-  final String baseUrl = "https://openapi.naver.com/v1/search/local.json";
+class CafeDataSourceImpl implements CafeDataSource {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  final List<Map<String, dynamic>> searchResults = [];
-  Map<String, dynamic>? selectedCafe;
-  bool isLoading = false;
-
-  final List<String> excludedBrands = [
-    '메가MGC커피',
-    '이디야커피',
-    '컴포즈커피',
-    '스타벅스',
-    '빽다방',
-    '투썸플레이스',
-    '더벤티',
-    '할리스커피',
-    '파스쿠찌',
-    '엔제리너스',
-    '탐앤탐스',
-    '커피빈',
-    '폴바셋',
-    '커피베이',
-    '카페베네',
-  ];
-
-  // 카페 검색
-  Future<void> searchCafes(String query) async {
-    if (query.isEmpty) return;
-
-    isLoading = true;
-    notifyListeners();
-
+  @override
+  Future<CafeDetailDto?> fetchCafeItem(String id) async {
     try {
-      final url = Uri.parse('$baseUrl?query=$query&display=20');
-      final response = await http.get(
-        url,
-        headers: {
-          'X-Naver-Client-Id': naverApiKey,
-          'X-Naver-Client-Secret': naverApiSecret,
-        },
-      );
+      final docSnapshot = await _firestore.collection('cafe').doc(id).get();
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final items = data['items'] as List<dynamic>? ?? [];
-        searchResults.clear();
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data()!;
 
-        searchResults.addAll(items.where((item) {
-          final name = item['title'] as String;
-          return !excludedBrands.any((brand) => name.contains(brand));
-        }).map((item) {
-          return {
-            'name': _stripHtmlTags(item['title']),
-            'address': item['roadAddress'] ?? item['address'] ?? '',
-            'tel': item['telephone'] ?? '',
-            'link': item['link'] ?? '',
-          };
-        }));
-
-        if (searchResults.isEmpty) {
-          print('검색 결과가 없습니다.');
-        }
-      } else {
-        print('네이버 지도 API 호출 실패: ${response.body}');
-        throw Exception('Failed to fetch cafes');
+        return CafeDetailDto(
+          id: docSnapshot.id,
+          name: data['name'] ?? '',
+          address: data['address'] ?? '',
+          lat: (data['lat'] ?? 0.0).toDouble(),
+          lng: (data['lng'] ?? 0.0).toDouble(),
+          tel: data['tel'],
+          feedImageUrls: '',
+        );
       }
+
+      return null;
     } catch (e) {
-      print('카페 검색 중 오류 발생: $e');
-    } finally {
-      isLoading = false;
-      notifyListeners();
+      return null;
     }
   }
 
-  // 선택된 카페 설정
-  void setSelectedCafe(Map<String, dynamic> cafe) {
-    selectedCafe = cafe;
-    notifyListeners();
+  @override
+  Future<List<CafeMarkerDto>?> fetchCafesList(double lat, double lng) async {
+    // final jsonString = await _assetBundle.loadString('assets/cafes.json');
+    // return List.from(jsonDecode(jsonString))
+    //     .map((e) => CafeDto.fromJson(e))
+    //     .toList();
+
+    final firestore = FirebaseFirestore.instance;
+    final collectionRef = firestore
+        .collection('cafe')
+        .where('lat', isLessThan: lat + 0.05)
+        .where('lat', isGreaterThan: lat - 0.05)
+        .where('lng', isLessThan: lng + 0.05)
+        .where('lng', isGreaterThan: lng - 0.05);
+    final result = await collectionRef.get();
+    final docs = result.docs;
+
+    return docs.map((doc) {
+      final map = {
+        'id': doc.id,
+        ...doc.data(),
+      };
+      return CafeMarkerDto.fromJson(map);
+    }).toList();
   }
 
-  // HTML 태그 제거
-  String _stripHtmlTags(String htmlString) {
-    final regex = RegExp(r'<[^>]*>');
-    return htmlString.replaceAll(regex, '');
-  }
+  @override
+  Future<void> addCafeItem(CafeDetailDto item) async {
+    final firestore = FirebaseFirestore.instance;
+    final collectionRef = firestore.collection('cafe');
+    final docRef = collectionRef.doc();
 
-  // Firebase에 카페 저장
-  Future<void> saveCafeToFirebase(Map<String, dynamic> cafe) async {
-    try {
-      final docRef = FirebaseFirestore.instance.collection('cafe').doc(cafe['name']);
-      await docRef.set({
-        'name': cafe['name'],
-        'address': cafe['address'],
-        'tel': cafe['tel'],
-        'link': cafe['link'],
-      });
-      print('${cafe['name']} 저장 완료!');
-    } catch (e) {
-      print('Firebase 저장 중 오류 발생: $e');
-    }
+    await docRef.set(item.toJson());
   }
 }

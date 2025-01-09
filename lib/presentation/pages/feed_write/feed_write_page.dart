@@ -7,9 +7,20 @@ import 'package:bean_tripper/presentation/pages/feed_write/widgets/submit_button
 import 'package:bean_tripper/presentation/provider.dart';
 
 class FeedWritePage extends ConsumerWidget {
+  final String selectedCafeName;
+
+  FeedWritePage({required this.selectedCafeName});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(feedWriteViewModelProvider);
+
+    // 선택된 카페 이름을 ViewModel에 설정
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModel.cafeName.isEmpty) {
+        viewModel.setCafeName(selectedCafeName); // 여기서 ViewModel에 설정
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(

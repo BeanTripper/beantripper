@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/feed_wirte_viewmodel.dart';
+import 'package:bean_tripper/presentation/pages/home/home_page.dart';
 
 class SubmitButton extends StatelessWidget {
   final FeedWriteViewModel viewModel;
@@ -17,9 +18,15 @@ class SubmitButton extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('업로드 성공!')),
             );
+
+            // 업로드 성공 시 홈 페이지로 이동
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
           } catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('업로드 실패: $e')),
+              SnackBar(content: Text('게시글 작성과 태그선택을 완료해 주세요.')),
             );
           }
         },

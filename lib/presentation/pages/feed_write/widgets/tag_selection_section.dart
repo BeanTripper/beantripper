@@ -13,7 +13,7 @@ class TagSelectionSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text( 
+        const Text(
           '태그',
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
@@ -22,10 +22,10 @@ class TagSelectionSection extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: tags.map((tag) {
-            final isSelected = viewModel.categories.contains(tag); // 변경된 부분
+            final isSelected = viewModel.categories.contains(tag);
             return GestureDetector(
               onTap: () {
-                viewModel.toggleTagSelection(tag);
+                viewModel.toggleTagSelection(tag, context);
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -47,3 +47,4 @@ class TagSelectionSection extends StatelessWidget {
     );
   }
 }
+
