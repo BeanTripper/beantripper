@@ -29,6 +29,11 @@ class _ClassNameState extends ConsumerState<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+    final arg = ModalRoute.of(context)?.settings.arguments as Map?;
+    if (arg != null) {
+      latlng = NLatLng(arg['lat'], arg['lng']);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Cafe Name'),
@@ -36,6 +41,7 @@ class _ClassNameState extends ConsumerState<MapPage> {
       body: latlng == null
           ? Center(child: CircularProgressIndicator())
           : MapWidget(
+              cafeId: arg?['id'],
               latLng: latlng ?? NLatLng(37.63695556, 127.0277194),
             ),
     );

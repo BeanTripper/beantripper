@@ -5,12 +5,13 @@ import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MapWidget extends ConsumerWidget {
-  const MapWidget({
-    super.key,
+  MapWidget({
+    required this.cafeId,
     required this.latLng,
   });
 
-  final NLatLng latLng;
+  String? cafeId;
+  NLatLng latLng;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
