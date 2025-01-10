@@ -1,13 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bean_tripper/presentation/pages/profile/profile_page.dart';
 import 'package:bean_tripper/presentation/pages/feeds/cafe_of_the_day.dart';
 import 'package:bean_tripper/core/widgets/feed_content.dart';
 import 'package:bean_tripper/core/widgets/feed_info.dart';
-import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page_viewmodel.dart';
-import 'package:bean_tripper/core/comment_page.dart';
 
 class FeedsPage extends ConsumerStatefulWidget {
   @override
@@ -39,8 +36,6 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(FirebaseAuth.instance.currentUser);
-
     final feedState = ref.watch(feedProvider);
     return Scaffold(
       appBar: AppBar(
@@ -89,11 +84,6 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
             CafeOfTheDay(), // "오늘의 카페" 부분
             feedState.when(
               data: (feeds) {
-                print("피드 데이터 불러오기 성공: ${feeds.length}개"); // 데이터 로드 성공 여부 확인
-                feeds.forEach((feed) {
-                  print(
-                      "카페 이름: ${feed.cafeName}, 작성자: ${feed.writerName}"); // 각 피드 데이터 확인
-                });
                 return ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -104,18 +94,15 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
                       children: [
                         FeedInfo(feed: feed), // FeedInfo 위젯 사용
                         FeedContent(feed: feed), // FeedContent 위젯 사용
-                        Text(feed.cafeName), // 테스트를 위해 카페 이름을 추가
                       ],
                     );
                   },
                 );
               },
               loading: () {
-                print("데이터 로딩 중...");
                 return Center(child: CircularProgressIndicator());
               },
               error: (e, stackTrace) {
-                print("데이터 불러오기 오류: $e");
                 return Center(child: Text('Error: $e'));
               },
             ),
