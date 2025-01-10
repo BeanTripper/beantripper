@@ -57,6 +57,7 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<Feed>>> {
     for (var d in snapshot.docs) {
       feedList.add(Feed.fromFirestore(d));
     }
+
     return feedList;
   }
 }
