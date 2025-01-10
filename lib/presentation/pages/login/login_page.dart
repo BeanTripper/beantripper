@@ -17,12 +17,9 @@ class LoginPage extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: Consumer(
           builder: (context, ref, child) {
-            print(FirebaseAuth.instance.currentUser == null);
-            if (FirebaseAuth.instance.currentUser != null) {
-              print('ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ${FirebaseAuth.instance.currentUser?.photoURL}');
-            }
             final userState = ref.watch(loginPageViewModelProvider);
             final userViewModel = ref.read(loginPageViewModelProvider.notifier);
+            print('&&&&&&&&&&&&&&&&&&&&${userViewModel.fetchUser()}');
             return Column(
               children: [
                 SizedBox(height: 150),

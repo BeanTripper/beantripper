@@ -96,6 +96,18 @@ class LoginPageViewModel extends Notifier<LoginState> {
     }
   }
 
+  Future<void> fetchUser() async {
+    final user = state.appUser;
+    if (user != null) {
+      try {
+        final fetchUserUseCase = ref.read(fetchUserUseCaseProvider);
+        final fetchUser = await fetchUserUseCase.fetchUser(user.id);
+      } on Exception catch (e) {
+        print(e);
+      }
+    }
+  }
+
   Future<void> submitUserToFirestore() async {
     final user = state.appUser;
     if (user != null) {
