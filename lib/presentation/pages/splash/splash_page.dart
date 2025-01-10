@@ -22,8 +22,6 @@ class SplashPage extends StatelessWidget {
         FirebaseAuth.instance.currentUser == null
             ? Navigator.pushNamed(context, '/login_page')
             : Navigator.pushNamed(context, '/feeds_page');
-
-        print(FirebaseAuth.instance.currentUser);
       },
     );
     return Scaffold(
