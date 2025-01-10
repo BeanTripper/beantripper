@@ -6,12 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FeedInfo extends ConsumerWidget {
   final Feed feed;
-
   const FeedInfo({
     super.key,
     required this.feed,
   });
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
@@ -36,7 +34,10 @@ class FeedInfo extends ConsumerWidget {
                 feed.writerName,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text('1분전'),
+              Text(
+                '${feed.createdAt.toDate()}',
+                style: TextStyle(color: Colors.grey),
+              ),
             ],
           ),
           Spacer(),
