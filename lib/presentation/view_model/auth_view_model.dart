@@ -5,15 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
-class LoginState {
+class AuthState {
   final AppUser? appUser;
-  LoginState({required this.appUser});
+  AuthState({required this.appUser});
 }
 
-class LoginPageViewModel extends Notifier<LoginState> {
+class AuthViewModel extends Notifier<AuthState> {
   @override
-  LoginState build() {
-    return LoginState(appUser: null);
+  AuthState build() {
+    return AuthState(appUser: null);
   }
 
   Future<void> signInWithGoogle() async {
@@ -24,12 +24,12 @@ class LoginPageViewModel extends Notifier<LoginState> {
         final fetchUserUseCase = ref.read(fetchUserUseCaseProvider);
         final fetchedUser = await fetchUserUseCase.fetchUser(user.id);
         if (fetchedUser != null) {
-          state = LoginState(appUser: fetchedUser);
+          state = AuthState(appUser: fetchedUser);
         } else {
           //user 가 firestore에 없으면 firestore에 등록. registerPage
           //updateUserToFirestore
           //submitUserToFirestore
-          state = LoginState(
+          state = AuthState(
             appUser: AppUser(
               id: user.id,
               name: user.name ?? "",
@@ -47,43 +47,38 @@ class LoginPageViewModel extends Notifier<LoginState> {
   ///kakao 로그인
   Future<void> signInWithKakao() async {
     try {
-      print(1);
       // await UserApi.instance.logout(); 카카오 로그아웃기능
       final isInstalled = await isKakaoTalkInstalled();
-      print(2);
       final OAuthToken oAuthToken = isInstalled
           ? await UserApi.instance.loginWithKakaoTalk()
           : await UserApi.instance.loginWithKakaoAccount();
       //카카오로그인
-      print(3);
-print(oAuthToken);
+
       final OAuthProvider oAuthProvider = OAuthProvider('oidc.kakao');
       final OAuthCredential oAuthCred = oAuthProvider.credential(
         accessToken: oAuthToken.accessToken,
         idToken: oAuthToken.idToken,
       );
-print(oAuthCred);
+
       //firebase 에 저장
       // 구글에서 받은 accessToken과 idToken을 firebase가 이해할수 있는 걸로 변환
       // .credential이라는 메서드는 kakao_flutter_sdk_user 패키지의 것
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(oAuthCred);
-          print(userCredential);
       // Firebase에 로그인(앱에 로그인하는 것과는 별개임)
       // 새 사용자라면 Firebase Authentication에서 사용자 생성
       final user = userCredential.user;
-      print(user);
       if (user != null) {
         final fetchUserUseCase = ref.read(fetchUserUseCaseProvider);
         final fetchedUser = await fetchUserUseCase.fetchUser(user.uid);
 
         if (fetchedUser != null) {
-          state = LoginState(appUser: fetchedUser);
+          state = AuthState(appUser: fetchedUser);
         } else {
           //user 가 firestore에 없으면 firestore에 등록. registerPage
           //updateUserToFirestore
           //submitUserToFirestore
-          state = LoginState(
+          state = AuthState(
             appUser: AppUser(
               id: user.uid,
               name:
@@ -95,11 +90,20 @@ print(oAuthCred);
           submitUserToFirestore();
         }
       }
-    } catch (e,s) {
-      state = LoginState(appUser: null);
-      print(3333);
-      print(e);
-      print(s);
+    } catch (e) {
+      state = AuthState(appUser: null);
+    }
+  }
+
+  Future<void> fetchUser() async {
+    final user = state.appUser;
+    if (user != null) {
+      try {
+        final fetchUserUseCase = ref.read(fetchUserUseCaseProvider);
+        final fetchUser = await fetchUserUseCase.fetchUser(user.id);
+      } on Exception catch (e) {
+        print(e);
+      }
     }
   }
 
@@ -120,7 +124,7 @@ print(oAuthCred);
   Future<void> updateUserNickname(String newNickname) async {
     final user = state.appUser;
     if (user != null) {
-      state = LoginState(
+      state = AuthState(
         appUser: AppUser(
           id: state.appUser?.id ?? '',
           name: newNickname,
@@ -132,6 +136,6 @@ print(oAuthCred);
 }
 
 final loginPageViewModelProvider =
-    NotifierProvider<LoginPageViewModel, LoginState>(() {
-  return LoginPageViewModel();
+    NotifierProvider<AuthViewModel, AuthState>(() {
+  return AuthViewModel();
 });
