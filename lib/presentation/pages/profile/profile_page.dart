@@ -1,6 +1,5 @@
-import 'package:bean_tripper/presentation/pages/login/login_page_view_model.dart';
+import 'package:bean_tripper/presentation/view_model/auth_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
