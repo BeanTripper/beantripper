@@ -9,7 +9,7 @@ class FeedInfo extends ConsumerWidget {
 
   const FeedInfo({
     super.key,
-    required this.feed,
+    required Feed feed,
   });
 
   @override
@@ -36,10 +36,7 @@ class FeedInfo extends ConsumerWidget {
                 feed.writerName,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text(
-                '${feed.createdAt.toDate()}',
-                style: TextStyle(color: Colors.grey),
-              ),
+              Text('1분전'),
             ],
           ),
           Spacer(),
