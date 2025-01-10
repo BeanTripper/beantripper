@@ -1,6 +1,8 @@
+import 'package:bean_tripper/presentation/pages/login/login_page_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -11,37 +13,43 @@ class ProfilePage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 50,
-              child: Icon(Icons.person, size: 50),
-            ),
-            SizedBox(height: 16),
-            Text(
-              '사용자 이름',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'user@example.com',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-                if (context.mounted) {
-                  Navigator.pushNamed(context, '/login_page');
-                }
-              },
-              child: Text('로그아웃'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+        child: Consumer(builder: (context, ref, child) {
+          final profileState = ref.read(loginPageViewModelProvider);
+          final profileViewModel =
+              ref.read(loginPageViewModelProvider.notifier);
+
+          return Column(
+            children: [
+              CircleAvatar(
+                radius: 50,
+                child: Icon(Icons.person, size: 50),
               ),
-            ),
-          ],
-        ),
+              SizedBox(height: 16),
+              Text(
+                '사용자 이름',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'user@example.com',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+              SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  if (context.mounted) {
+                    Navigator.pushNamed(context, '/login_page');
+                  }
+                },
+                child: Text('로그아웃'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
