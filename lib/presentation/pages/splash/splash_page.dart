@@ -1,4 +1,5 @@
 import 'package:bean_tripper/constant/theme.dart';
+import 'package:bean_tripper/presentation/view_model/auth_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -16,10 +17,11 @@ class SplashPage extends StatelessWidget {
         if (!context.mounted) {
           return;
         }
+
         //firebaseauth 현재 유저 여부
         FirebaseAuth.instance.currentUser == null
-            ? Navigator.pushNamed(context, '/login_page')
-            : Navigator.pushNamed(context, '/feeds_page');
+            ? Navigator.pushReplacementNamed(context, '/login_page')
+            : Navigator.pushReplacementNamed(context, '/feeds_page');
       },
     );
     return Scaffold(
