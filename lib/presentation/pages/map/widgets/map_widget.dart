@@ -34,6 +34,7 @@ class MapWidget extends ConsumerWidget {
       },
       onCameraIdle: () async {
         await _onCameraIdle(context, ref);
+
       },
     );
   }

@@ -52,10 +52,10 @@ class MapViewModel extends Notifier<MapState> {
     final cafes =
         await ref.read(fetchCafesListUsecaseProvider).excute(lat, lng);
     cafes?.forEach((element) {
-      print(
-          "CAFE== id: ${element.id}, lat: ${element.lat}, lng: ${element.lng}");
+      // print(
+      //     "CAFE== id: ${element.id}, lat: ${element.lat}, lng: ${element.lng}");
     });
-    print(cafes?.length);
+    // print(cafes?.length);
     state = MapState(
       cafeList: cafes ?? [],
       selectedCafe: state.selectedCafe,
@@ -66,7 +66,6 @@ class MapViewModel extends Notifier<MapState> {
 
   Future<void> fetchCafeItem(String id) async {
     final cafe = await ref.read(fetchCafeItemUsecaseProvider).excute(id);
-    
     state = MapState(
       cafeList: state.cafeList,
       selectedCafe: cafe,

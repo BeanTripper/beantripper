@@ -17,6 +17,10 @@ class LoginPage extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: Consumer(
           builder: (context, ref, child) {
+            print(FirebaseAuth.instance.currentUser == null);
+            if (FirebaseAuth.instance.currentUser != null) {
+              print('ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ${FirebaseAuth.instance.currentUser?.photoURL}');
+            }
             final userState = ref.watch(loginPageViewModelProvider);
             final userViewModel = ref.read(loginPageViewModelProvider.notifier);
             return Column(
@@ -43,7 +47,9 @@ class LoginPage extends StatelessWidget {
                   iconPath: "assets/images/kakao_icon.png",
                   onPressed: () async {
                     await userViewModel.signInWithKakao();
-                    Navigator.pushNamed(context, '/feeds_page');
+                    if (context.mounted) {
+                      Navigator.pushNamed(context, '/register_page');
+                    }
                   },
                   iconSize: 20,
                 ),
@@ -55,7 +61,9 @@ class LoginPage extends StatelessWidget {
                   iconPath: "assets/images/google_icon.png",
                   onPressed: () async {
                     await userViewModel.signInWithGoogle();
-                    Navigator.pushNamed(context, '/feeds_page');
+                    if (context.mounted) {
+                      Navigator.pushNamed(context, '/register_page');
+                    }
                   },
                   iconSize: 20,
                 ),
