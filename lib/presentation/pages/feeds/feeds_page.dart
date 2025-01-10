@@ -124,7 +124,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/feeds_write_page');
+          Navigator.pushNamed(context, '/cafe_selection_page');
         },
         child: Icon(Icons.edit),
         shape: RoundedRectangleBorder(
