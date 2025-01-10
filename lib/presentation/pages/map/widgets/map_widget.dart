@@ -34,7 +34,7 @@ class MapWidget extends ConsumerWidget {
         }
       },
       onCameraIdle: () async {
-        print("onCameraIdle called");
+        // print("onCameraIdle called");
         if (state.mapController != null) {
           final cameraPosition = state.mapController!.nowCameraPosition.target;
           if (state.currentLatLng?.latitude != cameraPosition.latitude &&
@@ -45,7 +45,7 @@ class MapWidget extends ConsumerWidget {
                 NLatLng(cameraPosition.latitude, cameraPosition.longitude));
           }
         } else {
-          print("controller is null");
+          // print("controller is null");
         }
       },
     );
@@ -63,15 +63,15 @@ class MapWidget extends ConsumerWidget {
     final state = ref.watch(mapViewModel);
 
     if (state.cafeList.isNotEmpty) {
-      print("지워용~~");
+      // print("지워용~~");
       mapController.clearOverlays();
     }
 
-    print("삐용~~");
+    // print("삐용~~");
     for (var e in state.cafeList) {
       final marker = NMarker(id: e.id, position: NLatLng(e.lat, e.lng));
       marker.setOnTapListener((overlay) async {
-        print("마커 터치 ${e.id}");
+        // print("마커 터치 ${e.id}");
 
         await vm.fetchCafeItem(e.id);
         final selectedCafe = ref.read(mapViewModel).selectedCafe;
@@ -85,6 +85,6 @@ class MapWidget extends ConsumerWidget {
       });
       mapController.addOverlay(marker);
     }
-    print("끗~~");
+    // print("끗~~");
   }
 }
