@@ -59,7 +59,10 @@ class CafeFeedCollection extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   '/feed_detail_page',
-                  arguments: feeds[index].id,
+                  arguments: {
+                    // 'feedId': feeds[index].id,
+                    'cafeName': cafeName,
+                  },
                 );
               },
               child: Container(
