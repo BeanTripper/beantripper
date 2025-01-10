@@ -11,7 +11,8 @@ class SplashPage extends StatelessWidget {
     //widget에서 화면을 실시 후 처음으로 하는 액션
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
-        // await FirebaseAuth.instance.signOut(); //로그아웃
+        await FirebaseAuth.instance.signOut(); //로그아웃
+
         //2초 딜레이
         await Future.delayed(Duration(seconds: 2));
         //비동기 처리하고 해당 화면에 있는지 확인 후
@@ -22,8 +23,6 @@ class SplashPage extends StatelessWidget {
         FirebaseAuth.instance.currentUser == null
             ? Navigator.pushNamed(context, '/login_page')
             : Navigator.pushNamed(context, '/feeds_page');
-
-        print(FirebaseAuth.instance.currentUser);
       },
     );
     return Scaffold(
