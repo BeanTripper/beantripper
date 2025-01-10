@@ -25,12 +25,8 @@ class FeedWritePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('작성하기'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        centerTitle: true,
+        leading: SizedBox(), // 뒤로 가기 버튼 제거
       ),
       body: GestureDetector(
         onTap: () {
