@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FeedInfo extends ConsumerWidget {
-  final Feed feed;
+  Feed feed;
 
-  const FeedInfo({
+  FeedInfo({
     super.key,
-    required Feed feed,
+    required this.feed,
   });
 
   @override
