@@ -23,9 +23,7 @@ class MapPage extends ConsumerWidget {
     final arg = ModalRoute.of(context)?.settings.arguments as Map?;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Cafe Name'),
-      ),
+      appBar: AppBar(),
       body: FutureBuilder<NLatLng?>(
         future: _fetchAddress(),
         builder: (context, snapshot) {
