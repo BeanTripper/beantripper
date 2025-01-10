@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bean_tripper/domain/entity/feed.dart';
+import 'package:bean_tripper/data/repository/comment_repository.dart';
 
 class CommentPage extends StatefulWidget {
   final Feed feed;
@@ -15,24 +16,18 @@ class CommentPage extends StatefulWidget {
 class _CommentPageState extends State<CommentPage> {
   final TextEditingController _commentController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final CommentRepository _commentRepository = CommentRepository();
 
   Future<void> _addComment(String comment) async {
     if (comment.isNotEmpty) {
       final user = _auth.currentUser;
       if (user != null) {
-        final newComment = {
-          'userId': user.uid,
-          'userName': user.displayName ?? 'Unknown',
-          'content': comment,
-          'timestamp': FieldValue.serverTimestamp(),
-        };
-
-        await FirebaseFirestore.instance
-            .collection('feed')
-            .doc(widget.feed.id)
-            .collection('comments')
-            .add(newComment);
-
+        await _commentRepository.addComment(
+          widget.feed.id,
+          user.uid,
+          user.displayName ?? 'Unknown',
+          comment,
+        );
         _commentController.clear();
       }
     }
@@ -60,26 +55,6 @@ class _CommentPageState extends State<CommentPage> {
                 }
 
                 final comments = snapshot.data!.docs;
-                if (comments.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          '아직 댓글이 없습니다',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          '대화를 시작하세요.',
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
                 return ListView.builder(
                   itemCount: comments.length,
                   itemBuilder: (context, index) {
@@ -98,7 +73,7 @@ class _CommentPageState extends State<CommentPage> {
               },
             ),
           ),
-          Padding(
+          Container(
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
