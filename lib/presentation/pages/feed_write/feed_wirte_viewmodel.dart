@@ -1,9 +1,9 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FeedWriteViewModel extends ChangeNotifier {
   final ImagePicker _picker = ImagePicker();
@@ -12,38 +12,29 @@ class FeedWriteViewModel extends ChangeNotifier {
   String cafeName = '';
   String content = '';
 
-  // 카페 이름 설정
   void setCafeName(String value) {
     cafeName = value;
     notifyListeners();
   }
 
-  // 게시글 내용 설정
   void setPostContent(String value) {
     content = value;
     notifyListeners();
   }
 
-  // 태그 선택/해제
   void toggleTagSelection(String tag, BuildContext context) {
-  if (categories.contains(tag)) {
-    categories.remove(tag);
-  } else if (categories.length < 3) {
-    categories.add(tag);
-  } else {
-    // 태그 3개 초과 시 스낵바 표시
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('태그는 최대 3개까지 선택 가능합니다.'),
-        duration: Duration(seconds: 2),
-      ),
-    );
+    if (categories.contains(tag)) {
+      categories.remove(tag);
+    } else if (categories.length < 3) {
+      categories.add(tag);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('태그는 최대 3개까지 선택 가능합니다.')),
+      );
+    }
+    notifyListeners();
   }
-  notifyListeners();
-}
 
-
-  // 이미지 선택
   Future<void> pickImages() async {
     final images = await _picker.pickMultiImage();
     if (images != null) {
@@ -60,8 +51,7 @@ class FeedWriteViewModel extends ChangeNotifier {
     }
   }
 
-  // Firestore에 데이터 업로드
-  Future<void> uploadDataToFirebase() async {
+  Future<void> uploadDataToFirebase(String userName) async {
     if (cafeName.isEmpty || content.isEmpty || categories.isEmpty) {
       throw Exception('모든 필드를 입력해야 합니다.');
     }
@@ -85,6 +75,7 @@ class FeedWriteViewModel extends ChangeNotifier {
         'categories': categories,
         'content': content,
         'imageUrls': imageUrls,
+        'userName': userName,
         'createdAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
@@ -93,3 +84,8 @@ class FeedWriteViewModel extends ChangeNotifier {
     }
   }
 }
+
+final feedWriteViewModelProvider = ChangeNotifierProvider((ref) {
+  final viewModel = FeedWriteViewModel();
+  return viewModel;
+});

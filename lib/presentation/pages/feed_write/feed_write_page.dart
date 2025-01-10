@@ -5,6 +5,7 @@ import 'package:bean_tripper/presentation/pages/feed_write/widgets/text_input_se
 import 'package:bean_tripper/presentation/pages/feed_write/widgets/tag_selection_section.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/widgets/submit_button.dart';
 import 'package:bean_tripper/presentation/provider.dart';
+import 'package:bean_tripper/presentation/view_model/auth_view_model.dart';
 
 class FeedWritePage extends ConsumerWidget {
   final String selectedCafeName;
@@ -14,11 +15,12 @@ class FeedWritePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(feedWriteViewModelProvider);
+    final userState = ref.watch(loginPageViewModelProvider); // userState 가져오기
 
-    // 선택된 카페 이름을 ViewModel에 설정
+    // 선택된 카페 이름과 유저 정보 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (viewModel.cafeName.isEmpty) {
-        viewModel.setCafeName(selectedCafeName); // 여기서 ViewModel에 설정
+      if ((viewModel.cafeName?.isEmpty ?? true)) {
+        viewModel.setCafeName(selectedCafeName); // 카페 이름 설정
       }
     });
 
@@ -26,7 +28,7 @@ class FeedWritePage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('작성하기'),
         centerTitle: true,
-        leading: SizedBox(), // 뒤로 가기 버튼 제거
+        leading: const SizedBox(), // 뒤로 가기 버튼 제거
       ),
       body: GestureDetector(
         onTap: () {
@@ -45,7 +47,10 @@ class FeedWritePage extends ConsumerWidget {
                 const SizedBox(height: 20),
                 TagSelectionSection(viewModel: viewModel),
                 const SizedBox(height: 20),
-                SubmitButton(viewModel: viewModel),
+                SubmitButton(
+                  viewModel: viewModel,
+                  userName: userState.appUser?.name ?? '익명', // 유저 이름 전달
+                ),
               ],
             ),
           ),

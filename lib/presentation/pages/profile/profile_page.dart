@@ -1,4 +1,4 @@
-import 'package:bean_tripper/presentation/pages/login/login_page_view_model.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +14,9 @@ class ProfilePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Consumer(builder: (context, ref, child) {
-          final profileState = ref.read(loginPageViewModelProvider);
-          final profileViewModel =
-              ref.read(loginPageViewModelProvider.notifier);
+        //  final profileState = ref.read(loginPageViewModelProvider);
+        //  final profileViewModel =
+         //     ref.read(loginPageViewModelProvider.notifier);
 
           return Column(
             children: [
