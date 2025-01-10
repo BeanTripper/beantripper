@@ -12,27 +12,38 @@ class FeedWriteViewModel extends ChangeNotifier {
   String cafeName = '';
   String content = '';
 
+  // 카페 이름 설정
   void setCafeName(String value) {
     cafeName = value;
     notifyListeners();
   }
 
+  // 게시글 내용 설정
   void setPostContent(String value) {
     content = value;
     notifyListeners();
   }
 
-  void toggleTagSelection(String tag) {
-    if (categories.contains(tag)) {
-      categories.remove(tag);
-    } else if (categories.length < 3) {
-      categories.add(tag);
-    } else {
-      print('태그는 최대 3개까지 선택 가능합니다.');
-    }
-    notifyListeners();
+  // 태그 선택/해제
+  void toggleTagSelection(String tag, BuildContext context) {
+  if (categories.contains(tag)) {
+    categories.remove(tag);
+  } else if (categories.length < 3) {
+    categories.add(tag);
+  } else {
+    // 태그 3개 초과 시 스낵바 표시
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('태그는 최대 3개까지 선택 가능합니다.'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
+  notifyListeners();
+}
 
+
+  // 이미지 선택
   Future<void> pickImages() async {
     final images = await _picker.pickMultiImage();
     if (images != null) {
@@ -49,6 +60,7 @@ class FeedWriteViewModel extends ChangeNotifier {
     }
   }
 
+  // Firestore에 데이터 업로드
   Future<void> uploadDataToFirebase() async {
     if (cafeName.isEmpty || content.isEmpty || categories.isEmpty) {
       throw Exception('모든 필드를 입력해야 합니다.');

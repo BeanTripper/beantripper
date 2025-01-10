@@ -36,7 +36,7 @@ android {
         debug {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            storeFile file('C:/Users/xyide/.android/debug.keystore')
+            storeFile file('C:/Users/KGE/.android/debug.keystore')
             storePassword 'android'
         }
     }
