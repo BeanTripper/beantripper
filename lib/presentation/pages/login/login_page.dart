@@ -1,6 +1,6 @@
 import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
-import 'package:bean_tripper/presentation/pages/login/login_page_view_model.dart';
+import 'package:bean_tripper/presentation/view_model/auth_view_model.dart';
 import 'package:bean_tripper/presentation/pages/login/widget/custom_social_button.dart';
 import 'package:bean_tripper/presentation/pages/login/widget/looking_around_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,7 +44,7 @@ class LoginPage extends StatelessWidget {
                   iconPath: "assets/images/kakao_icon.png",
                   onPressed: () async {
                     await userViewModel.signInWithKakao();
-                    if (context.mounted) {
+                    if (context.mounted && userState.appUser != null) {
                       Navigator.pushNamed(context, '/register_page');
                     }
                   },
@@ -58,7 +58,7 @@ class LoginPage extends StatelessWidget {
                   iconPath: "assets/images/google_icon.png",
                   onPressed: () async {
                     await userViewModel.signInWithGoogle();
-                    if (context.mounted) {
+                    if (context.mounted && userState.appUser != null) {
                       Navigator.pushNamed(context, '/register_page');
                     }
                   },

@@ -5,15 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
-class LoginState {
+class AuthState {
   final AppUser? appUser;
-  LoginState({required this.appUser});
+  AuthState({required this.appUser});
 }
 
-class LoginPageViewModel extends Notifier<LoginState> {
+class AuthViewModel extends Notifier<AuthState> {
   @override
-  LoginState build() {
-    return LoginState(appUser: null);
+  AuthState build() {
+    return AuthState(appUser: null);
   }
 
   Future<void> signInWithGoogle() async {
@@ -24,12 +24,12 @@ class LoginPageViewModel extends Notifier<LoginState> {
         final fetchUserUseCase = ref.read(fetchUserUseCaseProvider);
         final fetchedUser = await fetchUserUseCase.fetchUser(user.id);
         if (fetchedUser != null) {
-          state = LoginState(appUser: fetchedUser);
+          state = AuthState(appUser: fetchedUser);
         } else {
           //user 가 firestore에 없으면 firestore에 등록. registerPage
           //updateUserToFirestore
           //submitUserToFirestore
-          state = LoginState(
+          state = AuthState(
             appUser: AppUser(
               id: user.id,
               name: user.name ?? "",
@@ -73,12 +73,12 @@ class LoginPageViewModel extends Notifier<LoginState> {
         final fetchedUser = await fetchUserUseCase.fetchUser(user.uid);
 
         if (fetchedUser != null) {
-          state = LoginState(appUser: fetchedUser);
+          state = AuthState(appUser: fetchedUser);
         } else {
           //user 가 firestore에 없으면 firestore에 등록. registerPage
           //updateUserToFirestore
           //submitUserToFirestore
-          state = LoginState(
+          state = AuthState(
             appUser: AppUser(
               id: user.uid,
               name:
@@ -91,8 +91,7 @@ class LoginPageViewModel extends Notifier<LoginState> {
         }
       }
     } catch (e) {
-      state = LoginState(appUser: null);
-      print(e);
+      state = AuthState(appUser: null);
     }
   }
 
@@ -125,7 +124,7 @@ class LoginPageViewModel extends Notifier<LoginState> {
   Future<void> updateUserNickname(String newNickname) async {
     final user = state.appUser;
     if (user != null) {
-      state = LoginState(
+      state = AuthState(
         appUser: AppUser(
           id: state.appUser?.id ?? '',
           name: newNickname,
@@ -137,6 +136,6 @@ class LoginPageViewModel extends Notifier<LoginState> {
 }
 
 final loginPageViewModelProvider =
-    NotifierProvider<LoginPageViewModel, LoginState>(() {
-  return LoginPageViewModel();
+    NotifierProvider<AuthViewModel, AuthState>(() {
+  return AuthViewModel();
 });
