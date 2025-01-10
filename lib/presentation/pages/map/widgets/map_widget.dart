@@ -10,13 +10,12 @@ class MapWidget extends ConsumerWidget {
     required this.latLng,
   });
 
-  String? cafeId;
-  NLatLng latLng;
+  final String? cafeId;
+  final NLatLng latLng;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vm = ref.read(mapViewModel.notifier);
-    final state = ref.watch(mapViewModel);
+    print("지도 빌드해요");
 
     return NaverMap(
       options: NaverMapViewOptions(
@@ -28,63 +27,73 @@ class MapWidget extends ConsumerWidget {
         consumeSymbolTapEvents: true,
       ),
       onMapReady: (controller) async {
+        final state = ref.watch(mapViewModel);
         state.mapController = controller;
-        if (state.mapController != null) {
-          await fetchCafeMarkers(ref, context, state.mapController!, latLng);
-        }
+
+        await _fetchCafeMarkers(context, ref);
       },
       onCameraIdle: () async {
-        print("onCameraIdle called");
-        if (state.mapController != null) {
-          final cameraPosition = state.mapController!.nowCameraPosition.target;
-          if (state.currentLatLng?.latitude != cameraPosition.latitude &&
-              state.currentLatLng?.longitude != cameraPosition.longitude) {
-            await fetchCafeMarkers(
-                ref, context, state.mapController!, cameraPosition);
-            vm.setCurrentLatLng(
-                NLatLng(cameraPosition.latitude, cameraPosition.longitude));
-          }
-        } else {
-          print("controller is null");
-        }
+        await _onCameraIdle(context, ref);
       },
     );
   }
 
-  Future<void> fetchCafeMarkers(
-    WidgetRef ref,
+  Future<void> _onCameraIdle(
     BuildContext context,
-    NaverMapController mapController,
-    NLatLng targetLatLng,
+    WidgetRef ref,
   ) async {
     final vm = ref.read(mapViewModel.notifier);
-    await vm.fetchCafes(targetLatLng.latitude, targetLatLng.longitude);
-
     final state = ref.watch(mapViewModel);
+    final mapController = state.mapController;
 
-    if (state.cafeList.isNotEmpty) {
-      print("지워용~~");
-      mapController.clearOverlays();
+    if (mapController != null) {
+      final cameraPosition = mapController.nowCameraPosition.target;
+      final currentPosition = state.currentLatLng;
+
+      if (currentPosition?.latitude != cameraPosition.latitude ||
+          currentPosition?.longitude != cameraPosition.longitude) {
+        await vm.fetchCafes(cameraPosition.latitude, cameraPosition.longitude);
+        vm.setCurrentLatLng(
+            NLatLng(cameraPosition.latitude, cameraPosition.longitude));
+        await _fetchCafeMarkers(context, ref);
+      }
     }
+  }
 
-    print("삐용~~");
-    for (var e in state.cafeList) {
-      final marker = NMarker(id: e.id, position: NLatLng(e.lat, e.lng));
-      marker.setOnTapListener((overlay) async {
-        print("마커 터치 ${e.id}");
+  Future<void> _fetchCafeMarkers(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final vm = ref.read(mapViewModel.notifier);
+    final state = ref.watch(mapViewModel);
+    final mapController = state.mapController;
 
-        await vm.fetchCafeItem(e.id);
-        final selectedCafe = ref.read(mapViewModel).selectedCafe;
+    if (mapController != null) {
+      await vm.fetchCafes(latLng.latitude, latLng.longitude);
 
-        showModalBottomSheet(
-          backgroundColor: Color.fromRGBO(0, 0, 0, 0),
-          barrierColor: Color.fromRGBO(0, 0, 0, 0),
-          context: context,
-          builder: (context) => CafeInfoBottomSheet(cafe: selectedCafe),
-        );
-      });
-      mapController.addOverlay(marker);
+      if (state.cafeList.isNotEmpty) {
+        mapController.clearOverlays();
+      }
+
+      for (var e in state.cafeList) {
+        final marker = NMarker(id: e.id, position: NLatLng(e.lat, e.lng));
+        marker.setOnTapListener((overlay) async {
+          await vm.fetchCafeItem(e.id);
+
+          // 상태 변경 후 watch로 상태 반영
+          final selectedCafe =
+              ref.watch(mapViewModel.select((s) => s.selectedCafe));
+          print("SELECTEDCAFE== ${selectedCafe?.id}, ${selectedCafe?.name}");
+
+          showModalBottomSheet(
+            backgroundColor: Color.fromRGBO(0, 0, 0, 0),
+            barrierColor: Color.fromRGBO(0, 0, 0, 0),
+            context: context,
+            builder: (context) => CafeInfoBottomSheet(cafe: selectedCafe),
+          );
+        });
+        mapController.addOverlay(marker);
+      }
     }
-    print("끗~~");
   }
 }
