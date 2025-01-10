@@ -66,7 +66,6 @@ class MapViewModel extends Notifier<MapState> {
 
   Future<void> fetchCafeItem(String id) async {
     final cafe = await ref.read(fetchCafeItemUsecaseProvider).excute(id);
-    // print("SELECTEDCAFE== ${cafe?.id}, ${cafe?.name}");
     state = MapState(
       cafeList: state.cafeList,
       selectedCafe: cafe,
