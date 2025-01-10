@@ -47,27 +47,32 @@ class LoginPageViewModel extends Notifier<LoginState> {
   ///kakao 로그인
   Future<void> signInWithKakao() async {
     try {
+      print(1);
       // await UserApi.instance.logout(); 카카오 로그아웃기능
       final isInstalled = await isKakaoTalkInstalled();
+      print(2);
       final OAuthToken oAuthToken = isInstalled
           ? await UserApi.instance.loginWithKakaoTalk()
           : await UserApi.instance.loginWithKakaoAccount();
       //카카오로그인
-
+      print(3);
+print(oAuthToken);
       final OAuthProvider oAuthProvider = OAuthProvider('oidc.kakao');
       final OAuthCredential oAuthCred = oAuthProvider.credential(
         accessToken: oAuthToken.accessToken,
         idToken: oAuthToken.idToken,
       );
-
+print(oAuthCred);
       //firebase 에 저장
       // 구글에서 받은 accessToken과 idToken을 firebase가 이해할수 있는 걸로 변환
       // .credential이라는 메서드는 kakao_flutter_sdk_user 패키지의 것
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(oAuthCred);
+          print(userCredential);
       // Firebase에 로그인(앱에 로그인하는 것과는 별개임)
       // 새 사용자라면 Firebase Authentication에서 사용자 생성
       final user = userCredential.user;
+      print(user);
       if (user != null) {
         final fetchUserUseCase = ref.read(fetchUserUseCaseProvider);
         final fetchedUser = await fetchUserUseCase.fetchUser(user.uid);
@@ -90,9 +95,11 @@ class LoginPageViewModel extends Notifier<LoginState> {
           submitUserToFirestore();
         }
       }
-    } catch (e) {
+    } catch (e,s) {
       state = LoginState(appUser: null);
+      print(3333);
       print(e);
+      print(s);
     }
   }
 

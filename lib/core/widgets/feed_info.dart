@@ -9,7 +9,7 @@ class FeedInfo extends ConsumerWidget {
 
   const FeedInfo({
     super.key,
-    required Feed feed,
+    required this.feed,
   });
 
   @override
