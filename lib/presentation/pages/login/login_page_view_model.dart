@@ -109,6 +109,19 @@ class LoginPageViewModel extends Notifier<LoginState> {
       }
     }
   }
+
+  Future<void> updateUserNickname(String newNickname) async {
+    final user = state.appUser;
+    if (user != null) {
+      state = LoginState(
+        appUser: AppUser(
+          id: state.appUser?.id ?? '',
+          name: newNickname,
+          profile: state.appUser?.profile ?? '',
+        ),
+      );
+    }
+  }
 }
 
 final loginPageViewModelProvider =

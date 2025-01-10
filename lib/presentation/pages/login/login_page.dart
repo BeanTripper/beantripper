@@ -17,6 +17,7 @@ class LoginPage extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: Consumer(
           builder: (context, ref, child) {
+            print(FirebaseAuth.instance.currentUser == null);
             if (FirebaseAuth.instance.currentUser != null) {
               print('ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ${FirebaseAuth.instance.currentUser?.photoURL}');
             }
@@ -47,7 +48,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: () async {
                     await userViewModel.signInWithKakao();
                     if (context.mounted) {
-                      Navigator.pushNamed(context, '/feeds_page');
+                      Navigator.pushNamed(context, '/register_page');
                     }
                   },
                   iconSize: 20,
@@ -61,7 +62,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: () async {
                     await userViewModel.signInWithGoogle();
                     if (context.mounted) {
-                      Navigator.pushNamed(context, '/feeds_page');
+                      Navigator.pushNamed(context, '/register_page');
                     }
                   },
                   iconSize: 20,

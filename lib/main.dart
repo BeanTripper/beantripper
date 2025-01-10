@@ -4,6 +4,7 @@ import 'package:bean_tripper/presentation/pages/cafe_selection/cafe_selection_pa
 import 'package:bean_tripper/presentation/pages/feed_write/feed_write_page.dart';
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
 import 'package:bean_tripper/presentation/pages/login/login_page.dart';
+import 'package:bean_tripper/presentation/pages/login/register_page.dart';
 import 'package:bean_tripper/presentation/pages/map/map_page.dart';
 import 'package:bean_tripper/presentation/pages/splash/splash_page.dart';
 import 'package:bean_tripper/presentation/pages/profile/profile_page.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         '/cafe_detail_page': (context) => CafeDetailPage(),
         '/login_page': (context) => LoginPage(),
         '/profile_page': (context) => ProfilePage(),
+        '/register_page': (context) => RegisterPage(),
         '/feedwritepage': (context) {
           final arguments = ModalRoute.of(context)?.settings.arguments as Map?;
           final selectedCafeName = arguments?['selectedCafeName'] ?? '카페 미선택';
@@ -59,6 +61,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
       ),
       home: SplashPage(),
+      // home: RegisterPage(),
     );
   }
 }
