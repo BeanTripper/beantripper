@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bean_tripper/presentation/pages/profile/profile_page.dart';
@@ -38,6 +39,8 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(FirebaseAuth.instance.currentUser);
+
     final feedState = ref.watch(feedProvider);
     return Scaffold(
       appBar: AppBar(
@@ -121,7 +124,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/feeds_write_page');
+          Navigator.pushNamed(context, '/cafe_selection_page');
         },
         child: Icon(Icons.edit),
         shape: RoundedRectangleBorder(

@@ -4,7 +4,6 @@ class CafeDetailDto {
   String address;
   double lat;
   double lng;
-  String? tel;
   String? feedImageUrls;
 
   CafeDetailDto({
@@ -13,7 +12,6 @@ class CafeDetailDto {
     required this.address,
     required this.lat,
     required this.lng,
-    required this.tel,
     required this.feedImageUrls,
   });
 
@@ -24,7 +22,6 @@ class CafeDetailDto {
           address: json['address'] ?? '',
           lat: json['lat'] ?? 0.0,
           lng: json['lng'] ?? 0.0,
-          tel: json['tel'],
           feedImageUrls: json['feedImageUrls'],
         );
 
@@ -35,7 +32,6 @@ class CafeDetailDto {
       'address': address,
       'lat': lat,
       'lng': lng,
-      'tel': tel,
       'feedImageUrls': feedImageUrls,
     };
   }

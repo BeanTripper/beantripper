@@ -14,16 +14,23 @@ class CafeDetailPage extends ConsumerWidget {
     final state = ref.watch(cafeDetailViewModelProvider);
     final viewModel = ref.read(cafeDetailViewModelProvider.notifier);
 
+    if (state.isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(state.cafeDetail?.name ?? '카페 상세'),
+        title: Text(state.cafeDetail!.name),
         actions: [
           Row(
             children: [
               GestureDetector(
                 onTap: () async {
                   if (FirebaseAuth.instance.currentUser == null) {
-                    // 로그인되지 않은 경우 처리
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('로그인이 필요한 기능입니다.')),
                     );

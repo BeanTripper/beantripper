@@ -113,8 +113,9 @@ class _FeedContentState extends State<FeedContent> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 피드 이미지 표시 영역
-        SizedBox(
+        SizedBox(height: 12),
+        Container(
+          width: double.infinity,
           height: MediaQuery.of(context).size.width,
           child: PageView.builder(
             itemCount: widget.feed.imageUrls.length,
