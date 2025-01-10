@@ -1,6 +1,6 @@
 import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
-import 'package:bean_tripper/presentation/pages/login/login_page_view_model.dart';
+import 'package:bean_tripper/presentation/view_model/auth_view_model.dart';
 import 'package:bean_tripper/presentation/pages/login/widget/custom_social_button.dart';
 import 'package:bean_tripper/presentation/pages/login/widget/looking_around_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,12 +17,9 @@ class LoginPage extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: Consumer(
           builder: (context, ref, child) {
-            print(FirebaseAuth.instance.currentUser == null);
-            if (FirebaseAuth.instance.currentUser != null) {
-              print('ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ${FirebaseAuth.instance.currentUser?.photoURL}');
-            }
             final userState = ref.watch(loginPageViewModelProvider);
             final userViewModel = ref.read(loginPageViewModelProvider.notifier);
+            print('&&&&&&&&&&&&&&&&&&&&${userViewModel.fetchUser()}');
             return Column(
               children: [
                 SizedBox(height: 150),
@@ -47,7 +44,7 @@ class LoginPage extends StatelessWidget {
                   iconPath: "assets/images/kakao_icon.png",
                   onPressed: () async {
                     await userViewModel.signInWithKakao();
-                    if (context.mounted) {
+                    if (context.mounted && userState.appUser != null) {
                       Navigator.pushNamed(context, '/register_page');
                     }
                   },
@@ -61,7 +58,7 @@ class LoginPage extends StatelessWidget {
                   iconPath: "assets/images/google_icon.png",
                   onPressed: () async {
                     await userViewModel.signInWithGoogle();
-                    if (context.mounted) {
+                    if (context.mounted && userState.appUser != null) {
                       Navigator.pushNamed(context, '/register_page');
                     }
                   },

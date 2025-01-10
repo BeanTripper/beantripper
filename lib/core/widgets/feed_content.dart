@@ -22,12 +22,14 @@ class FeedContent extends StatefulWidget {
 class _FeedContentState extends State<FeedContent> {
   bool isLiked = false;
   int likeCount = 0;
+  int commentIdCount = 0;
 
   @override
   void initState() {
     super.initState();
     checkIfLiked();
     getLikeCount();
+    getCommentCount();
   }
 
   // 현재 사용자가 이 피드를 좋아요 했는지 확인
@@ -37,7 +39,7 @@ class _FeedContentState extends State<FeedContent> {
         .collection('feed')
         .doc(widget.feed.id)
         .collection('favoriteFeed')
-        .where('userId', isEqualTo: userId);
+        .where('user_list', arrayContains: userId);
 
     final snapshot = await favoriteFeedRef.get();
     if (snapshot.docs.isNotEmpty) {
@@ -55,8 +57,26 @@ class _FeedContentState extends State<FeedContent> {
         .collection('favoriteFeed');
 
     final snapshot = await favoriteFeedRef.get();
+    int count = 0;
+    for (var doc in snapshot.docs) {
+      final userList = List<String>.from(doc['user_list']);
+      count += userList.length;
+    }
     setState(() {
-      likeCount = snapshot.docs.length;
+      likeCount = count;
+    });
+  }
+
+  // 댓글 수 가져오기
+  void getCommentCount() async {
+    final commentsRef = FirebaseFirestore.instance
+        .collection('feed')
+        .doc(widget.feed.id)
+        .collection('comments');
+
+    final snapshot = await commentsRef.get();
+    setState(() {
+      commentIdCount = snapshot.docs.length;
     });
   }
 
@@ -69,14 +89,20 @@ class _FeedContentState extends State<FeedContent> {
         .collection('feed')
         .doc(widget.feed.id)
         .collection('favoriteFeed')
-        .where('userId', isEqualTo: userId);
+        .where('user_list', arrayContains: userId);
 
     final snapshot = await favoriteFeedRef.get();
     if (snapshot.docs.isNotEmpty) {
       // 좋아요 취소 로직
-      for (var doc in snapshot.docs) {
-        await doc.reference.delete();
-      }
+      final docId = snapshot.docs.first.id;
+      await FirebaseFirestore.instance
+          .collection('feed')
+          .doc(widget.feed.id)
+          .collection('favoriteFeed')
+          .doc(docId)
+          .update({
+        'user_list': FieldValue.arrayRemove([userId]),
+      });
       setState(() {
         isLiked = false;
         likeCount--;
@@ -88,8 +114,7 @@ class _FeedContentState extends State<FeedContent> {
           .doc(widget.feed.id)
           .collection('favoriteFeed')
           .add({
-        'userId': userId,
-        'timestamp': FieldValue.serverTimestamp(),
+        'user_list': FieldValue.arrayUnion([userId]),
       });
       setState(() {
         isLiked = true;
@@ -118,15 +143,14 @@ class _FeedContentState extends State<FeedContent> {
           width: double.infinity,
           height: MediaQuery.of(context).size.width,
           child: PageView.builder(
-            itemCount: widget.feed.imageUrls.length,
+            itemCount: widget.feed.imageUrls.length, // 이미지를 갯수에 맞게 설정
             itemBuilder: (context, index) {
               return Container(
                 decoration: BoxDecoration(
-                  color: CustomColors.darkGray, // 배경색 설정
+                  color: CustomColors.darkGray,
                   image: DecorationImage(
-                    image:
-                        NetworkImage(widget.feed.imageUrls[index]), // 각 이미지 사용
-                    fit: BoxFit.cover, // 이미지 비율 유지하면서 크기에 맞게 조절
+                    image: NetworkImage(widget.feed.imageUrls[index]),
+                    fit: BoxFit.cover,
                   ),
                 ),
               );
@@ -160,7 +184,7 @@ class _FeedContentState extends State<FeedContent> {
               ),
               SizedBox(width: 6),
               Text(
-                '${widget.feed.commentCount}', // 댓글 수 표시
+                '$commentIdCount', // 댓글 수 표시
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],
@@ -186,7 +210,6 @@ class _FeedContentState extends State<FeedContent> {
           ),
         ),
         SizedBox(height: 27), // 하단 공간 추가
-        Text(widget.feed.cafeName), // 테스트를 위해 카페 이름을 추가
       ],
     );
   }
