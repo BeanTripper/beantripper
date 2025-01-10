@@ -1,4 +1,3 @@
-import 'package:bean_tripper/core/feed_detail_page.dart';
 import 'package:bean_tripper/firebase_options.dart';
 import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_page.dart';
 import 'package:bean_tripper/presentation/pages/cafe_selection/cafe_selection_page.dart';
@@ -60,7 +59,6 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
       ),
       home: SplashPage(),
-      // home: CafeSelectionPage(),
     );
   }
 }
