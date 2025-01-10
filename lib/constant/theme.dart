@@ -7,5 +7,4 @@ class CustomColors {
   static const Color lightGray = Color(0xFFD9D9D9);
   static const Color brown = Color(0xFFA47764);
   static const Color onError = Color(0xFFFD7563);
-  static const Color blue = Color.fromRGBO(58, 120, 243, 1);
 }

@@ -34,43 +34,43 @@ class CafeDetailState {
 }
 
 class CafeDetailViewModel extends StateNotifier<CafeDetailState> {
-  final FetchCafeItemUsecase _fetchCafeItemUsecase;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? _cafeName;
 
-  CafeDetailViewModel(this._fetchCafeItemUsecase) : super(CafeDetailState()) {
-    _initFirstCafe();
+  CafeDetailViewModel(FetchCafeItemUsecase watch) : super(CafeDetailState()) {
+    if (_cafeName != null) {
+      initWithCafeName(_cafeName!);
+    }
   }
 
-  Future<void> _initFirstCafe() async {
-    try {
-      final snapshot = await _firestore.collection('cafe').limit(1).get();
-      if (snapshot.docs.isNotEmpty) {
-        final firstCafeId = snapshot.docs[0].id;
-        await fetchCafeDetail(firstCafeId);
-      } else {}
-    } catch (e) {
-      state = state.copyWith(
-        error: '카페 정보를 불러오는데 실패했습니다.',
-      );
-    }
+  void setCafeName(String name) {
+    _cafeName = name;
+    initWithCafeName(name);
   }
 
   Future<void> checkFavoriteStatus(String cafeName) async {
     try {
       final userId = _auth.currentUser?.uid;
-      if (userId == null) return;
+      if (userId == null) {
+        state = state.copyWith(isFavorite: false);
+        return;
+      }
 
-      final docSnapshot = await _firestore
-          .collection('users')
+      final favoritesSnapshot = await _firestore
+          .collection('user')
           .doc(userId)
           .collection('favoriteCafe')
-          .where('cafeName', isEqualTo: cafeName)
           .get();
 
-      state = state.copyWith(isFavorite: docSnapshot.docs.isNotEmpty);
+      final isFavorite = favoritesSnapshot.docs.any((doc) {
+        final data = doc.data();
+        return data['cafeName'] == cafeName;
+      });
+
+      state = state.copyWith(isFavorite: isFavorite);
     } catch (e) {
-      print('Error checking favorite status: $e');
+      state = state.copyWith(isFavorite: false);
     }
   }
 
@@ -82,50 +82,62 @@ class CafeDetailViewModel extends StateNotifier<CafeDetailState> {
       if (userId == null || cafeName == null) return;
 
       final userFavoriteRef =
-          _firestore.collection('users').doc(userId).collection('favoriteCafe');
+          _firestore.collection('user').doc(userId).collection('favoriteCafe');
 
       if (state.isFavorite) {
-        final querySnapshot =
-            await userFavoriteRef.where('cafeName', isEqualTo: cafeName).get();
+        final favoritesSnapshot = await userFavoriteRef.get();
+        final docToDelete = favoritesSnapshot.docs.firstWhere(
+          (doc) => doc.data()['cafeName'] == cafeName,
+          orElse: () => throw Exception('Document not found'),
+        );
 
-        for (var doc in querySnapshot.docs) {
-          await doc.reference.delete();
-        }
+        await userFavoriteRef.doc(docToDelete.id).delete();
       } else {
-        await userFavoriteRef.add({
+        final docRef = await userFavoriteRef.add({
           'cafeName': cafeName,
-          'timestamp': FieldValue.serverTimestamp(),
         });
       }
 
       state = state.copyWith(isFavorite: !state.isFavorite);
-    } catch (e) {
-      print('Error toggling favorite: $e');
-    }
+    } catch (e) {}
   }
 
-  Future<void> fetchCafeDetail(String cafeId) async {
+  Future<void> fetchCafeDetail(String cafeName) async {
     try {
-      state = state.copyWith(isLoading: true, error: null);
-      final cafeDetail = await _fetchCafeItemUsecase.excute(cafeId);
+      final docSnapshot =
+          await _firestore.collection('cafe').doc(cafeName).get();
 
-      if (cafeDetail != null) {
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data()!;
+        final lat = double.tryParse(data['lat'].toString()) ?? 0.0;
+        final lng = double.tryParse(data['lng'].toString()) ?? 0.0;
+
+        final cafeDetail = CafeDetail(
+          id: docSnapshot.id,
+          name: data['name'] ?? '',
+          address: data['address'] ?? '',
+          lat: lat,
+          lng: lng,
+          feedImageUrls: data['feedImageUrls'],
+        );
+
         state = state.copyWith(
           isLoading: false,
           cafeDetail: cafeDetail,
         );
         await checkFavoriteStatus(cafeDetail.name);
-      } else {
-        state = state.copyWith(
-          isLoading: false,
-          error: '카페 정보를 찾을 수 없습니다.',
-        );
       }
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: '카페 정보를 불러오는데 실패했습니다.',
-      );
+      state = state.copyWith(isLoading: false);
+    }
+  }
+
+  Future<void> initWithCafeName(String cafeName) async {
+    try {
+      state = state.copyWith(isLoading: true);
+      await fetchCafeDetail(cafeName);
+    } catch (e) {
+      state = state.copyWith(isLoading: false);
     }
   }
 
