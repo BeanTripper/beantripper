@@ -50,7 +50,7 @@ class AppUserDataSourceImpl implements AppUserDataSource {
   Future<UserDto?> signInWithGoogle() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn();
-      await googleSignIn.signOut(); //로그아웃 기능
+      // await googleSignIn.signOut(); // 구글로그인 로그아웃 기능
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       //google 로그인
       if (googleUser != null) {

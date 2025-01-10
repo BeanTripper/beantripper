@@ -18,8 +18,7 @@ class LoginPage extends StatelessWidget {
         child: Consumer(
           builder: (context, ref, child) {
             if (FirebaseAuth.instance.currentUser != null) {
-              print(
-                  'ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ${FirebaseAuth.instance.currentUser?.displayName}');
+              print('ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ${FirebaseAuth.instance.currentUser?.photoURL}');
             }
             final userState = ref.watch(loginPageViewModelProvider);
             final userViewModel = ref.read(loginPageViewModelProvider.notifier);

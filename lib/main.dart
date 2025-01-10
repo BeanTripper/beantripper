@@ -49,7 +49,8 @@ class MyApp extends StatelessWidget {
         '/feedwritepage': (context) {
           final arguments = ModalRoute.of(context)?.settings.arguments as Map?;
           final selectedCafeName = arguments?['selectedCafeName'] ?? '카페 미선택';
-          return FeedWritePage(selectedCafeName: selectedCafeName);}
+          return FeedWritePage(selectedCafeName: selectedCafeName);
+        }
         // '/feed_detail_page': (context) => FeedDetailPage(),
       },
       // feeds_page로 가고 싶을때 pushNamed 사용예시:
@@ -58,7 +59,8 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Pretendard',
         brightness: Brightness.dark,
       ),
-      home: CafeSelectionPage(),
+      home: SplashPage(),
+      // home: CafeSelectionPage(),
     );
   }
 }
