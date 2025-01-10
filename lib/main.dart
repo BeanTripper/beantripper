@@ -1,6 +1,7 @@
 import 'package:bean_tripper/core/feed_detail_page.dart';
 import 'package:bean_tripper/firebase_options.dart';
 import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_page.dart';
+import 'package:bean_tripper/presentation/pages/cafe_selection/cafe_selection_page.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/feed_write_page.dart';
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
 import 'package:bean_tripper/presentation/pages/login/login_page.dart';
@@ -40,11 +41,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/feeds_page': (context) => FeedsPage(),
-        '/feeds_write_page': (context) => FeedWritePage(),
+        '/cafe_selection_page': (context) => CafeSelectionPage(),
         '/map_page': (context) => MapPage(),
         '/cafe_detail_page': (context) => CafeDetailPage(),
         '/login_page': (context) => LoginPage(),
         '/profile_page': (context) => ProfilePage(),
+        '/feedwritepage': (context) {
+          final arguments = ModalRoute.of(context)?.settings.arguments as Map?;
+          final selectedCafeName = arguments?['selectedCafeName'] ?? '카페 미선택';
+          return FeedWritePage(selectedCafeName: selectedCafeName);}
         // '/feed_detail_page': (context) => FeedDetailPage(),
       },
       // feeds_page로 가고 싶을때 pushNamed 사용예시:
@@ -53,7 +58,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Pretendard',
         brightness: Brightness.dark,
       ),
-      home: SplashPage(),
+      home: CafeSelectionPage(),
     );
   }
 }
