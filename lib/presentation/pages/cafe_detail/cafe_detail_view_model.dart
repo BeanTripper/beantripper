@@ -102,47 +102,42 @@ class CafeDetailViewModel extends StateNotifier<CafeDetailState> {
     } catch (e) {}
   }
 
-  Future<void> fetchCafeDetail(String cafeId) async {
+  Future<void> fetchCafeDetail(String cafeName) async {
     try {
-      final docSnapshot = await _firestore.collection('cafe').doc(cafeId).get();
-      final data = docSnapshot.data()!;
+      final docSnapshot =
+          await _firestore.collection('cafe').doc(cafeName).get();
 
-      final cafeDetail = CafeDetail(
-        id: docSnapshot.id,
-        name: data['name'] ?? '',
-        address: data['address'] ?? '',
-        lat: (data['lat'] ?? 0.0).toDouble(),
-        lng: (data['lng'] ?? 0.0).toDouble(),
-        tel: data['tel'],
-        feedImageUrls: data['feedImageUrls'],
-      );
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data()!;
+        final lat = double.tryParse(data['lat'].toString()) ?? 0.0;
+        final lng = double.tryParse(data['lng'].toString()) ?? 0.0;
 
-      state = state.copyWith(
-        isLoading: false,
-        cafeDetail: cafeDetail,
-      );
-      await checkFavoriteStatus(cafeDetail.name);
+        final cafeDetail = CafeDetail(
+          id: docSnapshot.id,
+          name: data['name'] ?? '',
+          address: data['address'] ?? '',
+          lat: lat,
+          lng: lng,
+          feedImageUrls: data['feedImageUrls'],
+        );
+
+        state = state.copyWith(
+          isLoading: false,
+          cafeDetail: cafeDetail,
+        );
+        await checkFavoriteStatus(cafeDetail.name);
+      }
     } catch (e) {
-      print('Error in fetchCafeDetail: $e');
+      state = state.copyWith(isLoading: false);
     }
   }
 
   Future<void> initWithCafeName(String cafeName) async {
     try {
       state = state.copyWith(isLoading: true);
-
-      final snapshot = await _firestore
-          .collection('cafe')
-          .where('name', isEqualTo: cafeName)
-          .get();
-
-      final doc = snapshot.docs.first;
-      final cafeId = doc.id;
-      await fetchCafeDetail(cafeId);
-
-      await checkFavoriteStatus(cafeName);
+      await fetchCafeDetail(cafeName);
     } catch (e) {
-      print('Error in initWithCafeName: $e');
+      state = state.copyWith(isLoading: false);
     }
   }
 

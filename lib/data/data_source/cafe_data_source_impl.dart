@@ -20,7 +20,6 @@ class CafeDataSourceImpl implements CafeDataSource {
           address: data['address'] ?? '',
           lat: (data['lat'] ?? 0.0).toDouble(),
           lng: (data['lng'] ?? 0.0).toDouble(),
-          tel: data['tel'],
           feedImageUrls: '',
         );
       }

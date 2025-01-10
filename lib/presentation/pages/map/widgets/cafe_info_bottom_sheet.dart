@@ -35,7 +35,6 @@ class CafeInfoBottomSheet extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(cafe?.tel ?? ''),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/cafe_detail_page');

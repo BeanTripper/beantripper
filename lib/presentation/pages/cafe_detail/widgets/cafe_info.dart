@@ -18,22 +18,13 @@ class CafeInfo extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  cafeDetail?.address ?? '주소 정보가 없습니다',
-                  style: TextStyle(fontSize: 16),
-                ),
-                Row(
-                  children: [
-                    Icon(Icons.local_phone),
-                    SizedBox(width: 6),
-                    Text(cafeDetail?.tel ?? '전화번호 정보가 없습니다'),
-                  ],
-                )
-              ],
+            Expanded(
+              child: Text(
+                cafeDetail?.address ?? '주소 정보가 없습니다',
+                style: TextStyle(fontSize: 16),
+              ),
             ),
+            SizedBox(width: 12),
             GestureDetector(
               onTap: () {
                 Navigator.pushNamed(
