@@ -1,8 +1,10 @@
 import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/domain/entity/feed.dart';
+import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FeedInfo extends StatelessWidget {
+class FeedInfo extends ConsumerWidget {
   final Feed feed;
 
   const FeedInfo({
@@ -11,7 +13,7 @@ class FeedInfo extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
@@ -31,7 +33,7 @@ class FeedInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                feed.writerName, // 수정: writerName 사용
+                feed.writerName,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(
@@ -41,7 +43,17 @@ class FeedInfo extends StatelessWidget {
             ],
           ),
           Spacer(),
-          Icon(Icons.arrow_forward),
+          GestureDetector(
+            onTap: () {
+              final viewModel = ref.read(cafeDetailViewModelProvider.notifier);
+              viewModel.setCafeName(feed.cafeName);
+              Navigator.pushNamed(
+                context,
+                '/cafe_detail_page',
+              );
+            },
+            child: Icon(Icons.arrow_forward),
+          ),
         ],
       ),
     );
