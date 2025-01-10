@@ -118,7 +118,6 @@ class CafeDetailViewModel extends StateNotifier<CafeDetailState> {
           address: data['address'] ?? '',
           lat: lat,
           lng: lng,
-          tel: data['tel'],
           feedImageUrls: data['feedImageUrls'],
         );
 
