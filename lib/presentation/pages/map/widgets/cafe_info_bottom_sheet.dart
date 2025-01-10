@@ -35,18 +35,26 @@ class CafeInfoBottomSheet extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Text(
+                    cafe?.address ?? '',
+                    style: TextStyle(color: CustomColors.brown),
+                    overflow: TextOverflow.visible,
+                  ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: CustomColors.brown,
+                      foregroundColor: CustomColors.white,
+                    ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/cafe_detail_page');
+                      Navigator.pushNamed(
+                        context,
+                        '/cafe_detail_page',
+                        arguments: cafe!.id,
+                      );
                     },
                     child: Text('상세보기'),
                   ),
                 ],
-              ),
-              Text(
-                cafe?.address ?? '',
-                style: TextStyle(color: CustomColors.brown),
-                overflow: TextOverflow.visible,
               ),
             ],
           ),
