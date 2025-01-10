@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:bean_tripper/presentation/pages/profile/profile_page.dart';
-import 'package:bean_tripper/presentation/pages/feeds/cafe_of_the_day.dart';
 import 'package:bean_tripper/core/widgets/feed_content.dart';
 import 'package:bean_tripper/core/widgets/feed_info.dart';
+import 'package:bean_tripper/presentation/pages/feeds/cafe_of_the_day.dart';
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page_viewmodel.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FeedsPage extends ConsumerStatefulWidget {
+  const FeedsPage({super.key});
+
   @override
   _FeedsPageState createState() => _FeedsPageState();
 }
@@ -28,6 +29,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
   }
 
   void _scrollListener() {
+    print("/FeedsPage _scrollListener");
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       ref.read(feedProvider.notifier).fetchMoreFeeds(); // 추가 피드 데이터 로드
@@ -36,6 +38,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('/feeds_page');
     final feedState = ref.watch(feedProvider);
     return Scaffold(
       appBar: AppBar(
@@ -54,11 +57,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProfilePage()), // 여기서 프로필 페이지로 이동
-              );
+              Navigator.pushNamed(context, '/profile_page');
             },
           ),
         ],

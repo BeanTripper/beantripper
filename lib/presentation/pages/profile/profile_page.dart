@@ -1,11 +1,15 @@
+import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/presentation/view_model/auth_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
   @override
   Widget build(BuildContext context) {
+    print('/profile_page');
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
@@ -32,25 +36,24 @@ class ProfilePage extends StatelessWidget {
                   profileState.appUser?.name ?? '사용자',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
-                Text(
-                  FirebaseAuth.instance.currentUser?.email ??
-                      'example@naver.com',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
                 SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: () async {
                     await FirebaseAuth.instance.signOut();
-                    if (context.mounted) {
-                      Navigator.pushNamed(context, '/login_page');
+                    // TODO profileState.appUser=null 를 뷰모델에서.
+                    if (context.mounted &&
+                        profileState.appUser?.profile != null) {
+                      Navigator.pushReplacementNamed(context, '/login_page');
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: CustomColors.onError,
                   ),
-                  child: const Text('로그아웃'),
-                ),
+                  child: const Text(
+                    '로그아웃',
+                    style: TextStyle(color: CustomColors.white),
+                  ),
+                )
               ],
             ),
           );
