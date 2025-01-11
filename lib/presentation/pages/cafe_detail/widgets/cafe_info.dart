@@ -31,11 +31,9 @@ class CafeInfo extends ConsumerWidget {
                   context,
                   '/map_page',
                   arguments: {
-                    'cafeMarker': {
-                      'id': cafeDetail?.id,
-                      'lat': cafeDetail?.lat,
-                      'lng': cafeDetail?.lng,
-                    },
+                    'id': cafeDetail?.id,
+                    'lat': cafeDetail?.lat,
+                    'lng': cafeDetail?.lng,
                   },
                 );
               },

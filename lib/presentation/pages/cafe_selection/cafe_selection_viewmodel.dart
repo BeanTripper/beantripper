@@ -99,8 +99,8 @@ class CafeSelectionViewModel extends ChangeNotifier {
       await docRef.set({
         'name': cafe['name'],
         'address': cafe['address'],
-        'lat': cafe['lat'], // lat 필드 추가
-        'lng': cafe['lng'], // lng 필드 추가
+        'lat': double.parse(cafe['lat']) / 1e7, // lat 필드 추가
+        'lng': double.parse(cafe['lng']) / 1e7, // lng 필드 추가
       });
       print('${cafe['name']} 저장 완료!');
     } catch (e) {
