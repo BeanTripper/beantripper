@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:bean_tripper/core/geolocator_helper.dart';
 import 'package:bean_tripper/presentation/pages/map/map_view_model.dart';
 import 'package:bean_tripper/presentation/pages/map/widgets/map_widget.dart';
@@ -27,15 +26,17 @@ class MapPage extends ConsumerWidget {
       body: FutureBuilder<NLatLng?>(
         future: _fetchAddress(),
         builder: (context, snapshot) {
-          if (ref.watch(mapViewModel).mapController == null &&
-              snapshot.connectionState == ConnectionState.waiting) {
+          if (snapshot.connectionState == ConnectionState.waiting &&
+              ref.watch(mapViewModel).mapController == null) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            final latlng = arg != null
-                ? NLatLng(arg['lat'], arg['lng'])
-                : snapshot.data ?? NLatLng(37.63695556, 127.0277194);
+            final latlng =
+                arg != null && arg['lat'] != null && arg['lng'] != null
+                    ? NLatLng(arg['lat'], arg['lng'])
+                    : snapshot.data ?? NLatLng(37.63695556, 127.0277194);
+
             return MapWidget(
               cafeId: arg?['id'],
               latLng: latlng,

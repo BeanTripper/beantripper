@@ -35,11 +35,14 @@ class CafeInfoBottomSheet extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    cafe?.address ?? '',
-                    style: TextStyle(color: CustomColors.brown),
-                    overflow: TextOverflow.visible,
+                  Expanded(
+                    child: Text(
+                      cafe?.address ?? '',
+                      style: TextStyle(color: CustomColors.brown),
+                      overflow: TextOverflow.visible,
+                    ),
                   ),
+                  SizedBox(width: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: CustomColors.brown,

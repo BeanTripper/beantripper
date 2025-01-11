@@ -15,7 +15,7 @@ class MapWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print("지도 빌드해요");
+    print("지도 빌드해요 ${ref.watch(mapViewModel).currentLatLng}");
 
     return NaverMap(
       options: NaverMapViewOptions(
@@ -34,7 +34,6 @@ class MapWidget extends ConsumerWidget {
       },
       onCameraIdle: () async {
         await _onCameraIdle(context, ref);
-
       },
     );
   }
@@ -72,16 +71,13 @@ class MapWidget extends ConsumerWidget {
     if (mapController != null) {
       await vm.fetchCafes(latLng.latitude, latLng.longitude);
 
-      if (state.cafeList.isNotEmpty) {
-        mapController.clearOverlays();
-      }
+      mapController.clearOverlays();
 
       for (var e in state.cafeList) {
         final marker = NMarker(id: e.id, position: NLatLng(e.lat, e.lng));
         marker.setOnTapListener((overlay) async {
           await vm.fetchCafeItem(e.id);
 
-          // 상태 변경 후 watch로 상태 반영
           final selectedCafe =
               ref.watch(mapViewModel.select((s) => s.selectedCafe));
           print("SELECTEDCAFE== ${selectedCafe?.id}, ${selectedCafe?.name}");
