@@ -21,9 +21,10 @@ class CafeOfTheDay extends StatelessWidget {
             itemBuilder: (context, index) {
               var data = documents[index].data() as Map<String, dynamic>;
               return Container(
+                height: 100,
                 width: 100,
-                color: Colors.transparent,
-                child: Image.network(data['imageUrl'], fit: BoxFit.cover),
+                color: Colors.yellowAccent,
+                // child: Image.network(data['imageUrl'], fit: BoxFit.cover),
               );
             },
           );
