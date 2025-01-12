@@ -117,7 +117,8 @@ timestamp(타임스탬프)
 
  <p align="left">
    <img src="assets/images/login_page.png" alt="LoginPage" width="300">
-   <img src="assets/images/register_page.png" alt="RegisterPage" width="300">
+   <img src="assets/images/login_page.gif" alt="RegisterPage" width="300">
+
    </p>
    
 - **SNS(구글,카카오) 로그인**을 통해 ID 및 비밀번호 없이 간편 로그인 가능합니다.
