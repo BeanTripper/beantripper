@@ -92,34 +92,32 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ),
                 ),
               ),
-              Spacer(),
-              SizedBox(
-                width: double.infinity,
-                height: 42,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await userViewModel.submitUserToFirestore();
-                    if (context.mounted) {
-                      Navigator.pushNamed(context, '/feeds_page');
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: CustomColors.brown,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    "회원가입 하기",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: CustomColors.white,
-                    ),
-                  ),
-                ),
-              ),
               SizedBox(height: 20),
+              SizedBox(
+                  width: double.infinity,
+                  height: 42,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await userViewModel.submitUserToFirestore();
+                      if (context.mounted) {
+                        Navigator.pushNamed(context, '/feeds_page');
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: CustomColors.brown,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      "회원가입 하기",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: CustomColors.white,
+                      ),
+                    ),
+                  ))
             ],
           ),
         ),

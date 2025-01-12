@@ -44,13 +44,8 @@ class LoginPage extends StatelessWidget {
                   iconPath: "assets/images/kakao_icon.png",
                   onPressed: () async {
                     await userViewModel.signInWithKakao();
-                    if (!context.mounted) {
-                      return;
-                    }
-                    if (userState.appUser == null) {
+                    if (context.mounted && userState.appUser != null) {
                       Navigator.pushNamed(context, '/register_page');
-                    } else {
-                      Navigator.pushReplacementNamed(context, '/feeds_page');
                     }
                   },
                   iconSize: 20,
@@ -63,13 +58,8 @@ class LoginPage extends StatelessWidget {
                   iconPath: "assets/images/google_icon.png",
                   onPressed: () async {
                     await userViewModel.signInWithGoogle();
-                    if (!context.mounted) {
-                      return;
-                    }
-                    if (ref.read(loginPageViewModelProvider).appUser == null) {
+                    if (context.mounted && userState.appUser != null) {
                       Navigator.pushNamed(context, '/register_page');
-                    } else {
-                      Navigator.pushReplacementNamed(context, '/feeds_page');
                     }
                   },
                   iconSize: 20,

@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
         '/map_page': (context) => MapPage(),
         '/cafe_detail_page': (context) => CafeDetailPage(),
         '/login_page': (context) => LoginPage(),
-        '/profile_page': (context) => const ProfilePage(),
+        '/profile_page': (context) => ProfilePage(),
         '/register_page': (context) => RegisterPage(),
         '/feedwritepage': (context) {
           final arguments = ModalRoute.of(context)?.settings.arguments as Map?;
