@@ -22,7 +22,14 @@ class MapPage extends ConsumerWidget {
     final arg = ModalRoute.of(context)?.settings.arguments as Map?;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          '내 주변 카페 보기',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: FutureBuilder<NLatLng?>(
         future: _fetchAddress(),
         builder: (context, snapshot) {

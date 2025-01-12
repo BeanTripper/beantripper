@@ -82,7 +82,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Pretendard',
         brightness: Brightness.dark,
+        appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+        ),
       ),
+
       home: SplashPage(),
       // home: RegisterPage(),
     );
