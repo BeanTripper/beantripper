@@ -16,6 +16,15 @@ class FeedWritePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(feedWriteViewModelProvider);
     final userState = ref.watch(authViewModelProvider); // userState 가져오기
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+
+    if (args != null && args['selectedCafeName'] != null) {
+      final selectedCafeName = args['selectedCafeName'];
+      if (viewModel.cafeName != selectedCafeName) {
+        viewModel.setCafeName(selectedCafeName); // 카페 이름 설정
+      }
+    }
+
 
     // 선택된 카페 이름과 유저 정보 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -28,7 +37,13 @@ class FeedWritePage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('작성하기'),
         centerTitle: true,
-        leading: const SizedBox(), // 뒤로 가기 버튼 제거
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back), // 뒤로가기 아이콘
+          onPressed: () {
+            // Navigator.popAndPushNamed로 새 페이지를 열고 기존 페이지를 스택에서 제거
+            Navigator.pushReplacementNamed(context, '/cafe_selection_page');
+          },
+        ),
       ),
       body: GestureDetector(
         onTap: () {
@@ -59,3 +74,4 @@ class FeedWritePage extends ConsumerWidget {
     );
   }
 }
+

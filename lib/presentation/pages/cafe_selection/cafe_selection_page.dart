@@ -80,7 +80,7 @@ class CafeSelectionBody extends StatelessWidget {
                         await viewModel.saveCafeToFirebase(selectedCafe);
 
                         // FeedWritePage로 이동
-                        Navigator.pushNamed(
+                        Navigator.pushReplacementNamed(
                           context,
                           '/feedwritepage',
                           arguments: {'selectedCafeName': selectedCafe['name']},
