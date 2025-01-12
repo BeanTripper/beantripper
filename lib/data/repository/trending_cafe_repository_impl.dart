@@ -13,41 +13,59 @@ class TrendingCafeRepositoryImpl implements TrendingCafeRepository {
       final startOfDay = DateTime(today.year, today.month, today.day);
       final endOfDay = DateTime(today.year, today.month, today.day, 23, 59, 59);
 
+      print('Fetching feeds between: $startOfDay and $endOfDay');
+
       final snapshot = await _firestore
           .collection('feed')
-          .where('createdAt', isGreaterThanOrEqualTo: startOfDay)
-          .where('createdAt', isLessThanOrEqualTo: endOfDay)
+          .where('createdAt',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+          .where('createdAt', isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
           .get();
 
-      final cafeCountMap = <String, int>{};
-      final cafeImageMap = <String, String?>{};
-      final cafeCategoryMap = <String, String>{};
+      print('Found ${snapshot.docs.length} feeds today');
+
+      final cafeMap = <String, Map<String, dynamic>>{};
 
       for (var doc in snapshot.docs) {
         final data = doc.data();
-        final cafeName = data['cafeName'] as String;
-        final imageUrl =
-            (data['imageUrls'] as List<dynamic>?)?.first as String?;
-        final category = data['category'] as String;
+        print('Processing feed data: $data');
 
-        cafeCountMap[cafeName] = (cafeCountMap[cafeName] ?? 0) + 1;
-        cafeImageMap[cafeName] ??= imageUrl;
-        cafeCategoryMap[cafeName] = category;
+        final cafeName = data['cafeName'] as String;
+        final imageUrls = data['imageUrls'] as List<dynamic>? ?? [];
+        final imageUrl =
+            imageUrls.isNotEmpty ? imageUrls.first as String : null;
+
+        final categories = (data['categories'] as List<dynamic>?)
+                ?.map((e) => e.toString())
+                .join(', ') ??
+            '카테고리 없음';
+
+        print(
+            'Extracted cafe info - name: $cafeName, imageUrl: $imageUrl, categories: $categories');
+
+        cafeMap[cafeName] = {
+          'name': cafeName,
+          'imageUrl': imageUrl ?? cafeMap[cafeName]?['imageUrl'],
+          'category': categories,
+        };
       }
 
-      final trendingCafes = cafeCountMap.entries
-          .map((entry) => TrendingCafeDto(
-                name: entry.key,
-                imageUrl: cafeImageMap[entry.key],
-                category: cafeCategoryMap[entry.key]!,
-              ).toEntity())
-          .toList();
+      print('Final cafe map: $cafeMap');
 
-      trendingCafes.sort((a, b) => b.feedCount.compareTo(a.feedCount));
+      final trendingCafes = cafeMap.values.take(5).map((data) {
+        print('Converting data to DTO: $data');
+        return TrendingCafeDto(
+          name: data['name'],
+          imageUrl: data['imageUrl'],
+          category: data['category'],
+        ).toEntity();
+      }).toList();
 
-      return trendingCafes.take(5).toList();
+      print('Final trending cafes list: $trendingCafes');
+      return trendingCafes;
     } catch (e) {
       print('Error fetching trending cafes: $e');
+      print('Error stack trace: ${StackTrace.current}');
       return [];
     }
   }

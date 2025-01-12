@@ -1,3 +1,4 @@
+import 'package:bean_tripper/constant/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bean_tripper/presentation/pages/profile/profile_page.dart';
@@ -69,18 +70,19 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 '오늘의 카페',
                 style: TextStyle(
-                  color: Color(0xFFA47764), // 글씨 색상 설정
-                  fontSize:
-                      Theme.of(context).textTheme.headlineLarge!.fontSize! *
-                          0.6, // 글씨 크기 절반으로 설정
+                  color: CustomColors.brown, // 글씨 색상 설정
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  // Theme.of(context).textTheme.headlineLarge!.fontSize! *
+                  // 0.6, // 글씨 크기 절반으로 설정
                 ),
               ),
             ),
+            const SizedBox(height: 3),
             CafeOfTheDay(), // "오늘의 카페" 부분
             feedState.when(
               data: (feeds) {
