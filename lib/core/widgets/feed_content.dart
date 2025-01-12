@@ -229,7 +229,7 @@ class _FeedContentState extends State<FeedContent> {
 
         // 해시태그 표시 영역
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 12),
           child: Text(
             convertCategoriesToTags(widget.feed.categories), // 카테고리 변환
             style: TextStyle(

@@ -59,7 +59,7 @@ class CafeOfTheDay extends ConsumerWidget {
     }
 
     return SizedBox(
-      height: 220,
+      height: 260,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -71,7 +71,6 @@ class CafeOfTheDay extends ConsumerWidget {
             width: 160,
             decoration: BoxDecoration(
               color: CustomColors.darkGray,
-              // borderRadius: BorderRadius.circular(8),
               image: cafe.imageUrl != null
                   ? DecorationImage(
                       image: NetworkImage(cafe.imageUrl!),
