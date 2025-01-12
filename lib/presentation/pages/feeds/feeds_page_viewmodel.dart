@@ -8,20 +8,23 @@ final feedProvider =
 });
 
 class FeedNotifier extends StateNotifier<AsyncValue<List<Feed>>> {
-  FeedNotifier() : super(AsyncValue.loading()) {
-    _fetchFeeds();
+  FeedNotifier() : super(const AsyncValue.loading()) {
+    _loadInitialFeeds();
   }
 
   DocumentSnapshot? _lastDocument;
   bool _hasMore = true;
 
-  Future<void> _fetchFeeds() async {
-    try {
-      final feeds = await _fetchFeedsFromFirebase();
-      state = AsyncValue.data(feeds);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
+  void _loadInitialFeeds() {
+    _fetchFeedsFromFirebase().then((feeds) {
+      if (mounted) {
+        state = AsyncValue.data(feeds);
+      }
+    }).catchError((error, stackTrace) {
+      if (mounted) {
+        state = AsyncValue.error(error, stackTrace);
+      }
+    });
   }
 
   Future<void> fetchMoreFeeds() async {
@@ -33,9 +36,13 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<Feed>>> {
         _hasMore = false;
         return;
       }
-      state = state.whenData((feeds) => [...feeds, ...moreFeeds]);
+      if (mounted) {
+        state = state.whenData((feeds) => [...feeds, ...moreFeeds]);
+      }
     } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+      if (mounted) {
+        state = AsyncValue.error(e, stackTrace);
+      }
     }
   }
 
@@ -59,5 +66,21 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<Feed>>> {
     }
 
     return feedList;
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+    try {
+      _lastDocument = null;
+      _hasMore = true;
+      final feeds = await _fetchFeedsFromFirebase();
+      if (mounted) {
+        state = AsyncValue.data(feeds);
+      }
+    } catch (e, st) {
+      if (mounted) {
+        state = AsyncValue.error(e, st);
+      }
+    }
   }
 }

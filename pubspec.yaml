@@ -52,6 +52,7 @@ dependencies:
   http: ^1.2.2
   firebase_crashlytics: ^4.3.0
   firebase_analytics: ^11.4.0
+  timeago: ^3.6.1
 
 dev_dependencies:
   flutter_test:

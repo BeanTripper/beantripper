@@ -3,7 +3,9 @@ import 'package:bean_tripper/domain/entity/feed.dart';
 import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
+// ignore: must_be_immutable
 class FeedInfo extends ConsumerWidget {
   Feed feed;
 
@@ -11,6 +13,20 @@ class FeedInfo extends ConsumerWidget {
     super.key,
     required this.feed,
   });
+  // 한국어 로케일 설정을 위한 초기화
+
+  String formatDate(DateTime date) {
+    final now = DateTime.now();
+
+    // 24시간 이내인 경우 "~분 전", "~시간 전"으로 표시
+    if (now.difference(date).inHours < 24) {
+      return timeago.format(date, locale: 'ko');
+    }
+
+    // 24시간 이상인 경우 "yyyy-MM-dd" 형식으로 표시
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
@@ -36,8 +52,11 @@ class FeedInfo extends ConsumerWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(
-                '${feed.createdAt.toDate()}',
-                style: TextStyle(color: Colors.grey),
+                formatDate(feed.createdAt.toDate()),
+                style: TextStyle(
+                  color: CustomColors.darkGray,
+                  fontSize: 14,
+                ),
               ),
             ],
           ),

@@ -1,31 +1,124 @@
+import 'package:bean_tripper/constant/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bean_tripper/presentation/pages/feeds/trending_cafe_view_model.dart';
 
-class CafeOfTheDay extends StatelessWidget {
+class StrokeText extends StatelessWidget {
+  final String text;
+  final double fontSize;
+  final FontWeight fontWeight;
+
+  const StrokeText({
+    super.key,
+    required this.text,
+    required this.fontSize,
+    required this.fontWeight,
+  });
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 120, // 가로 스크롤 이미지를 위한 높이 설정
-      child: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('cafes').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          }
-          var documents = snapshot.data!.docs;
-          return ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: documents.length,
-            separatorBuilder: (context, index) =>
-                SizedBox(width: 8), // 이미지들 사이 간격 설정
-            itemBuilder: (context, index) {
-              var data = documents[index].data() as Map<String, dynamic>;
-              return Container(
-                width: 100,
-                color: Colors.transparent,
-                child: Image.network(data['imageUrl'], fit: BoxFit.cover),
-              );
-            },
+    return Stack(
+      children: [
+        // 테두리
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 3
+              ..color = Colors.black,
+          ),
+        ),
+        // 실제 텍스트
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CafeOfTheDay extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(trendingCafeViewModelProvider);
+
+    if (state.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.error != null) {
+      return Center(child: Text(state.error!));
+    }
+
+    return SizedBox(
+      height: 260,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        itemCount: state.cafes.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 12),
+        itemBuilder: (context, index) {
+          final cafe = state.cafes[index];
+          return Container(
+            width: 160,
+            decoration: BoxDecoration(
+              color: CustomColors.darkGray,
+              image: cafe.imageUrl != null
+                  ? DecorationImage(
+                      image: NetworkImage(cafe.imageUrl!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: StrokeText(
+                    text: cafe.name,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                if (cafe.imageUrl == null)
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        'No Image',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    spacing: 4,
+                    children: cafe.category
+                        .split(',')
+                        .map((category) => StrokeText(
+                              text: '#$category',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ))
+                        .toList(),
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),

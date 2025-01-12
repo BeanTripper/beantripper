@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/firebase_options.dart';
 import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_page.dart';
 import 'package:bean_tripper/presentation/pages/cafe_selection/cafe_selection_page.dart';
@@ -82,7 +83,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Pretendard',
         brightness: Brightness.dark,
+        appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+          backgroundColor: CustomColors.backgroundColor,
+          scrolledUnderElevation: 0,
+        ),
       ),
+
       home: SplashPage(),
       // home: RegisterPage(),
     );

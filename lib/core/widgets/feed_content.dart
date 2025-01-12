@@ -1,5 +1,4 @@
 import 'package:bean_tripper/constant/theme.dart';
-import 'package:bean_tripper/core/feed_categories.dart';
 import 'package:bean_tripper/domain/entity/feed.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +21,12 @@ class FeedContent extends StatefulWidget {
 class _FeedContentState extends State<FeedContent> {
   bool isLiked = false;
   int likeCount = 0;
-  int commentIdCount = 0;
 
   @override
   void initState() {
     super.initState();
     checkIfLiked();
     getLikeCount();
-    getCommentCount();
   }
 
   // 현재 사용자가 이 피드를 좋아요 했는지 확인
@@ -67,17 +64,14 @@ class _FeedContentState extends State<FeedContent> {
     });
   }
 
-  // 댓글 수 가져오기
-  void getCommentCount() async {
-    final commentsRef = FirebaseFirestore.instance
+  // 댓글 수를 실시간으로 가져오는 Stream
+  Stream<int> getCommentCountStream() {
+    return FirebaseFirestore.instance
         .collection('feed')
         .doc(widget.feed.id)
-        .collection('comments');
-
-    final snapshot = await commentsRef.get();
-    setState(() {
-      commentIdCount = snapshot.docs.length;
-    });
+        .collection('comments')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.length);
   }
 
   // 좋아요 토글 기능
@@ -128,22 +122,37 @@ class _FeedContentState extends State<FeedContent> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: false,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withOpacity(0.5),
+      useSafeArea: true,
       builder: (BuildContext context) {
-        return SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ), // 키보드가 올라올 때 바텀시트의 내용이 가려지지 않도록 패딩 추가
-            child: DraggableScrollableSheet(
-              expand: false,
-              builder:
-                  (BuildContext context, ScrollController scrollController) {
-                return CommentPage(
-                  feed: widget.feed,
-                );
-              },
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  color: Colors.transparent,
+                ),
+              ),
             ),
-          ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  child: CommentPage(
+                    feed: widget.feed,
+                  ),
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
@@ -160,29 +169,29 @@ class _FeedContentState extends State<FeedContent> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 12),
-        Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.width,
-          child: PageView.builder(
-            itemCount: widget.feed.imageUrls.length, // 이미지를 갯수에 맞게 설정
-            itemBuilder: (context, index) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: CustomColors.darkGray,
-                  image: DecorationImage(
-                    image: NetworkImage(widget.feed.imageUrls[index]),
-                    fit: BoxFit.cover,
+        if (widget.feed.imageUrls.isNotEmpty)
+          SizedBox(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.width,
+            child: PageView.builder(
+              itemCount: widget.feed.imageUrls.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: CustomColors.darkGray,
+                    image: DecorationImage(
+                      image: NetworkImage(widget.feed.imageUrls[index]),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
-        ),
-        SizedBox(height: 12), // 이미지와 버튼 사이에 공간 추가
 
         // 좋아요 및 댓글 버튼 영역
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
           child: Row(
             children: [
               InkWell(
@@ -204,9 +213,15 @@ class _FeedContentState extends State<FeedContent> {
                 onPressed: showCommentsBottomSheet, // 바텀시트로 댓글 페이지 띄우기
               ),
               SizedBox(width: 6),
-              Text(
-                '$commentIdCount', // 댓글 수 표시
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              StreamBuilder<int>(
+                stream: getCommentCountStream(),
+                builder: (context, snapshot) {
+                  final commentCount = snapshot.data ?? 0;
+                  return Text(
+                    '$commentCount',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  );
+                },
               ),
             ],
           ),
@@ -214,7 +229,7 @@ class _FeedContentState extends State<FeedContent> {
 
         // 해시태그 표시 영역
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 12),
           child: Text(
             convertCategoriesToTags(widget.feed.categories), // 카테고리 변환
             style: TextStyle(
