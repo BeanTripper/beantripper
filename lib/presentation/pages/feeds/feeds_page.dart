@@ -1,4 +1,5 @@
 import 'package:bean_tripper/constant/theme.dart';
+import 'package:bean_tripper/presentation/pages/feeds/trending_cafe_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bean_tripper/presentation/pages/profile/profile_page.dart';
@@ -9,16 +10,34 @@ import 'package:bean_tripper/presentation/pages/feeds/feeds_page_viewmodel.dart'
 
 class FeedsPage extends ConsumerStatefulWidget {
   @override
-  _FeedsPageState createState() => _FeedsPageState();
+  ConsumerState<FeedsPage> createState() => _FeedsPageState();
 }
 
-class _FeedsPageState extends ConsumerState<FeedsPage> {
+class _FeedsPageState extends ConsumerState<FeedsPage>
+    with AutomaticKeepAliveClientMixin {
   final ScrollController _scrollController = ScrollController();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+    _refreshData(feedProvider);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _refreshData(feedProvider);
+  }
+
+  Future<void> _refreshData(dynamic feedsPageViewModelProvider) async {
+    // 오늘의 카페 데이터 새로고침
+    await ref.read(trendingCafeViewModelProvider.notifier).refresh();
+    // 피드 데이터 새로고침
+    await ref.read(feedsPageViewModelProvider.notifier).refresh();
   }
 
   @override
@@ -37,6 +56,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final feedState = ref.watch(feedProvider);
     return Scaffold(
       appBar: AppBar(

@@ -11,6 +11,10 @@ class TrendingCafeViewModel extends StateNotifier<TrendingCafeState> {
     fetchTrendingCafes();
   }
 
+  Future<void> refresh() async {
+    await fetchTrendingCafes();
+  }
+
   Future<void> fetchTrendingCafes() async {
     try {
       state = state.copyWith(isLoading: true);
