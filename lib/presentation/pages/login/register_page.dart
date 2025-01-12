@@ -17,8 +17,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   // 초기값 sns이름
   @override
   Widget build(BuildContext context) {
-    final userState = ref.watch(loginPageViewModelProvider);
-    final userViewModel = ref.read(loginPageViewModelProvider.notifier);
+    final userState = ref.watch(authViewModelProvider);
+    final userViewModel = ref.read(authViewModelProvider.notifier);
 
     return GestureDetector(
       onTap: () {
@@ -92,32 +92,34 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              Spacer(),
               SizedBox(
-                  width: double.infinity,
-                  height: 42,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await userViewModel.submitUserToFirestore();
-                      if (context.mounted) {
-                        Navigator.pushNamed(context, '/feeds_page');
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: CustomColors.brown,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                width: double.infinity,
+                height: 42,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await userViewModel.submitUserToFirestore();
+                    if (context.mounted) {
+                      Navigator.pushNamed(context, '/feeds_page');
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CustomColors.brown,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(
-                      "회원가입 하기",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: CustomColors.white,
-                      ),
+                  ),
+                  child: Text(
+                    "회원가입 하기",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: CustomColors.white,
                     ),
-                  ))
+                  ),
+                ),
+              ),
+              SizedBox(height: 20)
             ],
           ),
         ),

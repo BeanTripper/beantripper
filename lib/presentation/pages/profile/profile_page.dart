@@ -13,7 +13,7 @@ class ProfilePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Consumer(builder: (context, ref, child) {
-          final profileState = ref.read(loginPageViewModelProvider);
+          final profileState = ref.read(authViewModelProvider);
 
           return Center(
             child: Column(

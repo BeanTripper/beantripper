@@ -18,8 +18,8 @@ class SplashPage extends StatelessWidget {
         }
         //firebaseauth 현재 유저 여부
         FirebaseAuth.instance.currentUser == null
-            ? Navigator.pushNamed(context, '/login_page')
-            : Navigator.pushNamed(context, '/feeds_page');
+            ? Navigator.pushReplacementNamed(context, '/login_page')
+            : Navigator.pushReplacementNamed(context, '/feeds_page');
       },
     );
     return Scaffold(

@@ -15,7 +15,7 @@ class FeedWritePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(feedWriteViewModelProvider);
-    final userState = ref.watch(loginPageViewModelProvider); // userState 가져오기
+    final userState = ref.watch(authViewModelProvider); // userState 가져오기
 
     // 선택된 카페 이름과 유저 정보 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {

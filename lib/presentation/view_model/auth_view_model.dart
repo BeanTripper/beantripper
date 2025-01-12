@@ -2,52 +2,51 @@ import 'package:bean_tripper/domain/entity/app_user.dart';
 import 'package:bean_tripper/presentation/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 class AuthState {
+  /// 파이어베이스 로그인 정보
   final AppUser? appUser;
-  AuthState({required this.appUser});
+
+  // /// 구글로그인 정보(앱에 들고 있음) user에서 할당
+  // final AppUser? originInfo;
+  AuthState({
+    required this.appUser,
+  });
 }
 
 class AuthViewModel extends Notifier<AuthState> {
   @override
   AuthState build() {
-    return AuthState(appUser: null);
+    return AuthState(
+      appUser: null,
+    );
   }
 
+  /// 구글로그인
   Future<void> signInWithGoogle() async {
     try {
       final signInWithGoogleUseCase = ref.read(signInWithGoogleUseCaseProvider);
       final user = await signInWithGoogleUseCase.signInWithGoogle();
+      //user 구글로그인정보
       if (user != null) {
         final fetchUserUseCase = ref.read(fetchUserUseCaseProvider);
         final fetchedUser = await fetchUserUseCase.fetchUser(user.id);
-        if (fetchedUser != null) {
-          state = AuthState(appUser: fetchedUser);
-        } else {
-          //user 가 firestore에 없으면 firestore에 등록. registerPage
-          //updateUserToFirestore
-          //submitUserToFirestore
-          state = AuthState(
-            appUser: AppUser(
-              id: user.id,
-              name: user.name ?? "",
-              profile: user.profile ?? "",
-            ),
-          );
-          submitUserToFirestore();
-        }
+        print(3);
+        print('^^^^^^^^^^^^^^^^^^^^^^${user.id}');
+        print('%%%%%%%%%%%%%%%${fetchedUser?.id}');
+        state = AuthState(
+          appUser: fetchedUser,
+        );
       }
     } on Exception catch (e) {
       print(e);
     }
   }
 
-  ///kakao 로그인
+  /// kakao 로그인
   Future<void> signInWithKakao() async {
     try {
-      // await UserApi.instance.logout(); 카카오 로그아웃기능
       final isInstalled = await isKakaoTalkInstalled();
       final OAuthToken oAuthToken = isInstalled
           ? await UserApi.instance.loginWithKakaoTalk()
@@ -87,14 +86,15 @@ class AuthViewModel extends Notifier<AuthState> {
                   userCredential.additionalUserInfo?.profile?['picture'] ?? "",
             ),
           );
-          submitUserToFirestore();
+          // submitUserToFirestore();
         }
       }
     } catch (e) {
-      state = AuthState(appUser: null);
+      // state = AuthState(appUser: null);
     }
   }
 
+  /// firebase 회원정보 조회
   Future<void> fetchUser() async {
     final user = state.appUser;
     if (user != null) {
@@ -107,6 +107,7 @@ class AuthViewModel extends Notifier<AuthState> {
     }
   }
 
+  /// firebase 정보 업데이트
   Future<void> submitUserToFirestore() async {
     final user = state.appUser;
     if (user != null) {
@@ -121,6 +122,7 @@ class AuthViewModel extends Notifier<AuthState> {
     }
   }
 
+  /// firebase에 사용자이름 변경
   Future<void> updateUserNickname(String newNickname) async {
     final user = state.appUser;
     if (user != null) {
@@ -133,9 +135,18 @@ class AuthViewModel extends Notifier<AuthState> {
       );
     }
   }
+
+//   /// 앱에서 유저 아이디 삭제
+//   Future<void> deleteOriginInfo() async {
+//     final user = state.originInfo;
+//     if (user != null) {
+//       state = AuthState(
+//         appUser: state.appUser,
+//       );
+//     }
+//   }
 }
 
-final loginPageViewModelProvider =
-    NotifierProvider<AuthViewModel, AuthState>(() {
+final authViewModelProvider = NotifierProvider<AuthViewModel, AuthState>(() {
   return AuthViewModel();
 });

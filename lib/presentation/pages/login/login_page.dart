@@ -17,8 +17,8 @@ class LoginPage extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: Consumer(
           builder: (context, ref, child) {
-            final userState = ref.watch(loginPageViewModelProvider);
-            final userViewModel = ref.read(loginPageViewModelProvider.notifier);
+            final userState = ref.watch(authViewModelProvider);
+            final userViewModel = ref.read(authViewModelProvider.notifier);
             print('&&&&&&&&&&&&&&&&&&&&${userViewModel.fetchUser()}');
             return Column(
               children: [
@@ -44,9 +44,10 @@ class LoginPage extends StatelessWidget {
                   iconPath: "assets/images/kakao_icon.png",
                   onPressed: () async {
                     await userViewModel.signInWithKakao();
-                    if (context.mounted && userState.appUser != null) {
-                      Navigator.pushNamed(context, '/register_page');
+                    if (!context.mounted) {
+                      return;
                     }
+                    Navigator.pushReplacementNamed(context, '/register_page');
                   },
                   iconSize: 20,
                 ),
@@ -58,9 +59,10 @@ class LoginPage extends StatelessWidget {
                   iconPath: "assets/images/google_icon.png",
                   onPressed: () async {
                     await userViewModel.signInWithGoogle();
-                    if (context.mounted && userState.appUser != null) {
-                      Navigator.pushNamed(context, '/register_page');
+                    if (!context.mounted) {
+                      return;
                     }
+                    Navigator.pushReplacementNamed(context, '/register_page');
                   },
                   iconSize: 20,
                 ),
