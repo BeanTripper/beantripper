@@ -21,14 +21,12 @@ class FeedContent extends StatefulWidget {
 class _FeedContentState extends State<FeedContent> {
   bool isLiked = false;
   int likeCount = 0;
-  int commentIdCount = 0;
 
   @override
   void initState() {
     super.initState();
     checkIfLiked();
     getLikeCount();
-    getCommentCount();
   }
 
   // 현재 사용자가 이 피드를 좋아요 했는지 확인
@@ -66,17 +64,14 @@ class _FeedContentState extends State<FeedContent> {
     });
   }
 
-  // 댓글 수 가져오기
-  void getCommentCount() async {
-    final commentsRef = FirebaseFirestore.instance
+  // 댓글 수를 실시간으로 가져오는 Stream
+  Stream<int> getCommentCountStream() {
+    return FirebaseFirestore.instance
         .collection('feed')
         .doc(widget.feed.id)
-        .collection('comments');
-
-    final snapshot = await commentsRef.get();
-    setState(() {
-      commentIdCount = snapshot.docs.length;
-    });
+        .collection('comments')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.length);
   }
 
   // 좋아요 토글 기능
@@ -203,9 +198,15 @@ class _FeedContentState extends State<FeedContent> {
                 onPressed: showCommentsBottomSheet, // 바텀시트로 댓글 페이지 띄우기
               ),
               SizedBox(width: 6),
-              Text(
-                '$commentIdCount', // 댓글 수 표시
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              StreamBuilder<int>(
+                stream: getCommentCountStream(),
+                builder: (context, snapshot) {
+                  final commentCount = snapshot.data ?? 0;
+                  return Text(
+                    '$commentCount',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  );
+                },
               ),
             ],
           ),

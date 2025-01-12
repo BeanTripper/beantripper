@@ -1,3 +1,4 @@
+import 'package:bean_tripper/constant/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,12 +41,17 @@ class _CommentPageState extends State<CommentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text('댓글'),
-      ),
       body: Column(
         children: [
+          SizedBox(height: 12),
+          Container(
+            width: 50,
+            height: 5,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: CustomColors.darkGray,
+            ),
+          ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
@@ -65,14 +71,11 @@ class _CommentPageState extends State<CommentPage> {
                   itemBuilder: (context, index) {
                     final comment = comments[index];
                     final timestamp = comment['timestamp'] as Timestamp?;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: ListTile(
-                        title: Text(comment['userName'] ?? '익명'),
-                        subtitle: Text(comment['content'] ?? ''),
-                        trailing: Text(
-                          formatDate(timestamp),
-                        ),
+                    return ListTile(
+                      title: Text(comment['userName'] ?? '게스트'),
+                      subtitle: Text(comment['content'] ?? ''),
+                      trailing: Text(
+                        formatDate(timestamp),
                       ),
                     );
                   },
@@ -87,9 +90,6 @@ class _CommentPageState extends State<CommentPage> {
                 Expanded(
                   child: TextField(
                     controller: _commentController,
-                    decoration: InputDecoration(
-                      labelText: '댓글 입력',
-                    ),
                   ),
                 ),
                 IconButton(
