@@ -33,6 +33,11 @@ class _CommentPageState extends State<CommentPage> {
     }
   }
 
+  String formatDate(Timestamp timestamp) {
+    var date = timestamp.toDate();
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}'; // 날짜 형식 변경
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,13 +64,15 @@ class _CommentPageState extends State<CommentPage> {
                   itemCount: comments.length,
                   itemBuilder: (context, index) {
                     final comment = comments[index];
-                    return ListTile(
-                      title: Text(comment['userName']),
-                      subtitle: Text(comment['content']),
-                      trailing: Text(
-                        (comment['timestamp'] as Timestamp)
-                            .toDate()
-                            .toString(), // 댓글 시간 표시
+                    return Padding(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 8.0), // 간격 조정
+                      child: ListTile(
+                        title: Text(comment['userName']),
+                        subtitle: Text(comment['content']),
+                        trailing: Text(
+                          formatDate(comment['timestamp']), // 날짜 형식 변경
+                        ),
                       ),
                     );
                   },

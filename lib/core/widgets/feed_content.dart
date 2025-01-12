@@ -123,14 +123,35 @@ class _FeedContentState extends State<FeedContent> {
     }
   }
 
-  // 댓글 페이지로 이동
-  void navigateToComments() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CommentPage(feed: widget.feed), // CommentPage로 이동
-      ),
+  // 바텀시트로 댓글 페이지 띄우기
+  void showCommentsBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ), // 키보드가 올라올 때 바텀시트의 내용이 가려지지 않도록 패딩 추가
+            child: DraggableScrollableSheet(
+              expand: false,
+              builder:
+                  (BuildContext context, ScrollController scrollController) {
+                return CommentPage(
+                  feed: widget.feed,
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
+  }
+
+  // 카테고리 변환 함수
+  String convertCategoriesToTags(List<String> categories) {
+    return categories.map((category) => '#$category').join(' ');
   }
 
   @override
@@ -180,7 +201,7 @@ class _FeedContentState extends State<FeedContent> {
               SizedBox(width: 15),
               IconButton(
                 icon: Icon(Icons.chat_bubble_outline, size: 30),
-                onPressed: navigateToComments, // 댓글 페이지로 이동 기능 연결
+                onPressed: showCommentsBottomSheet, // 바텀시트로 댓글 페이지 띄우기
               ),
               SizedBox(width: 6),
               Text(
@@ -191,10 +212,16 @@ class _FeedContentState extends State<FeedContent> {
           ),
         ),
 
-        // 피드 카테고리 표시 영역
+        // 해시태그 표시 영역
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: feedCategories(widget.feed.categories), // 카테고리 표시
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            convertCategoriesToTags(widget.feed.categories), // 카테고리 변환
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: CustomColors.white), // 텍스트 스타일 설정
+          ),
         ),
 
         // 피드 내용 표시 영역
