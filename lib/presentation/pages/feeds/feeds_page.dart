@@ -72,13 +72,13 @@ class _FeedsPageState extends ConsumerState<FeedsPage>
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.map),
+            icon: Icon(Icons.map, color: CustomColors.white),
             onPressed: () {
               Navigator.pushNamed(context, '/map_page'); // 여기서 map_page로 이동
             },
           ),
           IconButton(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person, color: CustomColors.white),
             onPressed: () {
               Navigator.push(
                 context,
@@ -109,6 +109,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage>
             ),
             const SizedBox(height: 3),
             CafeOfTheDay(), // "오늘의 카페" 부분
+            SizedBox(height: 24),
             feedState.when(
               data: (feeds) {
                 return ListView.builder(
@@ -121,6 +122,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage>
                       children: [
                         FeedInfo(feed: feed), // FeedInfo 위젯 사용
                         FeedContent(feed: feed), // FeedContent 위젯 사용
+                        SizedBox(height: 15),
                       ],
                     );
                   },

@@ -1,5 +1,4 @@
 import 'package:bean_tripper/constant/theme.dart';
-import 'package:bean_tripper/core/feed_categories.dart';
 import 'package:bean_tripper/domain/entity/feed.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
@@ -160,29 +159,29 @@ class _FeedContentState extends State<FeedContent> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 12),
-        Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.width,
-          child: PageView.builder(
-            itemCount: widget.feed.imageUrls.length, // 이미지를 갯수에 맞게 설정
-            itemBuilder: (context, index) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: CustomColors.darkGray,
-                  image: DecorationImage(
-                    image: NetworkImage(widget.feed.imageUrls[index]),
-                    fit: BoxFit.cover,
+        if (widget.feed.imageUrls.isNotEmpty)
+          SizedBox(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.width,
+            child: PageView.builder(
+              itemCount: widget.feed.imageUrls.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: CustomColors.darkGray,
+                    image: DecorationImage(
+                      image: NetworkImage(widget.feed.imageUrls[index]),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
-        ),
-        SizedBox(height: 12), // 이미지와 버튼 사이에 공간 추가
 
         // 좋아요 및 댓글 버튼 영역
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
           child: Row(
             children: [
               InkWell(
