@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/firebase_options.dart';
 import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_page.dart';
 import 'package:bean_tripper/presentation/pages/cafe_selection/cafe_selection_page.dart';
@@ -87,6 +88,8 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: 22,
           ),
+          backgroundColor: CustomColors.backgroundColor,
+          scrolledUnderElevation: 0,
         ),
       ),
 

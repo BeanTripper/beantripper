@@ -64,78 +64,81 @@ class _FeedsPageState extends ConsumerState<FeedsPage>
     super.build(context);
     final feedState = ref.watch(feedProvider);
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Image.asset(
-          'assets/images/login_logo.png',
-          height: 35,
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.map, color: CustomColors.white),
-            onPressed: () {
-              Navigator.pushNamed(context, '/map_page'); // 여기서 map_page로 이동
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.person, color: CustomColors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProfilePage()), // 여기서 프로필 페이지로 이동
-              );
-            },
+      body: NestedScrollView(
+        controller: _scrollController,
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverAppBar(
+            floating: true,
+            snap: true,
+            automaticallyImplyLeading: false,
+            title: Image.asset(
+              'assets/images/login_logo.png',
+              height: 35,
+            ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.map, color: CustomColors.white),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/map_page');
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.person, color: CustomColors.white),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                  );
+                },
+              ),
+            ],
           ),
         ],
-      ),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                '오늘의 카페',
-                style: TextStyle(
-                  color: CustomColors.brown, // 글씨 색상 설정
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  // Theme.of(context).textTheme.headlineLarge!.fontSize! *
-                  // 0.6, // 글씨 크기 절반으로 설정
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  '오늘의 카페',
+                  style: TextStyle(
+                    color: CustomColors.brown,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 3),
-            CafeOfTheDay(), // "오늘의 카페" 부분
-            SizedBox(height: 24),
-            feedState.when(
-              data: (feeds) {
-                return ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: feeds.length,
-                  itemBuilder: (context, index) {
-                    final feed = feeds[index];
-                    return Column(
-                      children: [
-                        FeedInfo(feed: feed), // FeedInfo 위젯 사용
-                        FeedContent(feed: feed), // FeedContent 위젯 사용
-                        SizedBox(height: 15),
-                      ],
-                    );
-                  },
-                );
-              },
-              loading: () {
-                return Center(child: CircularProgressIndicator());
-              },
-              error: (e, stackTrace) {
-                return Center(child: Text('Error: $e'));
-              },
-            ),
-          ],
+              const SizedBox(height: 3),
+              CafeOfTheDay(),
+              SizedBox(height: 24),
+              feedState.when(
+                data: (feeds) {
+                  return ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: feeds.length,
+                    itemBuilder: (context, index) {
+                      final feed = feeds[index];
+                      return Column(
+                        children: [
+                          FeedInfo(feed: feed),
+                          FeedContent(feed: feed),
+                          SizedBox(height: 15),
+                        ],
+                      );
+                    },
+                  );
+                },
+                loading: () {
+                  return Center(child: CircularProgressIndicator());
+                },
+                error: (e, stackTrace) {
+                  return Center(child: Text('Error: $e'));
+                },
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
