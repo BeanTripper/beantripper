@@ -62,7 +62,7 @@ class LoginPage extends StatelessWidget {
                     if (!context.mounted) {
                       return;
                     }
-                    Navigator.pushReplacementNamed(context, '/register_page');
+                    Navigator.pushNamed(context, '/register_page');
                   },
                   iconSize: 20,
                 ),
