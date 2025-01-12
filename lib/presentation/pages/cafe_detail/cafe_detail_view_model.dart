@@ -92,11 +92,7 @@ class CafeDetailViewModel extends StateNotifier<CafeDetailState> {
         );
 
         await userFavoriteRef.doc(docToDelete.id).delete();
-      } else {
-        final docRef = await userFavoriteRef.add({
-          'cafeName': cafeName,
-        });
-      }
+      } else {}
 
       state = state.copyWith(isFavorite: !state.isFavorite);
     } catch (e) {}

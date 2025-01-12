@@ -37,18 +37,16 @@ class FeedWriteViewModel extends ChangeNotifier {
 
   Future<void> pickImages() async {
     final images = await _picker.pickMultiImage();
-    if (images != null) {
-      for (var img in images) {
-        final file = File(img.path);
-        if (!selectedImages.any((element) => element.path == file.path)) {
-          selectedImages.add(file);
-        }
+    for (var img in images) {
+      final file = File(img.path);
+      if (!selectedImages.any((element) => element.path == file.path)) {
+        selectedImages.add(file);
       }
-      if (selectedImages.length > 5) {
-        selectedImages.removeRange(5, selectedImages.length);
-      }
-      notifyListeners();
     }
+    if (selectedImages.length > 5) {
+      selectedImages.removeRange(5, selectedImages.length);
+    }
+    notifyListeners();
   }
 
   Future<void> uploadDataToFirebase(String userName) async {
@@ -63,7 +61,8 @@ class FeedWriteViewModel extends ChangeNotifier {
       // 이미지 업로드
       List<String> imageUrls = [];
       for (var file in selectedImages) {
-        final imageRef = storageRef.child('uploads/${file.path.split('/').last}');
+        final imageRef =
+            storageRef.child('uploads/${file.path.split('/').last}');
         await imageRef.putFile(file);
         final url = await imageRef.getDownloadURL();
         imageUrls.add(url);

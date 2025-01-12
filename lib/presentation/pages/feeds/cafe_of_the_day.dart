@@ -9,6 +9,7 @@ class StrokeText extends StatelessWidget {
   final FontWeight fontWeight;
 
   const StrokeText({
+    super.key,
     required this.text,
     required this.fontSize,
     required this.fontWeight,
@@ -58,16 +59,16 @@ class CafeOfTheDay extends ConsumerWidget {
     }
 
     return SizedBox(
-      height: 220,
+      height: 260,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: state.cafes.length,
         separatorBuilder: (context, index) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           final cafe = state.cafes[index];
           return Container(
-            width: 140,
+            width: 160,
             decoration: BoxDecoration(
               color: CustomColors.darkGray,
               // borderRadius: BorderRadius.circular(8),

@@ -1,5 +1,4 @@
 import 'package:bean_tripper/presentation/pages/cafe_selection/cafe_selection_page.dart';
-import 'package:bean_tripper/presentation/pages/feed_write/feed_write_page.dart';
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
 import 'package:bean_tripper/presentation/pages/home/home_view_model.dart';
 import 'package:bean_tripper/presentation/pages/home/widgets/home_bottom_navigation_bar.dart';

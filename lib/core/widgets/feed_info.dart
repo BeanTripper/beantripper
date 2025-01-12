@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+// ignore: must_be_immutable
 class FeedInfo extends ConsumerWidget {
   Feed feed;
 
@@ -13,12 +14,6 @@ class FeedInfo extends ConsumerWidget {
     required this.feed,
   });
   // 한국어 로케일 설정을 위한 초기화
-  static final _initialized = _initializeTimeago();
-
-  static bool _initializeTimeago() {
-    timeago.setLocaleMessages('ko', timeago.KoMessages());
-    return true;
-  }
 
   String formatDate(DateTime date) {
     final now = DateTime.now();

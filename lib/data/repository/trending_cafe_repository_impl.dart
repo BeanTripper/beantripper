@@ -31,7 +31,7 @@ class TrendingCafeRepositoryImpl implements TrendingCafeRepository {
       for (var doc in snapshot.docs) {
         final data = doc.data();
         final cafeName = data['cafeName'] as String;
-        final createdAt = (data['createdAt'] as Timestamp).toDate();
+        (data['createdAt'] as Timestamp).toDate();
 
         cafeCount[cafeName] = (cafeCount[cafeName] ?? 0) + 1;
 

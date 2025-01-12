@@ -10,7 +10,7 @@ import 'package:bean_tripper/presentation/view_model/auth_view_model.dart';
 class FeedWritePage extends ConsumerWidget {
   final String selectedCafeName;
 
-  FeedWritePage({required this.selectedCafeName});
+  const FeedWritePage({super.key, required this.selectedCafeName});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,7 +19,7 @@ class FeedWritePage extends ConsumerWidget {
 
     // 선택된 카페 이름과 유저 정보 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if ((viewModel.cafeName?.isEmpty ?? true)) {
+      if ((viewModel.cafeName.isEmpty)) {
         viewModel.setCafeName(selectedCafeName); // 카페 이름 설정
       }
     });

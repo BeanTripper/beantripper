@@ -48,6 +48,7 @@ class AppUserRepositoryImpl implements AppUserRepository {
         profile: user.profile,
       );
     }
+    return null;
   }
 
   @override
