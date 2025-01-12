@@ -119,6 +119,7 @@ timestamp(타임스탬프)
    <img src="assets/images/login_page.png" alt="LoginPage" width="300">
    <img src="assets/images/register_page.png" alt="RegisterPage" width="300">
    </p>
+   
 - **SNS(구글,카카오) 로그인**을 통해 ID 및 비밀번호 없이 간편 로그인 가능합니다.
 - **구글, 카카오 계정 정보**에서 프로필 이미지와 닉네임 기본값을 가져오며, 사용자 설정에 따라 수정 가능합니다.
 - **자동 로그인**을 통해 기존에 로그인 했다면 메인페이지로 이동합니다.
@@ -128,6 +129,7 @@ timestamp(타임스탬프)
 <p align="left">
 <img src="assets/images/map_page.png" alt="App Logo" width="300">
 </p>
+
 - **네이버 지도 API**를 이용해 내 주변 카페 확인.
 - 하단 **위치 버튼** 클릭 현재 자신의 위치를 기준으로 카페를 보여줍니다.
 - **채팅방 마커** 선택 시 카페 상세 정보(이름, 영업시간, 전화번호, 주소) 확인 가능합니다.
@@ -138,6 +140,7 @@ timestamp(타임스탬프)
 <img src="assets/images/feeds_page.png" alt="App Logo" width="300">
 <img src="assets/images/feed_detail_page.png" alt="App Logo" width="300">
 </p>
+
 - 피드의 대표 사진, 내용, 좋아요수, 댓글수, 테마를 확인할 수 있습니다.
 - 피드의 상세내용(전체 사진, 댓글, 테마)을 확인가능합니다.
 
@@ -147,6 +150,7 @@ timestamp(타임스탬프)
 <img src="assets/images/cafe_detail_page.png" alt="App Logo" width="300">
 <img src="assets/images/cafe_feed_page.png" alt="App Logo" width="300">
 </p>
+
 - 주소와 카페에 달린 피드를 확인할 수 있습니다.
 
 ### 5. **피드 작성 페이지(`write_page`)**
@@ -154,6 +158,7 @@ timestamp(타임스탬프)
 <p align="left">
 <img src="assets/images/write_page.png" alt="App Logo" width="300">
 </p>
+
 - 피드에 사진, 카페이름, 게시글, 테마를 작성합니다.
 - 카페이름은 **네이버 검색api**와 연동되어 편리하게 검색 가능합니다.
 
