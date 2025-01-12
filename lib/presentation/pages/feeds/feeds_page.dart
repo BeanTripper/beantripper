@@ -24,20 +24,25 @@ class _FeedsPageState extends ConsumerState<FeedsPage>
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    _refreshData(feedProvider);
+    Future.microtask(() => _refreshData());
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _refreshData(feedProvider);
+    Future.microtask(() => _refreshData());
   }
 
-  Future<void> _refreshData(dynamic feedsPageViewModelProvider) async {
-    // 오늘의 카페 데이터 새로고침
-    await ref.read(trendingCafeViewModelProvider.notifier).refresh();
-    // 피드 데이터 새로고침
-    await ref.read(feedsPageViewModelProvider.notifier).refresh();
+  Future<void> _refreshData() async {
+    try {
+      // 두 데이터를 병렬로 새로고침
+      await Future.wait([
+        ref.read(trendingCafeViewModelProvider.notifier).refresh(),
+        ref.read(feedProvider.notifier).refresh(),
+      ]);
+    } catch (e) {
+      print('Error refreshing data: $e');
+    }
   }
 
   @override
@@ -50,7 +55,7 @@ class _FeedsPageState extends ConsumerState<FeedsPage>
   void _scrollListener() {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      ref.read(feedProvider.notifier).fetchMoreFeeds(); // 추가 피드 데이터 로드
+      ref.read(feedProvider.notifier).fetchMoreFeeds();
     }
   }
 

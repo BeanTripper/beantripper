@@ -19,7 +19,6 @@ class TrendingCafeViewModel extends StateNotifier<TrendingCafeState> {
     try {
       state = state.copyWith(isLoading: true);
       final cafes = await _getTrendingCafesUseCase.execute();
-      print('Fetched Trending Cafes: $cafes');
       state = state.copyWith(
         isLoading: false,
         cafes: cafes,
