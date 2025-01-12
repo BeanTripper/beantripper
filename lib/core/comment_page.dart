@@ -23,7 +23,6 @@ class _CommentPageState extends State<CommentPage> {
   @override
   void initState() {
     super.initState();
-    // 한국어 로케일 설정
     timeago.setLocaleMessages('ko', timeago.KoMessages());
   }
 
@@ -45,80 +44,111 @@ class _CommentPageState extends State<CommentPage> {
     final now = DateTime.now();
     final date = timestamp.toDate();
 
-    // 24시간 이내인 경우 "~분 전", "~시간 전"으로 표시
     if (now.difference(date).inHours < 24) {
       return timeago.format(date, locale: 'ko');
     }
 
-    // 24시간 이상인 경우 "yyyy-MM-dd" 형식으로 표시
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(height: 12),
-          Container(
-            width: 50,
-            height: 5,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: CustomColors.darkGray,
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.4,
+      minChildSize: 0.4,
+      maxChildSize: 0.9,
+      builder: (context, scrollController) {
+        return Container(
+          decoration: BoxDecoration(
+            color: CustomColors.black,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(40),
+              topRight: Radius.circular(40),
             ),
           ),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('feed')
-                  .doc(widget.feed.id)
-                  .collection('comments')
-                  .orderBy('timestamp', descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                final comments = snapshot.data!.docs;
-                return ListView.builder(
-                  itemCount: comments.length,
-                  itemBuilder: (context, index) {
-                    final comment = comments[index];
-                    final timestamp = comment['timestamp'] as Timestamp?;
-                    return ListTile(
-                      title: Text(comment['userName'] ?? '게스트'),
-                      subtitle: Text(comment['content'] ?? ''),
-                      trailing: Text(
-                        formatDate(timestamp),
+          child: Column(
+            children: [
+              GestureDetector(
+                onVerticalDragUpdate: (details) {
+                  final currentSize = scrollController.position.pixels /
+                      MediaQuery.of(context).size.height;
+                  final newSize = currentSize -
+                      (details.primaryDelta! /
+                          MediaQuery.of(context).size.height);
+                  final clampedSize = newSize.clamp(0.3, 0.9);
+                  scrollController
+                      .jumpTo(clampedSize * MediaQuery.of(context).size.height);
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  width: double.infinity,
+                  child: Center(
+                    child: Container(
+                      width: 50,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: CustomColors.darkGray,
                       ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _commentController,
+                    ),
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    _addComment(_commentController.text);
+              ),
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('feed')
+                      .doc(widget.feed.id)
+                      .collection('comments')
+                      .orderBy('timestamp', descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    final comments = snapshot.data!.docs;
+                    return ListView.builder(
+                      controller: scrollController,
+                      itemCount: comments.length,
+                      itemBuilder: (context, index) {
+                        final comment = comments[index];
+                        final timestamp = comment['timestamp'] as Timestamp?;
+                        return ListTile(
+                          title: Text(comment['userName'] ?? '게스트'),
+                          subtitle: Text(comment['content'] ?? ''),
+                          trailing: Text(
+                            formatDate(timestamp),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
-              ],
-            ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _commentController,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.send),
+                      onPressed: () {
+                        _addComment(_commentController.text);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

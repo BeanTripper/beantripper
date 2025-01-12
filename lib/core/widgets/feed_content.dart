@@ -122,22 +122,37 @@ class _FeedContentState extends State<FeedContent> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: false,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withOpacity(0.5),
+      useSafeArea: true,
       builder: (BuildContext context) {
-        return SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ), // 키보드가 올라올 때 바텀시트의 내용이 가려지지 않도록 패딩 추가
-            child: DraggableScrollableSheet(
-              expand: false,
-              builder:
-                  (BuildContext context, ScrollController scrollController) {
-                return CommentPage(
-                  feed: widget.feed,
-                );
-              },
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  color: Colors.transparent,
+                ),
+              ),
             ),
-          ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  child: CommentPage(
+                    feed: widget.feed,
+                  ),
+                ),
+              ),
+            ),
+          ],
         );
       },
     );

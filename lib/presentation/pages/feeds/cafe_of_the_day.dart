@@ -59,7 +59,7 @@ class CafeOfTheDay extends ConsumerWidget {
     }
 
     return SizedBox(
-      height: 260,
+      height: 220,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
