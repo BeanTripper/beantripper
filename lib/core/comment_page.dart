@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bean_tripper/domain/entity/feed.dart';
 import 'package:bean_tripper/data/repository/comment_repository.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class CommentPage extends StatefulWidget {
   final Feed feed;
@@ -18,6 +19,13 @@ class _CommentPageState extends State<CommentPage> {
   final TextEditingController _commentController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final CommentRepository _commentRepository = CommentRepository();
+
+  @override
+  void initState() {
+    super.initState();
+    // 한국어 로케일 설정
+    timeago.setLocaleMessages('ko', timeago.KoMessages());
+  }
 
   Future<void> _addComment(String comment) async {
     if (comment.isNotEmpty) {
@@ -34,8 +42,16 @@ class _CommentPageState extends State<CommentPage> {
 
   String formatDate(Timestamp? timestamp) {
     if (timestamp == null) return '';
-    var date = timestamp.toDate();
-    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+    final now = DateTime.now();
+    final date = timestamp.toDate();
+
+    // 24시간 이내인 경우 "~분 전", "~시간 전"으로 표시
+    if (now.difference(date).inHours < 24) {
+      return timeago.format(date, locale: 'ko');
+    }
+
+    // 24시간 이상인 경우 "yyyy-MM-dd" 형식으로 표시
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
   @override
