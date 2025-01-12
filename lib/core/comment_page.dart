@@ -24,8 +24,6 @@ class _CommentPageState extends State<CommentPage> {
       if (user != null) {
         await _commentRepository.addComment(
           widget.feed.id,
-          user.uid,
-          user.displayName ?? 'Unknown',
           comment,
         );
         _commentController.clear();
@@ -33,15 +31,17 @@ class _CommentPageState extends State<CommentPage> {
     }
   }
 
-  String formatDate(Timestamp timestamp) {
+  String formatDate(Timestamp? timestamp) {
+    if (timestamp == null) return '';
     var date = timestamp.toDate();
-    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}'; // 날짜 형식 변경
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('댓글'),
       ),
       body: Column(
@@ -64,14 +64,14 @@ class _CommentPageState extends State<CommentPage> {
                   itemCount: comments.length,
                   itemBuilder: (context, index) {
                     final comment = comments[index];
+                    final timestamp = comment['timestamp'] as Timestamp?;
                     return Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 8.0), // 간격 조정
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: ListTile(
-                        title: Text(comment['userName']),
-                        subtitle: Text(comment['content']),
+                        title: Text(comment['userName'] ?? '익명'),
+                        subtitle: Text(comment['content'] ?? ''),
                         trailing: Text(
-                          formatDate(comment['timestamp']), // 날짜 형식 변경
+                          formatDate(timestamp),
                         ),
                       ),
                     );

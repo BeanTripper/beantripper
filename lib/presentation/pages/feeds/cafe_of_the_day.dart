@@ -70,7 +70,7 @@ class CafeOfTheDay extends ConsumerWidget {
             width: 140,
             decoration: BoxDecoration(
               color: CustomColors.darkGray,
-              borderRadius: BorderRadius.circular(8),
+              // borderRadius: BorderRadius.circular(8),
               image: cafe.imageUrl != null
                   ? DecorationImage(
                       image: NetworkImage(cafe.imageUrl!),
