@@ -10,7 +10,7 @@ Flutter 기반으로 제작된 **지도 연동 카페 추천 SNS**입니다. 사
 
 ## 🖥️ 시연 영상 링크
 
-## https://www.youtube.com/
+## [https://www.youtube.com/](https://youtube.com/shorts/2DURmwE-aG4?si=2ugX_RCA_vBUrVTy)
 
 ## 🚀 주요 기능
 
