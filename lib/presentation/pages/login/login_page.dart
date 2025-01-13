@@ -19,7 +19,6 @@ class LoginPage extends StatelessWidget {
           builder: (context, ref, child) {
             final userState = ref.watch(authViewModelProvider);
             final userViewModel = ref.read(authViewModelProvider.notifier);
-            print('&&&&&&&&&&&&&&&&&&&&${userViewModel.fetchUser()}');
             return Column(
               children: [
                 SizedBox(height: 150),
