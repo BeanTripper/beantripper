@@ -3,14 +3,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FeedWriteViewModel extends ChangeNotifier {
   final ImagePicker _picker = ImagePicker();
-  final List<File> selectedImages = [];
-  final List<String> categories = [];
+  List<File> selectedImages = [];
+  List<String> categories = [];
   String cafeName = '';
   String content = '';
+
+  // 초기화
+  void resetState() {
+    selectedImages = [];
+    categories = [];
+    cafeName = '';
+    content = '';
+    notifyListeners();
+  }
+    // 이미지 삭제
+  void removeImage(File image) {
+    selectedImages.remove(image);
+    notifyListeners();
+  }
 
   void setCafeName(String value) {
     cafeName = value;
@@ -61,8 +74,7 @@ class FeedWriteViewModel extends ChangeNotifier {
       // 이미지 업로드
       List<String> imageUrls = [];
       for (var file in selectedImages) {
-        final imageRef =
-            storageRef.child('uploads/${file.path.split('/').last}');
+        final imageRef = storageRef.child('uploads/${file.path.split('/').last}');
         await imageRef.putFile(file);
         final url = await imageRef.getDownloadURL();
         imageUrls.add(url);
@@ -77,14 +89,11 @@ class FeedWriteViewModel extends ChangeNotifier {
         'userName': userName,
         'createdAt': FieldValue.serverTimestamp(),
       });
+
+      resetState(); // 업로드 후 상태 초기화
     } catch (e) {
       print('Firebase 업로드 중 오류 발생: $e');
       rethrow;
     }
   }
 }
-
-final feedWriteViewModelProvider = ChangeNotifierProvider((ref) {
-  final viewModel = FeedWriteViewModel();
-  return viewModel;
-});

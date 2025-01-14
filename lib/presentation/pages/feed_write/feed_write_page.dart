@@ -15,22 +15,13 @@ class FeedWritePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(feedWriteViewModelProvider);
-    final userState = ref.watch(authViewModelProvider); // userState 가져오기
-    final userViewModel = ref.read(authViewModelProvider.notifier);
-    final args =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final userState = ref.watch(authViewModelProvider);
 
-    if (args != null && args['selectedCafeName'] != null) {
-      final selectedCafeName = args['selectedCafeName'];
-      if (viewModel.cafeName != selectedCafeName) {
-        viewModel.setCafeName(selectedCafeName); // 카페 이름 설정
-      }
-    }
-
-    // 선택된 카페 이름과 유저 정보 설정
+    // 선택된 카페 이름 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if ((viewModel.cafeName.isEmpty)) {
-        viewModel.setCafeName(selectedCafeName); // 카페 이름 설정
+      if (viewModel.cafeName.isEmpty || viewModel.cafeName != selectedCafeName) {
+        viewModel.resetState(); // 상태 초기화
+        viewModel.setCafeName(selectedCafeName); // 새로운 카페 이름 설정
       }
     });
 
@@ -39,9 +30,9 @@ class FeedWritePage extends ConsumerWidget {
         title: const Text('작성하기'),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back), // 뒤로가기 아이콘
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Navigator.popAndPushNamed로 새 페이지를 열고 기존 페이지를 스택에서 제거
+            viewModel.resetState(); // 페이지 나갈 때 상태 초기화
             Navigator.pushReplacementNamed(context, '/cafe_selection_page');
           },
         ),
@@ -65,10 +56,7 @@ class FeedWritePage extends ConsumerWidget {
                 const SizedBox(height: 20),
                 SubmitButton(
                   viewModel: viewModel,
-                  // userName:userViewModel
-                  //     .fetchUserName(userState.appUser!.id)
-                  //     .toString(), // 유저 이름 전달
-                  userName: userState.appUser?.id ?? '익명', // 유저 이름 전달
+                  userName: userState.appUser?.name ?? '익명',
                 ),
               ],
             ),
