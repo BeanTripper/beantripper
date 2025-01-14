@@ -33,6 +33,11 @@ android {
         versionName = flutter.versionName
     }
     signingConfigs {
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('C:/Users/82105/.android/debug.keystore')
+            storePassword 'android'
         release {
             keyAlias 'bean-tripper-release-key'
             keyPassword 'beantripper'
