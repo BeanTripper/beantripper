@@ -74,6 +74,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 PolicyPrivacy(),
+                PolicyPrivacy(),
                 Divider(
                   color: CustomColors.lightGray,
                   thickness: 1,
