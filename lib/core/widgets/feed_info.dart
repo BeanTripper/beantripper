@@ -33,22 +33,21 @@ class FeedInfo extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(30),
-            child: Container(
-              width: 42,
-              height: 42,
-              decoration: BoxDecoration(
-                color: CustomColors.darkGray,
-              ),
-            ),
+          CircleAvatar(
+            backgroundImage: feed.userProfile.isNotEmpty
+                ? NetworkImage(feed.userProfile)
+                : null, // 프로필 이미지 설정
+            radius: 21,
+            child: feed.userProfile.isEmpty
+                ? Icon(Icons.person, size: 30, color: Colors.grey) // 기본 아이콘 설정
+                : null,
           ),
           SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                feed.writerName,
+                feed.userName, // 닉네임 표시
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(

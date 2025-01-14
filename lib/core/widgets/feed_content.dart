@@ -40,11 +40,9 @@ class _FeedContentState extends State<FeedContent> {
 
     final snapshot = await favoriteFeedRef.get();
     if (snapshot.docs.isNotEmpty) {
-      if (mounted) {
-        setState(() {
-          isLiked = true;
-        });
-      }
+      setState(() {
+        isLiked = true;
+      });
     }
   }
 
@@ -61,11 +59,9 @@ class _FeedContentState extends State<FeedContent> {
       final userList = List<String>.from(doc['user_list']);
       count += userList.length;
     }
-    if (mounted) {
-      setState(() {
-        likeCount = count;
-      });
-    }
+    setState(() {
+      likeCount = count;
+    });
   }
 
   // 댓글 수를 실시간으로 가져오는 Stream
@@ -87,32 +83,37 @@ class _FeedContentState extends State<FeedContent> {
         .collection('feed')
         .doc(widget.feed.id)
         .collection('favoriteFeed')
-        .doc('user_list');
+        .where('user_list', arrayContains: userId);
 
     final snapshot = await favoriteFeedRef.get();
-    if (snapshot.exists &&
-        (snapshot.data()!['user_list'] as List).contains(userId)) {
+    if (snapshot.docs.isNotEmpty) {
       // 좋아요 취소 로직
-      await favoriteFeedRef.update({
+      final docId = snapshot.docs.first.id;
+      await FirebaseFirestore.instance
+          .collection('feed')
+          .doc(widget.feed.id)
+          .collection('favoriteFeed')
+          .doc(docId)
+          .update({
         'user_list': FieldValue.arrayRemove([userId]),
       });
-      if (mounted) {
-        setState(() {
-          isLiked = false;
-          likeCount--;
-        });
-      }
+      setState(() {
+        isLiked = false;
+        likeCount--;
+      });
     } else {
       // 좋아요 추가 로직
-      await favoriteFeedRef.set({
+      await FirebaseFirestore.instance
+          .collection('feed')
+          .doc(widget.feed.id)
+          .collection('favoriteFeed')
+          .add({
         'user_list': FieldValue.arrayUnion([userId]),
-      }, SetOptions(merge: true));
-      if (mounted) {
-        setState(() {
-          isLiked = true;
-          likeCount++;
-        });
-      }
+      });
+      setState(() {
+        isLiked = true;
+        likeCount++;
+      });
     }
   }
 
