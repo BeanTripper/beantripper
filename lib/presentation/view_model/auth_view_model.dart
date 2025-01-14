@@ -95,16 +95,18 @@ class AuthViewModel extends Notifier<AuthState> {
   }
 
   /// firebase 회원정보 조회
-  Future<void> fetchUser() async {
+  Future<String?> fetchUserName(String id) async {
     final user = state.appUser;
     if (user != null) {
       try {
         final fetchUserUseCase = ref.read(fetchUserUseCaseProvider);
-        final fetchUser = await fetchUserUseCase.fetchUser(user.id);
+        final fetchUser = await fetchUserUseCase.fetchUser(id);
+        return fetchUser?.name ?? '';
       } on Exception catch (e) {
         print(e);
       }
-    }
+    } else
+      return '';
   }
 
   /// firebase 정보 업데이트

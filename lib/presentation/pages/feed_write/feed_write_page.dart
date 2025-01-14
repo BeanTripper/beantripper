@@ -16,7 +16,9 @@ class FeedWritePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(feedWriteViewModelProvider);
     final userState = ref.watch(authViewModelProvider); // userState 가져오기
-    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final userViewModel = ref.read(authViewModelProvider.notifier);
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
     if (args != null && args['selectedCafeName'] != null) {
       final selectedCafeName = args['selectedCafeName'];
@@ -24,7 +26,6 @@ class FeedWritePage extends ConsumerWidget {
         viewModel.setCafeName(selectedCafeName); // 카페 이름 설정
       }
     }
-
 
     // 선택된 카페 이름과 유저 정보 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -64,7 +65,10 @@ class FeedWritePage extends ConsumerWidget {
                 const SizedBox(height: 20),
                 SubmitButton(
                   viewModel: viewModel,
-                  userName: userState.appUser?.name ?? '익명', // 유저 이름 전달
+                  // userName:userViewModel
+                  //     .fetchUserName(userState.appUser!.id)
+                  //     .toString(), // 유저 이름 전달
+                  userName: userState.appUser?.id ?? '익명', // 유저 이름 전달
                 ),
               ],
             ),
@@ -74,4 +78,3 @@ class FeedWritePage extends ConsumerWidget {
     );
   }
 }
-
