@@ -43,7 +43,7 @@ class ProfilePage extends StatelessWidget {
                   onPressed: () async {
                     await FirebaseAuth.instance.signOut();
                     if (context.mounted) {
-                      Navigator.pushNamed(context, '/login_page');
+                      Navigator.pushReplacementNamed(context, '/login_page');
                     }
                   },
                   style: ElevatedButton.styleFrom(
