@@ -45,7 +45,7 @@ class PolicyPrivacy extends StatelessWidget {
               patternList: [
                 EasyRichTextPattern(
                   targetString: '이용약관 및 개인정보',
-                  style: TextStyle(color: Color(0xFFD28BBA)),
+                  style: TextStyle(color: CustomColors.brown),
                 ),
               ],
             ),
