@@ -34,10 +34,10 @@ android {
     }
     signingConfigs {
         debug {
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-            storeFile file('c:/Users/KGE/.android/debug.keystore')
-            storePassword 'android'
+            keyAlias 'bean-tripper-release-key'
+            keyPassword 'beantripper'
+            storeFile file('bean-tripper-release-key.keystore')
+            storePassword 'beantripper'
         }
     }
 
