@@ -40,9 +40,11 @@ class _FeedContentState extends State<FeedContent> {
 
     final snapshot = await favoriteFeedRef.get();
     if (snapshot.docs.isNotEmpty) {
-      setState(() {
-        isLiked = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLiked = true;
+        });
+      }
     }
   }
 
@@ -59,9 +61,11 @@ class _FeedContentState extends State<FeedContent> {
       final userList = List<String>.from(doc['user_list']);
       count += userList.length;
     }
-    setState(() {
-      likeCount = count;
-    });
+    if (mounted) {
+      setState(() {
+        likeCount = count;
+      });
+    }
   }
 
   // 댓글 수를 실시간으로 가져오는 Stream
@@ -83,37 +87,32 @@ class _FeedContentState extends State<FeedContent> {
         .collection('feed')
         .doc(widget.feed.id)
         .collection('favoriteFeed')
-        .where('user_list', arrayContains: userId);
+        .doc('user_list');
 
     final snapshot = await favoriteFeedRef.get();
-    if (snapshot.docs.isNotEmpty) {
+    if (snapshot.exists &&
+        (snapshot.data()!['user_list'] as List).contains(userId)) {
       // 좋아요 취소 로직
-      final docId = snapshot.docs.first.id;
-      await FirebaseFirestore.instance
-          .collection('feed')
-          .doc(widget.feed.id)
-          .collection('favoriteFeed')
-          .doc(docId)
-          .update({
+      await favoriteFeedRef.update({
         'user_list': FieldValue.arrayRemove([userId]),
       });
-      setState(() {
-        isLiked = false;
-        likeCount--;
-      });
+      if (mounted) {
+        setState(() {
+          isLiked = false;
+          likeCount--;
+        });
+      }
     } else {
       // 좋아요 추가 로직
-      await FirebaseFirestore.instance
-          .collection('feed')
-          .doc(widget.feed.id)
-          .collection('favoriteFeed')
-          .add({
+      await favoriteFeedRef.set({
         'user_list': FieldValue.arrayUnion([userId]),
-      });
-      setState(() {
-        isLiked = true;
-        likeCount++;
-      });
+      }, SetOptions(merge: true));
+      if (mounted) {
+        setState(() {
+          isLiked = true;
+          likeCount++;
+        });
+      }
     }
   }
 

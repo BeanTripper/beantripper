@@ -71,10 +71,20 @@ class _FeedsPageState extends ConsumerState<FeedsPage>
             floating: true,
             snap: true,
             automaticallyImplyLeading: false,
-            title: Image.asset(
+            title: //
+                Image.asset(
               'assets/images/login_logo.png',
               height: 35,
             ),
+            // 로고 택스트로 변경
+            // Text(
+            //       'BeanTripper',
+            //       style: TextStyle(
+            //         fontFamily: 'Allura',
+            //         fontSize: 30,
+            //         color: CustomColors.brown,
+            //       ),
+            //     ),
             actions: [
               IconButton(
                 icon: Icon(Icons.map, color: CustomColors.white),

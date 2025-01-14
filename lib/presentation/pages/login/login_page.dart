@@ -1,9 +1,8 @@
 import 'package:bean_tripper/constant/theme.dart';
-import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
-import 'package:bean_tripper/presentation/view_model/auth_view_model.dart';
 import 'package:bean_tripper/presentation/pages/login/widget/custom_social_button.dart';
 import 'package:bean_tripper/presentation/pages/login/widget/looking_around_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:bean_tripper/presentation/pages/login/widget/policy_privacy.dart';
+import 'package:bean_tripper/presentation/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,7 +18,6 @@ class LoginPage extends StatelessWidget {
           builder: (context, ref, child) {
             final userState = ref.watch(authViewModelProvider);
             final userViewModel = ref.read(authViewModelProvider.notifier);
-            print('&&&&&&&&&&&&&&&&&&&&${userViewModel.fetchUser()}');
             return Column(
               children: [
                 SizedBox(height: 150),
@@ -31,11 +29,19 @@ class LoginPage extends StatelessWidget {
                     color: CustomColors.brown,
                   ),
                 ),
-                const SizedBox(height: 20),
-                Image.asset(
-                  "assets/images/login_logo.png",
-                  width: 234,
+                // const SizedBox(height: 20),
+                Text(
+                  'BeanTripper',
+                  style: TextStyle(
+                    fontFamily: 'Allura',
+                    fontSize: 60,
+                    color: CustomColors.brown,
+                  ),
                 ),
+                // Image.asset(
+                //   "assets/images/login_logo.png",
+                //   width: 234,
+                // ),
                 Spacer(),
                 CustomSocialButton(
                   text: "카카오로 시작하기",
@@ -67,6 +73,7 @@ class LoginPage extends StatelessWidget {
                   iconSize: 20,
                 ),
                 const SizedBox(height: 20),
+                PolicyPrivacy(),
                 Divider(
                   color: CustomColors.lightGray,
                   thickness: 1,

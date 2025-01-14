@@ -36,11 +36,15 @@ class SplashPage extends StatelessWidget {
                 color: CustomColors.brown,
               ),
             ),
-            const SizedBox(height: 20),
-            Image.asset(
-              "assets/images/login_logo.png",
-              width: 234,
-            ),
+            // const SizedBox(height: 20),
+            Text(
+              'BeanTripper',
+              style: TextStyle(
+                fontFamily: 'Allura',
+                fontSize: 60,
+                color: CustomColors.brown,
+              ),
+            )
           ],
         ),
       ),
