@@ -53,6 +53,8 @@ dependencies:
   firebase_crashlytics: ^4.3.0
   firebase_analytics: ^11.4.0
   timeago: ^3.6.1
+  flutter_markdown: ^0.7.5
+  easy_rich_text: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +79,9 @@ flutter:
   uses-material-design: true
 
   fonts:
+    - family: Allura
+      fonts:
+        - asset: assets/fonts/Allura-Regular.ttf
     - family: Pretendard
       fonts:
         - asset: assets/fonts/Pretendard-Thin.ttf
