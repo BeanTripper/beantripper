@@ -1,10 +1,11 @@
 import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/presentation/pages/login/widget/agreement_modal.dart';
+import 'package:bean_tripper/presentation/pages/login/widget/service_agreement_modal.dart';
 import 'package:easy_rich_text/easy_rich_text.dart';
 import 'package:flutter/material.dart';
 
-class PolicyPrivacy extends StatelessWidget {
-  const PolicyPrivacy({super.key});
+class PolicyService extends StatelessWidget {
+  const PolicyService({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class PolicyPrivacy extends StatelessWidget {
         showModalBottomSheet(
           context: context,
           builder: (context) {
-            return AgreementModal();
+            return ServiceAgreementModal();
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -37,14 +38,14 @@ class PolicyPrivacy extends StatelessWidget {
             SizedBox(width: 8),
             // flutter package easy_rich_text 사용!
             EasyRichText(
-              '로그인을 클릭하면 개인정보약관에 동의하는 것으로 간주됩니다.',
+              '로그인을 클릭하면 이용약관에 동의하는 것으로 간주됩니다.',
               defaultStyle: TextStyle(
                 fontSize: 11,
                 color: CustomColors.lightGray,
               ),
               patternList: [
                 EasyRichTextPattern(
-                  targetString: '개인정보약관',
+                  targetString: '이용약관',
                   style: TextStyle(color: CustomColors.brown),
                 ),
               ],
