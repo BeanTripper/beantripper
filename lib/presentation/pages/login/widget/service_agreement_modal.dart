@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-class PrivacyAgreementModal extends StatelessWidget {
+class ServiceAgreementModal extends StatelessWidget {
   final policy = '''
 # 서비스 이용약관
 
@@ -135,7 +135,7 @@ class PrivacyAgreementModal extends StatelessWidget {
 - **시행 일자**: 2025년 1월 14일
 ''';
 
-  const PrivacyAgreementModal({super.key});
+  const ServiceAgreementModal({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,5 +1,6 @@
 import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/presentation/pages/login/widget/agreement_modal.dart';
+import 'package:bean_tripper/presentation/pages/login/widget/service_agreement_modal.dart';
 import 'package:easy_rich_text/easy_rich_text.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class PolicyService extends StatelessWidget {
         showModalBottomSheet(
           context: context,
           builder: (context) {
-            return AgreementModal();
+            return ServiceAgreementModal();
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
