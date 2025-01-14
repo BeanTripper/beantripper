@@ -1,8 +1,10 @@
 import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/domain/entity/cafe_detail.dart';
+import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CafeInfoBottomSheet extends StatelessWidget {
+class CafeInfoBottomSheet extends ConsumerWidget {
   const CafeInfoBottomSheet({
     super.key,
     required this.cafe,
@@ -11,7 +13,7 @@ class CafeInfoBottomSheet extends StatelessWidget {
   final CafeDetail? cafe;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Wrap(
       children: [
         Container(
@@ -49,10 +51,12 @@ class CafeInfoBottomSheet extends StatelessWidget {
                       foregroundColor: CustomColors.white,
                     ),
                     onPressed: () {
+                      final viewModel =
+                          ref.read(cafeDetailViewModelProvider.notifier);
+                      viewModel.setCafeName(cafe!.id);
                       Navigator.pushNamed(
                         context,
                         '/cafe_detail_page',
-                        arguments: cafe!.id,
                       );
                     },
                     child: Text('상세보기'),
