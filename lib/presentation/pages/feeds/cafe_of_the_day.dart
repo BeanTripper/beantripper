@@ -58,6 +58,21 @@ class CafeOfTheDay extends ConsumerWidget {
       return Center(child: Text(state.error!));
     }
 
+    // 카페 데이터가 없는 경우
+    if (state.cafes.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 20, bottom: 12),
+        child: Text(
+          '오늘의 피드가 부족합니다',
+          style: TextStyle(
+            color: CustomColors.darkGray,
+            fontSize: 16,
+          ),
+        ),
+      );
+    }
+
+    // 카페 데이터가 있는 경우 기존 ListView 표시
     return SizedBox(
       height: 260,
       child: ListView.separated(

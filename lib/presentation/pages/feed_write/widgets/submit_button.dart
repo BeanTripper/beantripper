@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/feed_wirte_viewmodel.dart';
 import 'package:bean_tripper/presentation/pages/home/home_page.dart';
 
-
 class SubmitButton extends StatelessWidget {
   final FeedWriteViewModel viewModel;
   final String userName; // userName 파라미터 추가
@@ -43,4 +42,3 @@ class SubmitButton extends StatelessWidget {
     );
   }
 }
-

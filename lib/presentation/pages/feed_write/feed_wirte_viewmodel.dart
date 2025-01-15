@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FeedWriteViewModel extends ChangeNotifier {
   final ImagePicker _picker = ImagePicker();
@@ -19,7 +20,8 @@ class FeedWriteViewModel extends ChangeNotifier {
     content = '';
     notifyListeners();
   }
-    // 이미지 삭제
+
+  // 이미지 삭제
   void removeImage(File image) {
     selectedImages.remove(image);
     notifyListeners();
@@ -74,7 +76,8 @@ class FeedWriteViewModel extends ChangeNotifier {
       // 이미지 업로드
       List<String> imageUrls = [];
       for (var file in selectedImages) {
-        final imageRef = storageRef.child('uploads/${file.path.split('/').last}');
+        final imageRef =
+            storageRef.child('uploads/${file.path.split('/').last}');
         await imageRef.putFile(file);
         final url = await imageRef.getDownloadURL();
         imageUrls.add(url);

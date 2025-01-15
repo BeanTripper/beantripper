@@ -19,7 +19,8 @@ class FeedWritePage extends ConsumerWidget {
 
     // 선택된 카페 이름 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (viewModel.cafeName.isEmpty || viewModel.cafeName != selectedCafeName) {
+      if (viewModel.cafeName.isEmpty ||
+          viewModel.cafeName != selectedCafeName) {
         viewModel.resetState(); // 상태 초기화
         viewModel.setCafeName(selectedCafeName); // 새로운 카페 이름 설정
       }
@@ -56,7 +57,7 @@ class FeedWritePage extends ConsumerWidget {
                 const SizedBox(height: 20),
                 SubmitButton(
                   viewModel: viewModel,
-                  userName: userState.appUser?.name ?? '익명',
+                  userName: userState.appUser?.name ?? '게스트',
                 ),
               ],
             ),

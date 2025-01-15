@@ -50,18 +50,21 @@ class Feed {
       );
     }
 
-    final data = doc.data() as Map<String, dynamic>; // null 허용
+    final data = doc.data() as Map<String, dynamic>;
+
+    final userData = data['user'] as Map<String, dynamic>?;
+
     return Feed(
       id: doc.id,
-      content: data['content'] ?? '', // 기본 값 설정
-      cafeId: data['cafeId'] ?? '', // 기본 값 설정
-      cafeName: data['cafeName'] ?? '', // 기본 값 설정
-      userId: data['userId'] ?? '', // 기본 값 설정
-      userName: data['userName'] ?? '', // 기본 값 설정
-      userProfile: data['userProfile'] ?? '', // 기본 값 설정
-      createdAt: data['createdAt'] ?? Timestamp.now(), // 기본 값 설정
-      imageUrls: List<String>.from(data['imageUrls'] ?? []), // 기본 값 설정
-      categories: List<String>.from(data['categories'] ?? []), // 기본 값 설정
+      content: data['content'] ?? '',
+      cafeId: data['cafeId'] ?? '',
+      cafeName: data['cafeName'] ?? '',
+      userId: userData?['userId'] ?? data['userId'] ?? '',
+      userName: userData?['name'] ?? data['userName'] ?? '',
+      userProfile: userData?['profile'] ?? data['profile'] ?? '',
+      createdAt: data['createdAt'] ?? Timestamp.now(),
+      imageUrls: List<String>.from(data['imageUrls'] ?? []),
+      categories: List<String>.from(data['categories'] ?? []),
       popularList: data['popularList'] != null
           ? List<UserDto>.from((data['popularList'] as List)
               .map((user) => UserDto.fromJson(user)))

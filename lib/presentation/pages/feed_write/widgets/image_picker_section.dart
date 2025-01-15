@@ -1,3 +1,4 @@
+import 'package:bean_tripper/constant/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/feed_wirte_viewmodel.dart';
 import 'dart:io';
@@ -5,7 +6,8 @@ import 'dart:io';
 class ImagePickerSection extends StatelessWidget {
   final FeedWriteViewModel viewModel;
 
-  const ImagePickerSection({Key? key, required this.viewModel}) : super(key: key);
+  const ImagePickerSection({Key? key, required this.viewModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,11 @@ class ImagePickerSection extends StatelessWidget {
       children: [
         const Text(
           '이미지 업로드',
-          style: TextStyle(fontSize: 20, color: Colors.black),
+          style: TextStyle(
+            fontSize: 20,
+            color: CustomColors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 10),
         Row(
