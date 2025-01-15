@@ -68,36 +68,40 @@ class CafeSelectionBody extends StatelessWidget {
                       ),
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: viewModel.selectedCafe == null
-                  ? null
-                  : () async {
-                      final selectedCafe = viewModel.selectedCafe!;
-                      try {
-                        // Firebase 업로드
-                        await viewModel.saveCafeToFirebase(selectedCafe);
+          SafeArea(
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: viewModel.selectedCafe == null
+                    ? null
+                    : () async {
+                        final selectedCafe = viewModel.selectedCafe!;
+                        try {
+                          // Firebase 업로드
+                          await viewModel.saveCafeToFirebase(selectedCafe);
 
-                        // FeedWritePage로 이동
-                        Navigator.pushReplacementNamed(
-                          context,
-                          '/feedwritepage',
-                          arguments: {'selectedCafeName': selectedCafe['name']},
-                        );
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Firebase 업로드 실패: $e')),
-                        );
-                      }
-                    },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFA47764),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
-              child: const Text(
-                '카페 입력',
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                          // FeedWritePage로 이동
+                          Navigator.pushReplacementNamed(
+                            context,
+                            '/feedwritepage',
+                            arguments: {
+                              'selectedCafeName': selectedCafe['name']
+                            },
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Firebase 업로드 실패: $e')),
+                          );
+                        }
+                      },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFA47764),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: const Text(
+                  '카페 입력',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
               ),
             ),
           ),

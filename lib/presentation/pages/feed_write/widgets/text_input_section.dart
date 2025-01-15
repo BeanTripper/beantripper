@@ -1,3 +1,4 @@
+import 'package:bean_tripper/constant/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/feed_wirte_viewmodel.dart';
 
@@ -13,17 +14,25 @@ class TextInputSection extends StatelessWidget {
       children: [
         const Text(
           '카페',
-          style: TextStyle(fontSize: 20, color: Colors.white),
+          style: TextStyle(
+            fontSize: 20,
+            color: CustomColors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 10),
         Text(
           viewModel.cafeName.isNotEmpty ? viewModel.cafeName : '카페 이름이 없습니다.',
-          style: const TextStyle(fontSize: 18, color: Colors.grey),
+          style: const TextStyle(fontSize: 18, color: CustomColors.darkGray),
         ),
         const SizedBox(height: 20),
         const Text(
           '게시글',
-          style: TextStyle(fontSize: 20, color: Colors.white),
+          style: TextStyle(
+            fontSize: 20,
+            color: CustomColors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 12),
         TextField(
@@ -38,4 +47,3 @@ class TextInputSection extends StatelessWidget {
     );
   }
 }
-
