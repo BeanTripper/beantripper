@@ -1,9 +1,9 @@
+import 'package:bean_tripper/presentation/pages/feed_write/widgets/submit_button.dart';
+import 'package:bean_tripper/presentation/pages/feed_write/widgets/tag_selection_section.dart';
+import 'package:bean_tripper/presentation/pages/feed_write/widgets/text_input_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/widgets/image_picker_section.dart';
-import 'package:bean_tripper/presentation/pages/feed_write/widgets/text_input_section.dart';
-import 'package:bean_tripper/presentation/pages/feed_write/widgets/tag_selection_section.dart';
-import 'package:bean_tripper/presentation/pages/feed_write/widgets/submit_button.dart';
 import 'package:bean_tripper/presentation/provider.dart';
 import 'package:bean_tripper/presentation/view_model/auth_view_model.dart';
 

@@ -58,10 +58,10 @@ class CafeFeedCollection extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(
                   context,
-                  '/feed_detail_page',
+                  '/cafe_feed_page',
                   arguments: {
-                    // 'feedId': feeds[index].id,
-                    'cafeName': cafeName,
+                    'cafeId': cafeName,
+                    'selectedFeedId': feeds[index].id,
                   },
                 );
               },
