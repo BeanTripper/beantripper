@@ -1,4 +1,5 @@
 .env
+bean-tripper-release-key.keystore
 # Firebase 설정 파일
 GoogleService-Info.plist
 google-services.json
