@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bean_tripper/core/comment_page.dart';
+import 'package:bean_tripper/domain/repository/report_repository.dart';
 
 class FeedContent extends StatefulWidget {
   final Feed feed;
@@ -21,6 +22,7 @@ class FeedContent extends StatefulWidget {
 class _FeedContentState extends State<FeedContent> {
   bool isLiked = false;
   int likeCount = 0;
+  final ReportRepository _reportRepository = ReportRepository();
 
   @override
   void initState() {
@@ -163,6 +165,38 @@ class _FeedContentState extends State<FeedContent> {
     return categories.map((category) => '#$category').join(' ');
   }
 
+  void showReportDialog(String postId) {
+    TextEditingController reportController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('신고 사유를 입력하세요'),
+          content: TextField(
+            controller: reportController,
+            decoration: InputDecoration(hintText: '신고 사유'),
+          ),
+          actions: [
+            TextButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('신고'),
+              onPressed: () {
+                _reportRepository.reportPost(postId, reportController.text);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -221,6 +255,13 @@ class _FeedContentState extends State<FeedContent> {
                     '$commentCount',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   );
+                },
+              ),
+              SizedBox(width: 15),
+              IconButton(
+                icon: Icon(Icons.flag),
+                onPressed: () {
+                  showReportDialog(widget.feed.id);
                 },
               ),
             ],
