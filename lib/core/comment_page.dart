@@ -53,34 +53,27 @@ class _CommentPageState extends State<CommentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      expand: false,
-      initialChildSize: 0.4,
-      minChildSize: 0.4,
-      maxChildSize: 0.9,
-      builder: (context, scrollController) {
-        return Container(
-          decoration: BoxDecoration(
-            color: CustomColors.black,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.4,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) {
+          return Container(
+            decoration: BoxDecoration(
+              color: CustomColors.black,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(40),
+                topRight: Radius.circular(40),
+              ),
             ),
-          ),
-          child: Column(
-            children: [
-              GestureDetector(
-                onVerticalDragUpdate: (details) {
-                  final currentSize = scrollController.position.pixels /
-                      MediaQuery.of(context).size.height;
-                  final newSize = currentSize -
-                      (details.primaryDelta! /
-                          MediaQuery.of(context).size.height);
-                  final clampedSize = newSize.clamp(0.3, 0.9);
-                  scrollController
-                      .jumpTo(clampedSize * MediaQuery.of(context).size.height);
-                },
-                child: Container(
+            child: Column(
+              children: [
+                Container(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   width: double.infinity,
                   child: Center(
@@ -94,61 +87,76 @@ class _CommentPageState extends State<CommentPage> {
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('feed')
-                      .doc(widget.feed.id)
-                      .collection('comments')
-                      .orderBy('timestamp', descending: true)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
-                    }
+                Expanded(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('feed')
+                        .doc(widget.feed.id)
+                        .collection('comments')
+                        .orderBy('timestamp', descending: true)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(child: CircularProgressIndicator());
+                      }
 
-                    final comments = snapshot.data!.docs;
-                    return ListView.builder(
-                      controller: scrollController,
-                      itemCount: comments.length,
-                      itemBuilder: (context, index) {
-                        final comment = comments[index];
-                        final timestamp = comment['timestamp'] as Timestamp?;
-                        return ListTile(
-                          title: Text(comment['userName'] ?? '게스트'),
-                          subtitle: Text(comment['content'] ?? ''),
-                          trailing: Text(
-                            formatDate(timestamp),
-                          ),
-                        );
-                      },
-                    );
-                  },
+                      final comments = snapshot.data!.docs;
+                      return ListView.builder(
+                        controller: scrollController,
+                        itemCount: comments.length,
+                        itemBuilder: (context, index) {
+                          final comment = comments[index];
+                          final timestamp = comment['timestamp'] as Timestamp?;
+                          return ListTile(
+                            title: Text(comment['userName'] ?? '게스트'),
+                            subtitle: Text(comment['content'] ?? ''),
+                            trailing: Text(
+                              formatDate(timestamp),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _commentController,
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: CustomColors.black,
+                        border: Border.all(color: CustomColors.darkGray),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _commentController,
+                              decoration: InputDecoration(
+                                hintText: '댓글을 입력하세요',
+                                border: InputBorder.none,
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 16),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.send),
+                            onPressed: () {
+                              _addComment(_commentController.text);
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.send),
-                      onPressed: () {
-                        _addComment(_commentController.text);
-                      },
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
