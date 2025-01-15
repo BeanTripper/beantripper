@@ -16,6 +16,7 @@ class Feed {
   List<String> categories;
   List<UserDto>? popularList;
   List<Comment>? commentList;
+  bool isReported; // 신고 여부 필드 추가
 
   Feed({
     required this.id,
@@ -30,6 +31,7 @@ class Feed {
     required this.categories,
     this.commentList,
     this.popularList,
+    this.isReported = false, // 기본 값 설정
   });
 
   factory Feed.fromFirestore(DocumentSnapshot doc) {
@@ -47,6 +49,7 @@ class Feed {
         categories: [],
         popularList: [],
         commentList: [],
+        isReported: false, // 기본 값 설정
       );
     }
 
@@ -73,6 +76,7 @@ class Feed {
           ? List<Comment>.from((data['commentList'] as List)
               .map((comment) => Comment.fromFirestore(comment)))
           : [],
+      isReported: data['isReported'] ?? false, // 신고 여부 필드 추가
     );
   }
 
@@ -84,11 +88,13 @@ class Comment {
   String userId;
   String content;
   Timestamp createdAt;
+  bool isReported; // 신고 여부 필드 추가
 
   Comment({
     required this.userId,
     required this.content,
     required this.createdAt,
+    this.isReported = false, // 기본 값 설정
   });
 
   factory Comment.fromFirestore(Map<String, dynamic>? data) {
@@ -97,12 +103,14 @@ class Comment {
         userId: '',
         content: '',
         createdAt: Timestamp.now(),
+        isReported: false, // 기본 값 설정
       );
     }
     return Comment(
       userId: data['userId'] ?? '', // 기본 값 설정
       content: data['content'] ?? '', // 기본 값 설정
       createdAt: data['createdAt'] ?? Timestamp.now(), // 기본 값 설정
+      isReported: data['isReported'] ?? false, // 신고 여부 필드 추가
     );
   }
 }
