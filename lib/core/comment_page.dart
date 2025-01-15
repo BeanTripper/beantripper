@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bean_tripper/domain/entity/feed.dart';
 import 'package:bean_tripper/data/repository/comment_repository.dart';
+import 'package:bean_tripper/domain/repository/report_repository.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CommentPage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _CommentPageState extends State<CommentPage> {
   final TextEditingController _commentController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final CommentRepository _commentRepository = CommentRepository();
+  final ReportRepository _reportRepository = ReportRepository(); // 신고 리포지토리 추가
 
   @override
   void initState() {
@@ -39,6 +41,17 @@ class _CommentPageState extends State<CommentPage> {
     }
   }
 
+  Future<void> _reportComment(String commentId, String reason) async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      await _reportRepository.reportComment(
+        widget.feed.id,
+        commentId,
+        reason,
+      );
+    }
+  }
+
   String formatDate(Timestamp? timestamp) {
     if (timestamp == null) return '';
     final now = DateTime.now();
@@ -49,6 +62,38 @@ class _CommentPageState extends State<CommentPage> {
     }
 
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
+  void showReportDialog(String commentId) {
+    TextEditingController reportController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('신고 사유를 입력하세요'),
+          content: TextField(
+            controller: reportController,
+            decoration: InputDecoration(hintText: '신고 사유'),
+          ),
+          actions: [
+            TextButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('신고'),
+              onPressed: () {
+                _reportComment(commentId, reportController.text);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -114,12 +159,22 @@ class _CommentPageState extends State<CommentPage> {
                       itemCount: comments.length,
                       itemBuilder: (context, index) {
                         final comment = comments[index];
+                        final commentId = comment.id;
                         final timestamp = comment['timestamp'] as Timestamp?;
                         return ListTile(
                           title: Text(comment['userName'] ?? '게스트'),
                           subtitle: Text(comment['content'] ?? ''),
-                          trailing: Text(
-                            formatDate(timestamp),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(formatDate(timestamp)),
+                              IconButton(
+                                icon: Icon(Icons.flag),
+                                onPressed: () {
+                                  showReportDialog(commentId);
+                                },
+                              ),
+                            ],
                           ),
                         );
                       },
