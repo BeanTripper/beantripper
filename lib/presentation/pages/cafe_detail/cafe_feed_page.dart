@@ -33,8 +33,18 @@ class _CafeFeedsPageState extends ConsumerState<CafeFeedsPage> {
     final index = feeds.indexWhere((feed) => feed.id == widget.selectedFeedId);
     if (index != -1) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final itemHeight = MediaQuery.of(context).size.width + 200;
-        _scrollController.jumpTo(index * itemHeight);
+        final itemHeight = MediaQuery.of(context).size.width + 200.0;
+        final feedInfoHeight = 80.0; // FeedInfo의 대략적인 높이
+
+        final scrollPosition = (index * itemHeight) -
+            feedInfoHeight - // FeedInfo 높이만큼 추가로 조정
+            itemHeight * 0.5;
+
+        _scrollController.animateTo(
+          scrollPosition,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
       });
     }
   }
@@ -59,6 +69,7 @@ class _CafeFeedsPageState extends ConsumerState<CafeFeedsPage> {
           _scrollToSelectedFeed(feeds);
           return ListView.builder(
             controller: _scrollController,
+            padding: EdgeInsets.only(top: 0),
             itemCount: feeds.length,
             itemBuilder: (context, index) {
               final feed = feeds[index];
