@@ -1,10 +1,12 @@
+import 'package:bean_tripper/constant/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/feed_wirte_viewmodel.dart';
 
 class TagSelectionSection extends StatelessWidget {
   final FeedWriteViewModel viewModel;
 
-  const TagSelectionSection({Key? key, required this.viewModel}) : super(key: key);
+  const TagSelectionSection({Key? key, required this.viewModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,11 @@ class TagSelectionSection extends StatelessWidget {
       children: [
         const Text(
           '태그',
-          style: TextStyle(fontSize: 20, color: Colors.white),
+          style: TextStyle(
+            fontSize: 20,
+            color: CustomColors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 10),
         Wrap(
@@ -28,15 +34,16 @@ class TagSelectionSection extends StatelessWidget {
                 viewModel.toggleTagSelection(tag, context);
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFFA47764) : Colors.white,
+                  color: isSelected ? CustomColors.brown : CustomColors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
                   tag,
                   style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black,
+                    color: isSelected ? CustomColors.white : CustomColors.black,
                   ),
                 ),
               ),
@@ -47,4 +54,3 @@ class TagSelectionSection extends StatelessWidget {
     );
   }
 }
-

@@ -42,26 +42,36 @@ class FeedWritePage extends ConsumerWidget {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                ImagePickerSection(viewModel: viewModel),
-                const SizedBox(height: 20),
-                TextInputSection(viewModel: viewModel),
-                const SizedBox(height: 20),
-                TagSelectionSection(viewModel: viewModel),
-                const SizedBox(height: 20),
-                SubmitButton(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 20),
+                      ImagePickerSection(viewModel: viewModel),
+                      const SizedBox(height: 20),
+                      TextInputSection(viewModel: viewModel),
+                      const SizedBox(height: 20),
+                      TagSelectionSection(viewModel: viewModel),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: SafeArea(
+                child: SubmitButton(
                   viewModel: viewModel,
                   userName: userState.appUser?.name ?? '게스트',
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
