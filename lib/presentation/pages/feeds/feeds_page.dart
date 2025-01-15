@@ -7,7 +7,6 @@ import 'package:bean_tripper/presentation/pages/feeds/cafe_of_the_day.dart';
 import 'package:bean_tripper/core/widgets/feed_content.dart';
 import 'package:bean_tripper/core/widgets/feed_info.dart';
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page_viewmodel.dart';
-import 'package:bean_tripper/domain/entity/feed.dart';
 
 class FeedsPage extends ConsumerStatefulWidget {
   @override

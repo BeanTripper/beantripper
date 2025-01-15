@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bean_tripper/constant/theme.dart';
 import 'package:bean_tripper/firebase_options.dart';
 import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_detail_page.dart';
+import 'package:bean_tripper/presentation/pages/cafe_detail/cafe_feed_page.dart';
 import 'package:bean_tripper/presentation/pages/cafe_selection/cafe_selection_page.dart';
 import 'package:bean_tripper/presentation/pages/feed_write/feed_write_page.dart';
 import 'package:bean_tripper/presentation/pages/feeds/feeds_page.dart';
@@ -71,12 +72,20 @@ class MyApp extends StatelessWidget {
         '/login_page': (context) => LoginPage(),
         '/profile_page': (context) => ProfilePage(),
         '/register_page': (context) => RegisterPage(),
+        '/cafe_feed_page': (context) {
+          final arguments = ModalRoute.of(context)?.settings.arguments as Map?;
+          final cafeId = arguments?['cafeId'] as String? ?? '';
+          final selectedFeedId = arguments?['selectedFeedId'] as String? ?? '';
+          return CafeFeedsPage(
+            cafeId: cafeId,
+            selectedFeedId: selectedFeedId,
+          );
+        },
         '/feedwritepage': (context) {
           final arguments = ModalRoute.of(context)?.settings.arguments as Map?;
           final selectedCafeName = arguments?['selectedCafeName'] ?? '카페 미선택';
           return FeedWritePage(selectedCafeName: selectedCafeName);
         }
-        // '/feed_detail_page': (context) => FeedDetailPage(),
       },
       // feeds_page로 가고 싶을때 pushNamed 사용예시:
       // ontap:(){Navigator.pushNamed(context, '/feeds_page')}
